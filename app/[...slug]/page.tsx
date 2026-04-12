@@ -6,6 +6,7 @@ import rehypeHighlight from "rehype-highlight"
 import type { Components } from "react-markdown"
 import { DOC_PAGES } from "@/lib/docs-data"
 import { loadDocContent } from "@/lib/docs-content"
+import { ArchitecturePage } from "@/components/architecture-page"
 
 type PageProps = {
   params: { slug: string[] }
@@ -62,6 +63,12 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default function DocPage({ params }: PageProps) {
   const slug = params.slug?.join("/") || ""
+
+  // Architecture has a fully custom visual page
+  if (slug === "architecture") {
+    return <ArchitecturePage />
+  }
+
   const content = loadDocContent(slug)
   if (!content) {
     notFound()
