@@ -1,102 +1,105 @@
 # Changelog
 
-All notable changes to the Marvox CharacterOS project will be documented in this file.
+All notable changes to Marvox are documented here.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
-
-### 🎯 GitHub Project Management (Jan 19, 2026)
-
-**Added:**
-- GitHub Project #26 created for MVP v2 tracking
-- 4 Phase 1 RAG System issues created with detailed guidance:
-  - Issue #4: Enhance retrieve_relevant_chunks() (CRITICAL)
-  - Issue #5: Integrate RAG into CharacterAgent (CRITICAL)
-  - Issue #6: Canon scope enforcement testing (HIGH)
-  - Issue #7: RAG system documentation (MEDIUM)
-- Custom labels: priority-critical, priority-high, priority-medium, backend, testing
-- All issues linked to milestone v0.2.0 - RAG System (Due: Jan 21, 2026)
-- Issues added to Project #26 board
-
-**Links:**
-- Project: https://github.com/users/CyKiller/projects/26
-- Milestone: https://github.com/CyKiller/MarvoxV1/milestone/1
-- Issues: https://github.com/CyKiller/MarvoxV1/issues?q=label%3Aphase-1-rag
+Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
-### Added - CharacterOS MVP v2 (45% Complete)
-- Automatic CharacterOS build pipeline during manuscript upload
-- Character profile extraction (14 profiles from Alice in Wonderland)
-- Canon index with 33-66 chunks stored with embeddings
-- Granular progress tracking (Step 1/4, 2/4, 3/4, 4/4)
-- Character chat endpoint `/api/characteros/projects/{id}/chat`
-- CharacterOS status endpoint with real character/chunk counts
-- PostgreSQL database with 4 CharacterOS tables:
-  - `character_profiles` - Character personality and traits
-  - `canon_index` - Story chunks with embeddings
-  - `character_memories` - Conversation history
-  - `story_graphs` - Character relationships
-
-### Fixed
-- **Critical**: Removed duplicate `run_full_analysis_pipeline` method that prevented CharacterOS from building
-- **Critical**: Fixed 6 retrieval methods using deleted `self.get_db()`:
-  - `get_character_profile()`
-  - `get_character_profiles()`
-  - `count_character_profiles()`
-  - `count_canon_chunks()`
-  - `get_story_graph()`
-  - `save_character_memory()`
-- Analysis pipeline now completes in ~6 seconds (was timing out at 60s)
-- Project status updates with detailed completion messages
-- Character chat endpoint corrected to `/api/characteros/projects/{id}/chat`
-
-### Changed
-- Updated status messages to show character and chunk counts
-- Enhanced logging with emoji indicators for better visibility
-- Project status now shows: "✅ Analysis complete: 14 characters, 66 canon chunks indexed"
-
-### Testing
-- ✅ `test_day4_complete.py` - All CharacterOS features validated
-- ✅ `test_day4_integration.py` - Full upload → analysis → chat workflow
-- ✅ `upload_and_test.py` - Background pipeline verification
-- ✅ `test_build_direct.py` - Direct CharacterOS build validation
-
----
-
-## [0.1.0] - 2025-01-18 - DAY 4 Complete
+## [1.4.0] — Phase 4: API Key Management & Character Reflection (2026-03-19)
 
 ### Added
-- Initial CharacterOS architecture based on AGENTS.md specification
-- FastAPI backend with PostgreSQL database
-- Next.js 14 frontend with TypeScript
-- OpenAI GPT-4o-mini integration for AI analysis
-- ChromaDB vector database for embeddings
-- Upload and analysis pipeline
+- **API Key Management** — Programmatic access to Marvox without user credentials.
+  - `POST /api/billing/api-keys` — Create long-lived API keys (SHA256-hashed, one-time display).
+  - `GET /api/billing/api-keys` — List keys with prefix, last-used audit trail.
+  - `DELETE /api/billing/api-keys/{key_id}` — Soft-revoke a key immediately.
+  - Keys use `Authorization: Bearer mrvx_...` — identical to JWT bearer flow.
+  - Schema: migration `0011` — `api_keys` table with indexes on `project_id`, `key_hash`, `is_active`.
+- **Character Reflection** — Automatic memory-driven personality evolution.
+  - `POST /api/characteros/projects/{id}/characters/{char_id}/reflect` — Manual trigger.
+  - Nightly automatic reflections at 02:00 UTC via background scheduler.
+  - Produces: reflection text, emotional arc trend (improving / stable / declining), saved memory ID.
+  - Error codes: `REFLECT_FAILED`, `REFLECT_NO_MEMORIES`.
+- **OpenAI Cost Tracking** — `OPENAI_API_USAGE_WARNING_THRESHOLD` env var alerts when costs exceed the configured percentage (default: 80%).
 
-### Documentation
-- Created AGENTS.md - Complete CharacterOS architecture guide
-- README.md with setup instructions
-- CONTRIBUTING.md guidelines
-- SECURITY.md policies
+### Changed
+- `DEPLOYMENT.md` — Updated required Railway env vars to include Phase 4 additions.
 
 ---
 
-## Roadmap
+## [1.3.0] — Phase 3: Collaboration & Character Participants (2026-02-20)
 
-### Phase 1: RAG System (Target: 2 days)
-- [ ] Implement `retrieve_relevant_chunks()` with semantic search
-- [ ] Add canon scope filtering for spoiler protection
-- [ ] Integrate RAG into character chat responses
-- [ ] Test canon-locked character behavior
+### Added
+- **CharacterParticipantManager** — Characters react to `SCENE_COMPLETE` events in real-time via WebSocket broadcasts (event type: `CHARACTER_REACTION`).
+- Reactions are generated in parallel (semaphore = 3) using `CharacterAgent.chat(mode=WRITER_ROOM)`.
+- Memory persistence for character reactions via `MemoryBridge` (non-blocking — failures do not block reactions).
+- **EmotionalArcEvolverAgent** — Evolves character personality from accumulated reactions.
+- **ConsensusAnalyzerAgent** — Detects conflicting character portrayals across multiple writers.
+- `ReactionAudioStreamAgent` — Live audio streaming for character reactions in collaboration sessions.
 
-### Phase 2: Scene Generation (Target: 5 days)
-- [ ] Implement WriterAgent for multi-character scenes
-- [ ] Add ContinuityAgent for canon validation
-- [ ] Create `/scene` endpoint
-- [ ] Support 2-5 character scene generation
+### Fixed
+- Circular import in `collab_routes.py` — now uses lazy initialization for `CharacterParticipantManager`.
+
+---
+
+## [1.2.0] — Phase 2: Audio Pipeline (2026-02-01)
+
+### Added
+- **8-step audio production pipeline** (`AudioPipelineOrchestrator`):
+  1. Parse scene dialogue blocks.
+  2. Resolve character voices via `VoiceSelectionAgent`.
+  3. Configure per-character TTS params via `VoiceConfigurationAgent` (300+ configs; speed 0.25×–4.0×).
+  4. Per-line emotion detection (`AudioSceneAgent`).
+  5. TTS generation (parallel with `asyncio.Semaphore(5)` to prevent OOM).
+  6. Audio composition and mixing via `pydub`.
+  7. 5-layer audio QA via `AudioContinuityAgent`.
+  8. Store to Vercel Blob; fall back to local file storage in dev.
+- **VoiceCloningAgent** — Neural voice DNA cloning.
+- **DNALearningEngine** — Evolves voice DNA when overall quality score ≥ 85 %.
+- **VoiceVault** — IP-locks Voice DNA to project/org boundaries (signed binding).
+- `AudiobookOrchestrator` — Full audiobook production from project canon.
+
+---
+
+## [1.1.0] — Phase 1: CharacterOS Agent Network (2026-01-25)
+
+### Added
+- **19-agent CharacterOS network** orchestrated by `AgentRuntime` singleton.
+- **Content generation agents**: `CharacterAgent`, `WriterAgent`, `ReaderAgent`, `NarratorAgent`.
+- **Quality agents**: `ContinuityAgent` (5-layer validation), `DialogueQualityAgent`, `EmotionalBeatAnalyzer`, `ScenePacingOptimizer`.
+- **Supporting agents**: `DirectorAgent`, `SummarizationAgent`, `AtmosphereAgent`, `QualityAnalysisAgent`.
+- **3-pass scene generation**: WriterAgent → ContinuityAgent (fast) → optional 1 revision → ContinuityAgent (full) → NarratorAgent → ContinuityAgent (warn-only).
+- **4-mode system**: `CANON`, `CANON+INFER`, `BRANCH`, `WRITER_ROOM`.
+- **RAG pipeline**: `CanonIndexer` with semantic search, chapter/character filters, and `CHAROS_RETRIEVAL_DEFAULT_TOP_K` tuning.
+- **MemoryBridge** — Cross-agent character memory persistence with 90-day auto-pruning.
+- **Prompt safety** — `sanitize_story_excerpts()` + `RAG_SAFETY_RULE` blocks prompt injection from story content.
+- **Typed agent contracts** — all agent boundaries use `dump_validated()` / `validate_retrieved_chunks()`.
+- **`@traced` telemetry** — structured span logs on all public agent methods.
+- `EvalRecorder` — JSONL eval event log for agent decisions and latency.
+- `RuntimePolicy.from_env()` — all `CHAROS_*` tuning knobs centralized.
+
+### Infrastructure
+- Upstash Vector as production vector backend (`VECTOR_DB_BACKEND=upstash`).
+- ChromaDB for local development.
+- `BatchEmbeddingService` — batched + cached embedding calls (4× faster than per-call).
+- `IntegratedSecurityMiddleware` — CSRF, rate limiting, XSS sanitization.
+- Stripe billing integration with webhook deduplication.
+
+---
+
+## [1.0.0] — MVP Foundation (2026-01-15)
+
+### Added
+- FastAPI backend on Railway (PostgreSQL + Redis).
+- Next.js 14 frontend on Vercel.
+- Manuscript upload and analysis pipeline (`.txt`, `.epub`, `.pdf`).
+- Character extraction — up to 14+ characters per manuscript.
+- AI-powered story analysis: summary, themes, dialogue patterns, publication readiness.
+- 9-tab analysis dashboard with charts.
+- JWT authentication, email verification, Google OAuth.
+- Alembic-managed schema migrations (auto-run at Railway startup).
+- Docker Compose for local development.
+
 
 ### Phase 3: Audio Pipeline (Target: 8 days)
 - [x] Integrate OpenAI TTS

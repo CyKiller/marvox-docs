@@ -121,6 +121,60 @@ export default function DocsHomePage() {
         </div>
       </section>
 
+      {/* ── What's New banner ── */}
+      <section
+        className="rounded-xl px-5 py-4"
+        style={{
+          background: "linear-gradient(135deg, rgba(251,146,60,0.06) 0%, rgba(192,132,252,0.06) 100%)",
+          border: "1px solid rgba(251,146,60,0.18)",
+        }}
+      >
+        <div className="flex flex-wrap items-start gap-4">
+          <div
+            className="shrink-0 text-xs font-bold px-2 py-1 rounded"
+            style={{ background: "rgba(251,146,60,0.15)", color: "#fb923c" }}
+          >
+            WHAT&apos;S NEW
+          </div>
+          <div className="flex-1 min-w-0 space-y-1.5">
+            <p className="text-sm font-semibold" style={{ color: "hsl(0 0% 90%)" }}>
+              Phase 4 — API Key Management & Character Reflection
+            </p>
+            <ul className="text-xs space-y-0.5" style={{ color: "hsl(240 5% 60%)" }}>
+              <li>
+                <span style={{ color: "#fb923c" }}>→</span>{" "}
+                Long-lived API keys with SHA256 hashing, expiry, and last-used audit trail
+                <code
+                  className="ml-1 font-mono px-1 rounded text-[11px]"
+                  style={{ background: "rgba(251,146,60,0.1)", color: "#fb923c" }}
+                >
+                  POST /api/billing/api-keys
+                </code>
+              </li>
+              <li>
+                <span style={{ color: "#c084fc" }}>→</span>{" "}
+                Nightly character reflection — memory-driven personality arc evolution
+              </li>
+              <li>
+                <span style={{ color: "#7dd3fc" }}>→</span>{" "}
+                OpenAI cost tracking with configurable warning thresholds
+              </li>
+            </ul>
+          </div>
+          <Link
+            href="/changelog"
+            className="shrink-0 text-xs font-medium px-3 py-1.5 rounded-lg"
+            style={{
+              background: "rgba(251,146,60,0.08)",
+              border: "1px solid rgba(251,146,60,0.2)",
+              color: "#fb923c",
+            }}
+          >
+            Full Changelog →
+          </Link>
+        </div>
+      </section>
+
       {/* ── Docs grid ── */}
       <section>
         <h2
