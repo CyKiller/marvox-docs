@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 33% 96%;
+    --foreground: 210 22% 12%;
+    --card: 36 33% 98%;
+    --card-foreground: 210 22% 12%;
+    --popover: 36 33% 98%;
+    --popover-foreground: 210 22% 12%;
+    --primary: 173 62% 30%;
+    --primary-foreground: 36 33% 96%;
+    --secondary: 36 21% 90%;
+    --secondary-foreground: 210 22% 12%;
+    --muted: 36 21% 92%;
+    --muted-foreground: 210 14% 38%;
+    --accent: 27 65% 70%;
+    --accent-foreground: 210 22% 12%;
+    --destructive: 0 74% 46%;
+    --destructive-foreground: 36 33% 96%;
+    --border: 36 14% 82%;
+    --input: 36 14% 82%;
+    --ring: 173 62% 30%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 210 22% 10%;
+    --foreground: 36 33% 96%;
+    --card: 210 22% 12%;
+    --card-foreground: 36 33% 96%;
+    --popover: 210 22% 12%;
+    --popover-foreground: 36 33% 96%;
+    --primary: 173 62% 40%;
+    --primary-foreground: 210 22% 10%;
+    --secondary: 210 18% 20%;
+    --secondary-foreground: 36 33% 96%;
+    --muted: 210 18% 20%;
+    --muted-foreground: 36 18% 70%;
+    --accent: 27 65% 55%;
+    --accent-foreground: 210 22% 10%;
+    --destructive: 0 70% 35%;
+    --destructive-foreground: 36 33% 96%;
+    --border: 210 16% 26%;
+    --input: 210 16% 26%;
+    --ring: 173 62% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    background-image: radial-gradient(circle at top left, hsla(27, 65%, 70%, 0.25), transparent 55%),
+      radial-gradient(circle at 20% 80%, hsla(173, 62%, 30%, 0.15), transparent 50%),
+      linear-gradient(180deg, hsl(var(--background)) 0%, hsl(36 33% 94%) 100%);
+  }
+}
+
+/* Fix scrolling issues */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+#__next {
+  height: 100%;
+}
+
+/* Ensure main content can scroll */
+main {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Fix sidebar scrolling */
+aside {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Custom styles for documentation */
+.prose {
+  @apply max-w-none;
+}
+
+.prose h1 {
+  @apply text-3xl font-bold tracking-tight mb-6 mt-0;
+  font-family: var(--font-serif);
+}
+
+.prose h2 {
+  @apply text-2xl font-semibold tracking-tight mb-4 mt-8;
+  font-family: var(--font-serif);
+}
+
+.prose h3 {
+  @apply text-xl font-semibold tracking-tight mb-3 mt-6;
+  font-family: var(--font-serif);
+}
+
+.prose h4 {
+  @apply text-lg font-semibold tracking-tight mb-2 mt-4;
+}
+
+.prose p {
+  @apply mb-4 leading-7;
+}
+
+.prose ul {
+  @apply mb-4 ml-6 list-disc;
+}
+
+.prose ol {
+  @apply mb-4 ml-6 list-decimal;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose code {
+  @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.prose pre {
+  @apply bg-muted p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-primary pl-4 italic mb-4;
+}
+
+.prose table {
+  @apply w-full border-collapse mb-4;
+}
+
+.prose th {
+  @apply border border-border bg-muted p-2 text-left font-semibold;
+}
+
+.prose td {
+  @apply border border-border p-2;
+}
+
+.prose img {
+  @apply rounded-lg shadow-sm mb-4;
+}
+
+.prose hr {
+  @apply border-border my-8;
+}
+
+/* Ensure content doesn't get cut off */
+.prose > *:last-child {
+  @apply mb-8;
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+  main {
+    padding-bottom: 2rem;
+  }
+
+  .prose {
+    @apply px-4;
+  }
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
+
+/* Print styles */
+@media print {
+  aside {
+    display: none !important;
+  }
+
+  main {
+    margin: 0 !important;
+    padding: 1rem !important;
+    max-width: none !important;
+  }
+}
