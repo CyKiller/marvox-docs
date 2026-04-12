@@ -2,17 +2,17 @@
 
 [build]
   command = "npm run build"
-  publish = ".next"
+  publish = "out"
 
 [build.environment]
   NODE_VERSION = "22"
   # Next.js 15 requires Node.js 22+
 
+# 404 fallback
 [[redirects]]
-  # Next.js routing
   from = "/*"
-  to = "/index.html"
-  status = 200
+  to = "/404.html"
+  status = 404
 
 # Security headers
 [[headers]]

@@ -2,7 +2,7 @@ import fs from "fs"
 import path from "path"
 import { DOC_PAGE_BY_SLUG, type DocPage } from "./docs-data"
 
-const repoRoot = path.resolve(process.cwd(), "..")
+const repoRoot = path.resolve(process.cwd(), "content")
 
 export type DocContent = {
   page: DocPage

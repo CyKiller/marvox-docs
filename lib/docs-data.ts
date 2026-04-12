@@ -32,19 +32,12 @@ export const DOC_PAGES: DocPage[] = [
     section: "User Guide",
     order: 1,
   },
-  {
-    slug: "features",
-    title: "Features",
-    description: "Core capabilities and workflows.",
-    source: "FEATURES.md",
-    section: "User Guide",
-    order: 2,
-  },
+
   {
     slug: "api",
     title: "API Reference",
     description: "Generated API reference from OpenAPI.",
-    source: "docs/API.md",
+    source: "API.md",
     section: "API Reference",
     order: 1,
   },
@@ -88,14 +81,7 @@ export const DOC_PAGES: DocPage[] = [
     section: "Product",
     order: 1,
   },
-  {
-    slug: "rag-guide",
-    title: "RAG Guide",
-    description: "Retrieval-augmented generation details.",
-    source: "RAG_GUIDE.md",
-    section: "Product",
-    order: 2,
-  },
+
   {
     slug: "security",
     title: "Security",
