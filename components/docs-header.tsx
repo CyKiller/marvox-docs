@@ -1,6 +1,29 @@
+"use client"
+
 import type React from "react"
 import Link from "next/link"
-import { BookOpen, Github, ExternalLink } from "lucide-react"
+import { BookOpen, Github, ExternalLink, Sun, Moon } from "lucide-react"
+import { useTheme } from "next-themes"
+import { useEffect, useState } from "react"
+
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  // Avoid hydration mismatch — render only after mount
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return <div className="w-8 h-8" />
+  const isDark = theme === "dark"
+  return (
+    <button
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+      className="flex items-center justify-center w-8 h-8 rounded-md transition-colors"
+      style={{ color: "hsl(240 5% 60%)" }}
+    >
+      {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+    </button>
+  )
+}
 
 export const DocsHeader: React.FC = () => {
   return (
@@ -52,12 +75,13 @@ export const DocsHeader: React.FC = () => {
         </nav>
 
         {/* Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
           <Link
             href="https://marvox.ai"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md transition-all"
+            className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md transition-all ml-2"
             style={{
               color: "hsl(196 100% 67%)",
               border: "1px solid rgba(125,211,252,0.2)",

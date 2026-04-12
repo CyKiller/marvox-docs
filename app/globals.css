@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root,
+  .dark {
     /* Marvox Dark — obsidian carbon + cyan editorial */
     --background: 221 51% 6%;
     --foreground: 0 0% 98%;
@@ -32,6 +33,34 @@
     --surface-panel: rgba(6, 11, 24, 0.72);
     --shadow-panel: 0 24px 60px rgba(2, 8, 22, 0.32);
   }
+
+  /* Light mode overrides */
+  .light {
+    --background: 220 20% 97%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 196 90% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 93%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 220 14% 93%;
+    --muted-foreground: 220 8% 46%;
+    --accent: 220 14% 90%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 86%;
+    --input: 220 13% 91%;
+    --ring: 196 90% 42%;
+
+    --surface-border: rgba(30, 41, 59, 0.14);
+    --surface-border-glow: rgba(8, 145, 178, 0.22);
+    --surface-panel: rgba(255, 255, 255, 0.85);
+    --shadow-panel: 0 8px 32px rgba(30, 41, 59, 0.10);
+  }
 }
 
 @layer base {
@@ -58,6 +87,12 @@
       radial-gradient(900px 560px at 50% 110%, rgba(14, 165, 233, 0.07), transparent 62%),
       linear-gradient(180deg, #020c1b 0%, #010409 100%);
     background-attachment: fixed;
+  }
+
+  .light body,
+  body:has(.light) {
+    background-color: hsl(220 20% 97%);
+    background-image: none;
   }
 }
 
