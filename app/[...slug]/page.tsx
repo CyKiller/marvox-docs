@@ -3,6 +3,8 @@ import { DOC_PAGES } from "@/lib/docs-data"
 import { loadDocContent } from "@/lib/docs-content"
 import { ArchitecturePage } from "@/components/architecture-page"
 import ApiReferencePage from "@/components/api-reference-page"
+import WorkflowsPage from "@/components/workflows-page"
+import StudioLayoutDiagram from "@/components/studio-layout-diagram"
 import MarkdownRenderer from "@/components/markdown-renderer"
 
 type PageProps = {
@@ -34,6 +36,16 @@ export default function DocPage({ params }: PageProps) {
   // API reference has a fully custom visual page
   if (slug === "api") {
     return <ApiReferencePage />
+  }
+
+  // Workflows interactive reference
+  if (slug === "workflows") {
+    return <WorkflowsPage />
+  }
+
+  // Studio layout interactive wireframe
+  if (slug === "studio-layout") {
+    return <StudioLayoutDiagram />
   }
 
   const content = loadDocContent(slug)

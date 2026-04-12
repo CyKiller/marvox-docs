@@ -82,6 +82,22 @@ export const DOC_PAGES: DocPage[] = [
     order: 5,
   },
   {
+    slug: "workflows",
+    title: "Workflows",
+    description: "8 interactive production workflow references — build, chat, scene generation, audio, reflection, collaboration, API keys, and RAG.",
+    source: "",
+    section: "Developer Guide",
+    order: 6,
+  },
+  {
+    slug: "studio-layout",
+    title: "Studio Layout",
+    description: "Interactive wireframe of the CharacterOS Studio interface — 3-panel layout with agent mapping.",
+    source: "",
+    section: "User Guide",
+    order: 2,
+  },
+  {
     slug: "roadmap",
     title: "Roadmap",
     description: "Product roadmap and phase status.",

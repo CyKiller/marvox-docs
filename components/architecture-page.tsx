@@ -1,4 +1,7 @@
+"use client"
+
 import type React from "react"
+import { useState } from "react"
 import Link from "next/link"
 
 // ── Shared primitives ──────────────────────────────────────────────────────────
@@ -84,55 +87,120 @@ function Badge({ children, color = "cyan" }: { children: React.ReactNode; color?
 // ── Section 1: Production Pipeline ────────────────────────────────────────────
 
 const PIPELINE_STEPS = [
-  { n: "01", label: "Upload", sub: "Manuscript ingest", desc: "DOCX / PDF / TXT up to 100 MB", color: "hsl(196 100% 67%)" },
-  { n: "02", label: "Analyze", sub: "Progressive analysis", desc: "Characters · Plot · Themes · Style", color: "hsl(196 100% 67%)" },
-  { n: "03", label: "Build", sub: "CharacterOS build", desc: "Profiles · Canon index · Memory init", color: "hsl(196 100% 67%)" },
-  { n: "04", label: "Generate", sub: "Scene generation", desc: "WriterAgent + DirectorAgent injection", color: "hsl(196 100% 67%)" },
-  { n: "05", label: "Validate", sub: "Continuity × 3 passes", desc: "Revise once if severity=high", color: "hsl(196 100% 67%)" },
-  { n: "06", label: "Narrate", sub: "NarratorAgent framing", desc: "Prose transitions + scene polish", color: "hsl(196 100% 67%)" },
-  { n: "07", label: "Audio", sub: "8-step TTS pipeline", desc: "Multi-voice · Semaphore(5) guarded", color: "hsl(196 100% 67%)" },
+  {
+    n: "01", label: "Upload", sub: "Manuscript ingest", desc: "DOCX / PDF / TXT up to 100 MB",
+    detail: "MAX_UPLOAD_MB (default 100) enforced server-side before reading into memory. Supported formats: .docx, .pdf, .txt, .epub. File content is sanitized and stored; raw bytes never cached past extraction.",
+    file: "backend/project_routes.py",
+  },
+  {
+    n: "02", label: "Analyze", sub: "Progressive analysis", desc: "Characters · Plot · Themes · Style",
+    detail: "ProgressiveAnalysisEngine extracts characters, relationships, timeline, themes, and writing style. Jobs tracked in DB — STALE_ANALYZING_HOURS (default 2) auto-fails stuck jobs.",
+    file: "services/progressive_analysis_engine.py",
+  },
+  {
+    n: "03", label: "Build", sub: "CharacterOS build", desc: "Profiles · Canon index · Memory init",
+    detail: "POST /api/characteros/projects/{id}/build returns job_id immediately. Background: init → profiles → index → memories → complete. BuildStatusGuard gates all CharacterOS pages until status = complete.",
+    file: "backend/characteros_routes.py",
+  },
+  {
+    n: "04", label: "Generate", sub: "Scene generation", desc: "WriterAgent + DirectorAgent injection",
+    detail: "DirectorAgent enriches the WriterAgent prompt with mood, pacing, and atmospheric context. Character count gated by CHAROS_MAX_SCENE_CHARACTERS (default 5).",
+    file: "services/characteros/writer_agent.py",
+  },
+  {
+    n: "05", label: "Validate", sub: "Continuity × 3 passes", desc: "Revise once if severity=high",
+    detail: "ContinuityAgent runs three times intentionally. Pass 1: fast check, trigger revision if severity=high. Pass 2: full post-revision validation. Pass 3: narrator warn-only (never revises).",
+    file: "services/characteros/continuity_agent.py",
+  },
+  {
+    n: "06", label: "Narrate", sub: "NarratorAgent framing", desc: "Prose transitions + scene polish",
+    detail: "AtmosphereAgent injects context before NarratorAgent framing call. Output: prose opening/closing, scene transitions, act markers. Continuity Pass 3 runs on narrator output (warn-only).",
+    file: "services/characteros/narrator_agent.py",
+  },
+  {
+    n: "07", label: "Audio", sub: "8-step TTS pipeline", desc: "Multi-voice · Semaphore(5) guarded",
+    detail: "AudioPipelineOrchestrator: parse → voice resolution → config → TTS generation (asyncio.Semaphore(5)) → mixing → quality check → storage → telemetry. Output stored to Vercel Blob in production.",
+    file: "services/characteros/audio_pipeline_orchestrator.py",
+  },
 ]
 
 function ProductionPipeline() {
+  const [active, setActive] = useState<number | null>(null)
+
   return (
-    <div className="overflow-x-auto pb-2">
-      <div className="flex items-stretch gap-0 min-w-[700px]">
-        {PIPELINE_STEPS.map((step, i) => (
-          <div key={step.n} className="flex items-center flex-1">
-            <div
-              className="flex-1 rounded-xl p-4 flex flex-col gap-1.5"
-              style={{
-                background: "rgba(6,12,28,0.72)",
-                border: "1px solid rgba(125,211,252,0.12)",
-                minWidth: 0,
-              }}
-            >
-              <span
-                className="font-mono text-xs font-bold"
-                style={{ color: "hsl(196 100% 67%)", opacity: 0.65 }}
+    <div>
+      <div className="overflow-x-auto pb-2">
+        <div className="flex items-stretch gap-0 min-w-[700px]">
+          {PIPELINE_STEPS.map((step, i) => (
+            <div key={step.n} className="flex items-center flex-1">
+              <button
+                onClick={() => setActive(active === i ? null : i)}
+                className="flex-1 rounded-xl p-4 flex flex-col gap-1.5 text-left transition-all duration-200 cursor-pointer"
+                style={{
+                  background: active === i ? "rgba(6,12,28,0.9)" : "rgba(6,12,28,0.72)",
+                  border: active === i
+                    ? "1px solid rgba(125,211,252,0.28)"
+                    : "1px solid rgba(125,211,252,0.12)",
+                  boxShadow: active === i ? "0 0 16px rgba(125,211,252,0.08)" : undefined,
+                  minWidth: 0,
+                }}
               >
-                {step.n}
-              </span>
-              <span className="font-semibold text-sm" style={{ color: "hsl(0 0% 96%)" }}>
-                {step.label}
-              </span>
-              <span className="text-xs font-medium" style={{ color: "hsl(196 100% 72%)", opacity: 0.8 }}>
-                {step.sub}
-              </span>
-              <span className="text-xs leading-relaxed" style={{ color: "hsl(240 5% 52%)" }}>
-                {step.desc}
-              </span>
+                <span
+                  className="font-mono text-xs font-bold"
+                  style={{ color: "hsl(196 100% 67%)", opacity: active === i ? 1 : 0.65 }}
+                >
+                  {step.n}
+                </span>
+                <span className="font-semibold text-sm" style={{ color: "hsl(0 0% 96%)" }}>
+                  {step.label}
+                </span>
+                <span className="text-xs font-medium" style={{ color: "hsl(196 100% 72%)", opacity: 0.8 }}>
+                  {step.sub}
+                </span>
+                <span className="text-xs leading-relaxed" style={{ color: "hsl(240 5% 52%)" }}>
+                  {step.desc}
+                </span>
+              </button>
+              {i < PIPELINE_STEPS.length - 1 && (
+                <div className="flex items-center px-1 flex-shrink-0">
+                  <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
+                    <path d="M0 6 H14 M10 1 L18 6 L10 11" stroke="rgba(125,211,252,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              )}
             </div>
-            {i < PIPELINE_STEPS.length - 1 && (
-              <div className="flex items-center px-1 flex-shrink-0">
-                <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
-                  <path d="M0 6 H14 M10 1 L18 6 L10 11" stroke="rgba(125,211,252,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+      {active !== null && (
+        <div
+          className="mt-3 rounded-xl px-5 py-4 transition-all duration-200"
+          style={{
+            background: "rgba(6,12,28,0.85)",
+            border: "1px solid rgba(125,211,252,0.18)",
+          }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <span className="font-mono text-xs font-bold" style={{ color: "hsl(196 100% 67%)" }}>
+              {PIPELINE_STEPS[active].n} — {PIPELINE_STEPS[active].label}
+            </span>
+          </div>
+          <p className="text-sm leading-relaxed mb-3" style={{ color: "hsl(240 5% 65%)" }}>
+            {PIPELINE_STEPS[active].detail}
+          </p>
+          <code
+            className="inline-block text-xs font-mono px-2 py-0.5 rounded"
+            style={{
+              background: "rgba(0,0,0,0.3)",
+              color: "hsl(196 100% 67%)",
+              border: "1px solid rgba(125,211,252,0.2)",
+              opacity: 0.85,
+            }}
+          >
+            {PIPELINE_STEPS[active].file}
+          </code>
+        </div>
+      )}
     </div>
   )
 }
@@ -275,6 +343,8 @@ const SCENE_STEPS = [
     note: "DirectorAgent enriches prompt with mood/pacing",
     color: "cyan",
     colorHex: "hsl(196 100% 67%)",
+    detail: "DirectorAgent.inject() prepends mood & pacing directives before the WriterAgent LLM call. Max characters enforced by CHAROS_MAX_SCENE_CHARACTERS.",
+    file: "services/characteros/writer_agent.py",
   },
   {
     agent: "ContinuityAgent",
@@ -282,6 +352,8 @@ const SCENE_STEPS = [
     note: "Logical consistency check (fast or full). Severity=high → revise",
     color: "green",
     colorHex: "hsl(160 70% 65%)",
+    detail: "5-layer validation: trait consistency, relationship accuracy, timeline coherence, dialogue authenticity, spoiler detection. Mode controlled by CHAROS_CONTINUITY_DETERMINISTIC_FIRST.",
+    file: "services/characteros/continuity_agent.py",
   },
   {
     agent: "WriterAgent",
@@ -290,6 +362,8 @@ const SCENE_STEPS = [
     color: "amber",
     colorHex: "hsl(40 90% 68%)",
     conditional: true,
+    detail: "Conditional — only runs when Pass 1 returns severity=high. Maximum 1 revision. If the revision still fails continuity, warnings are surfaced rather than retrying.",
+    file: "services/characteros/writer_agent.py",
   },
   {
     agent: "ContinuityAgent",
@@ -297,6 +371,8 @@ const SCENE_STEPS = [
     note: "Final polish — always full validation",
     color: "green",
     colorHex: "hsl(160 70% 65%)",
+    detail: "Always runs regardless of Pass 1 outcome. Always full (not fast) validation. Ensures the final scene (original or revised) meets canon standards before narration.",
+    file: "services/characteros/continuity_agent.py",
   },
   {
     agent: "NarratorAgent",
@@ -304,6 +380,8 @@ const SCENE_STEPS = [
     note: "Adds prose framing and scene transitions",
     color: "purple",
     colorHex: "hsl(265 80% 75%)",
+    detail: "AtmosphereAgent injects atmospheric context before NarratorAgent calls the LLM. Outputs prose framing, act/chapter transitions, and scene polish.",
+    file: "services/characteros/narrator_agent.py",
   },
   {
     agent: "ContinuityAgent",
@@ -311,6 +389,8 @@ const SCENE_STEPS = [
     note: "Narrator output check (fast, warn-only — never revises)",
     color: "green",
     colorHex: "hsl(160 70% 65%)",
+    detail: "Fast mode only. Warn-only — narrator output is always final. Any failures are appended to continuity_warnings in the API response. Never triggers revision.",
+    file: "services/characteros/continuity_agent.py",
   },
   {
     agent: "MemoryBridge",
@@ -318,6 +398,8 @@ const SCENE_STEPS = [
     note: "Persist participation to character memory",
     color: "slate",
     colorHex: "hsl(240 5% 65%)",
+    detail: "Each participating character's scene involvement persisted to their memory store. Used by future RAG retrieval for character context hydration.",
+    file: "services/characteros/memory_bridge.py",
   },
   {
     agent: "ProjectManager",
@@ -325,10 +407,18 @@ const SCENE_STEPS = [
     note: "Persist to PostgreSQL via execute_unified",
     color: "slate",
     colorHex: "hsl(240 5% 65%)",
+    detail: "Full scene record saved: text, character_ids, continuity_warnings, narration_applied flag. Uses execute_unified — never raw DB connections.",
+    file: "services/project_manager.py",
   },
 ]
 
 function SceneOrchestration() {
+  const [expandedStep, setExpandedStep] = useState<number | null>(null)
+
+  function toggle(i: number) {
+    setExpandedStep(expandedStep === i ? null : i)
+  }
+
   return (
     <div className="space-y-2">
       {SCENE_STEPS.map((step, i) => (
@@ -336,8 +426,12 @@ function SceneOrchestration() {
           {/* Timeline line */}
           <div className="flex flex-col items-center flex-shrink-0 pt-1">
             <div
-              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-              style={{ background: step.colorHex, boxShadow: `0 0 6px ${step.colorHex}60` }}
+              className="w-2.5 h-2.5 rounded-full flex-shrink-0 transition-all duration-200"
+              style={{
+                background: expandedStep === i ? step.colorHex : `${step.colorHex}66`,
+                boxShadow: expandedStep === i ? `0 0 8px ${step.colorHex}80` : undefined,
+                transform: expandedStep === i ? "scale(1.25)" : "scale(1)",
+              }}
             />
             {i < SCENE_STEPS.length - 1 && (
               <div
@@ -347,11 +441,14 @@ function SceneOrchestration() {
             )}
           </div>
           {/* Content */}
-          <div
-            className="flex-1 rounded-lg px-4 py-3 mb-1"
+          <button
+            onClick={() => toggle(i)}
+            className="flex-1 rounded-lg px-4 py-3 mb-1 text-left transition-all duration-200 cursor-pointer"
             style={{
-              background: "rgba(6,12,28,0.6)",
-              border: "1px solid rgba(148,163,184,0.08)",
+              background: expandedStep === i ? "rgba(6,12,28,0.85)" : "rgba(6,12,28,0.6)",
+              border: expandedStep === i
+                ? `1px solid ${step.colorHex}40`
+                : "1px solid rgba(148,163,184,0.08)",
             }}
           >
             <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -365,7 +462,7 @@ function SceneOrchestration() {
                 className="font-mono text-xs px-2 py-0.5 rounded"
                 style={{
                   background: "rgba(0,0,0,0.3)",
-                  color: "hsl(0 0% 75%)",
+                  color: expandedStep === i ? "hsl(0 0% 80%)" : "hsl(0 0% 65%)",
                   border: "1px solid rgba(148,163,184,0.1)",
                 }}
               >
@@ -374,11 +471,35 @@ function SceneOrchestration() {
               {step.conditional && (
                 <Badge color="amber">conditional</Badge>
               )}
+              <span className="ml-auto text-xs" style={{ color: "hsl(240 5% 35%)" }}>
+                {expandedStep === i ? "▴" : "▾"}
+              </span>
             </div>
             <p className="text-xs" style={{ color: "hsl(240 5% 52%)" }}>
               {step.note}
             </p>
-          </div>
+            {expandedStep === i && (
+              <div
+                className="mt-3 pt-3 space-y-2"
+                style={{ borderTop: "1px solid rgba(148,163,184,0.08)" }}
+              >
+                <p className="text-xs leading-relaxed" style={{ color: "hsl(240 5% 65%)" }}>
+                  {step.detail}
+                </p>
+                <code
+                  className="inline-block text-xs font-mono px-2 py-0.5 rounded"
+                  style={{
+                    background: "rgba(0,0,0,0.3)",
+                    color: step.colorHex,
+                    border: `1px solid ${step.colorHex}25`,
+                    opacity: 0.85,
+                  }}
+                >
+                  {step.file}
+                </code>
+              </div>
+            )}
+          </button>
         </div>
       ))}
     </div>
@@ -779,6 +900,19 @@ export function ArchitecturePage() {
           ContinuityAgent runs exactly 3 times — this is intentional. Pass 3 is warn-only and never triggers a revision. Do not collapse these calls.
         </SectionSub>
         <SceneOrchestration />
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href="/workflows"
+            className="inline-flex items-center gap-1.5 text-xs font-medium px-4 py-2 rounded-lg transition-all duration-150"
+            style={{
+              background: "rgba(125,211,252,0.07)",
+              border: "1px solid rgba(125,211,252,0.18)",
+              color: "hsl(196 100% 67%)",
+            }}
+          >
+            See all 8 production workflows →
+          </Link>
+        </div>
       </section>
 
       {/* 4 — Production Data Flow */}

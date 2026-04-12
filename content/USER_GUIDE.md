@@ -82,6 +82,8 @@ The scene generates in real-time:
 Mobile Layout: Tabs switch between Control/Scene/Events
 ```
 
+> **Interactive Layout** — See the [Studio Layout diagram](/studio-layout) for a visual walkthrough of this interface with live animations and agent mapping.
+
 ### The Controls Panel (Left Side)
 
 **Scene Prompt**

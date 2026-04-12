@@ -16,7 +16,7 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
        │                               ▼
        │        ┌──────────────────────────────┐
        │        │  CharacterOS Agent Network   │
-       │        │  (6 Agents + RAG System)     │
+       │        │  (25+ Agents + RAG System)   │
        │        └──────────────────┬───────────┘
        │                           │
        ▼                           ▼
@@ -27,7 +27,7 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
                                       │
                                       ▼
                              ┌──────────────────┐
-                             │  ChromaDB/Upstash│
+                             │  Upstash / CDB   │
                              │  (Vector Index)  │
                              └──────────────────┘
 ```

@@ -36,8 +36,9 @@ export const DocsHeader: React.FC = () => {
           {[
             { href: "/getting-started", label: "Get Started" },
             { href: "/api", label: "API" },
-            { href: "/agents", label: "Agents" },
             { href: "/architecture", label: "Architecture" },
+            { href: "/agents", label: "Agents" },
+            { href: "/workflows", label: "Workflows" },
             { href: "/developers", label: "Dev Guide" },
           ].map(({ href, label }) => (
             <Link

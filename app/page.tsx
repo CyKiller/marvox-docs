@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, BookOpen, Code, Layers, Users, Zap, Shield, Cpu, Network } from "lucide-react"
+import { ArrowRight, BookOpen, Code, Layers, Users, Zap, Shield, Cpu, Network, GitBranch } from "lucide-react"
 
 const SECTIONS = [
   {
@@ -31,6 +31,12 @@ const SECTIONS = [
     title: "Architecture",
     href: "/architecture",
     description: "Multi-agent network, data flow, and production topology.",
+  },
+  {
+    icon: GitBranch,
+    title: "Workflows",
+    href: "/workflows",
+    description: "8 interactive production flows — build, scene generation, audio pipeline, RAG retrieval, and more.",
   },
   {
     icon: Zap,

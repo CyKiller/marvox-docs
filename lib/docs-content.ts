@@ -18,6 +18,9 @@ export function loadDocContent(slug: string): DocContent | null {
   if (!page) {
     return null
   }
+  if (!page.source) {
+    return null
+  }
   const fullPath = path.join(repoRoot, page.source)
   if (!fs.existsSync(fullPath)) {
     return null
