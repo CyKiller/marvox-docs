@@ -74,6 +74,14 @@ export const DOC_PAGES: DocPage[] = [
     order: 4,
   },
   {
+    slug: "agents",
+    title: "Agent Network",
+    description: "Complete CharacterOS agent reference — all 25+ agents, data models, and API surface.",
+    source: "AGENTS.md",
+    section: "Developer Guide",
+    order: 5,
+  },
+  {
     slug: "roadmap",
     title: "Roadmap",
     description: "Product roadmap and phase status.",
@@ -81,7 +89,6 @@ export const DOC_PAGES: DocPage[] = [
     section: "Product",
     order: 1,
   },
-
   {
     slug: "security",
     title: "Security",

@@ -238,6 +238,131 @@
   margin: 2rem 0;
 }
 
+.docs-prose h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: hsl(0 0% 88%);
+  margin-top: 1.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.docs-prose h5,
+.docs-prose h6 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: hsl(240 5% 70%);
+  margin-top: 1.25rem;
+  margin-bottom: 0.3rem;
+}
+
+.docs-prose strong {
+  color: hsl(0 0% 96%);
+  font-weight: 600;
+}
+
+.docs-prose em {
+  color: hsl(240 5% 78%);
+}
+
+/* ── Code blocks ── */
+.code-block {
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(125, 211, 252, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+}
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 1rem;
+  background: rgba(125, 211, 252, 0.06);
+  border-bottom: 1px solid rgba(125, 211, 252, 0.1);
+}
+
+.code-lang-label {
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: hsl(196 100% 60%);
+  opacity: 0.75;
+}
+
+.code-block pre {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.code-block-wrapper pre {
+  margin: 1.5rem 0;
+}
+
+/* ── Table overflow wrapper ── */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.table-wrapper table {
+  margin: 0;
+}
+
+/* ── Highlight.js overrides for Marvox dark theme ── */
+.hljs {
+  background: rgba(4, 9, 22, 0.9) !important;
+  color: hsl(196 60% 85%) !important;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: hsl(240 5% 50%) !important;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst {
+  color: hsl(280 80% 75%) !important;
+}
+
+.hljs-string,
+.hljs-attr,
+.hljs-attribute {
+  color: hsl(130 60% 68%) !important;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable {
+  color: hsl(28 90% 68%) !important;
+}
+
+.hljs-built_in,
+.hljs-title,
+.hljs-type {
+  color: hsl(196 100% 70%) !important;
+}
+
+.hljs-function {
+  color: hsl(55 90% 70%) !important;
+}
+
+.hljs-params {
+  color: hsl(0 0% 85%) !important;
+}
+
+.hljs-meta,
+.hljs-doctag {
+  color: hsl(196 60% 60%) !important;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar {
   width: 6px;

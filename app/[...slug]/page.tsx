@@ -1,11 +1,49 @@
 import { notFound } from "next/navigation"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import rehypeSlug from "rehype-slug"
+import rehypeHighlight from "rehype-highlight"
+import type { Components } from "react-markdown"
 import { DOC_PAGES } from "@/lib/docs-data"
 import { loadDocContent } from "@/lib/docs-content"
 
 type PageProps = {
   params: { slug: string[] }
+}
+
+// Custom markdown components for better rendering
+const mdComponents: Components = {
+  // Code blocks with language label
+  pre({ children, ...props }) {
+    return (
+      <div className="code-block-wrapper">
+        <pre {...props}>{children}</pre>
+      </div>
+    )
+  },
+  code({ className, children, ...props }) {
+    const match = /language-(\w+)/.exec(className || "")
+    const lang = match?.[1]
+    if (lang) {
+      return (
+        <div className="code-block">
+          <div className="code-block-header">
+            <span className="code-lang-label">{lang}</span>
+          </div>
+          <code className={className} {...props}>{children}</code>
+        </div>
+      )
+    }
+    return <code className={className} {...props}>{children}</code>
+  },
+  // Tables with wrapper for horizontal scroll
+  table({ children, ...props }) {
+    return (
+      <div className="table-wrapper">
+        <table {...props}>{children}</table>
+      </div>
+    )
+  },
 }
 
 export function generateStaticParams() {
@@ -58,7 +96,13 @@ export default function DocPage({ params }: PageProps) {
 
       {/* Markdown body */}
       <div className="docs-prose">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content.markdown}</ReactMarkdown>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeSlug, rehypeHighlight]}
+          components={mdComponents}
+        >
+          {content.markdown}
+        </ReactMarkdown>
       </div>
     </article>
   )

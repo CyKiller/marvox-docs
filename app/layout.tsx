@@ -6,6 +6,7 @@ import { DocsHeader } from "@/components/docs-header"
 import { DocsFooter } from "@/components/docs-footer"
 import { Suspense } from "react"
 import "./globals.css"
+import "highlight.js/styles/github-dark.css"
 
 const inter = Inter({
   subsets: ["latin"],

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, BookOpen, Code, Layers, Users, Zap, Shield, Cpu } from "lucide-react"
+import { ArrowRight, BookOpen, Code, Layers, Users, Zap, Shield, Cpu, Network } from "lucide-react"
 
 const SECTIONS = [
   {
@@ -19,6 +19,12 @@ const SECTIONS = [
     title: "API Reference",
     href: "/api",
     description: "Full REST API — auth, projects, CharacterOS, billing, and audio.",
+  },
+  {
+    icon: Network,
+    title: "Agent Network",
+    href: "/agents",
+    description: "Complete 25-agent reference: CharacterAgent, WriterAgent, ContinuityAgent, and more.",
   },
   {
     icon: Layers,
