@@ -1,102 +1,199 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowRight, BookOpen, Code, Layers, Users } from "lucide-react"
+import { ArrowRight, BookOpen, Code, Layers, Users, Zap, Shield, Cpu } from "lucide-react"
+
+const SECTIONS = [
+  {
+    icon: BookOpen,
+    title: "Getting Started",
+    href: "/getting-started",
+    description: "Canonical onboarding flow. Launch your first storyworld in minutes.",
+  },
+  {
+    icon: Users,
+    title: "User Guide",
+    href: "/user-guide",
+    description: "CharacterOS Studio workflows, collaboration, and audio preview.",
+  },
+  {
+    icon: Code,
+    title: "API Reference",
+    href: "/api",
+    description: "Full REST API — auth, projects, CharacterOS, billing, and audio.",
+  },
+  {
+    icon: Layers,
+    title: "Architecture",
+    href: "/architecture",
+    description: "Multi-agent network, data flow, and production topology.",
+  },
+  {
+    icon: Zap,
+    title: "Developer Guide",
+    href: "/developers",
+    description: "Local setup, test commands, migrations, and CI/CD workflows.",
+  },
+  {
+    icon: Shield,
+    title: "Security",
+    href: "/security",
+    description: "OWASP controls, rate limiting, secrets management, and audits.",
+  },
+]
+
+const AGENT_FAMILIES = [
+  { label: "Content Generation", count: 4, desc: "Reader · Character · Writer · Narrator" },
+  { label: "Quality Assurance", count: 4, desc: "Continuity · Dialogue Quality · Emotional Beat · Scene Pacing" },
+  { label: "Audio & Voice", count: 7, desc: "Voice Selection · Config · Audio Scene · Continuity · Cloning · DNA Learning · VoiceVault" },
+  { label: "Evolution & Consensus", count: 2, desc: "Consensus Analyzer · Emotional Arc Evolver" },
+  { label: "Supporting Agents", count: 8, desc: "Director · Summarization · Quality Analysis · Atmosphere · Reaction Audio · and more" },
+]
 
 export default function DocsHomePage() {
   return (
-    <div className="space-y-16">
-      <section className="relative overflow-hidden rounded-3xl border border-border/60 bg-card/80 p-10 shadow-sm">
-        <div className="absolute -top-24 right-0 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(16,185,129,0.25),rgba(16,185,129,0))]" />
-        <div className="absolute -bottom-24 left-0 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.22),rgba(249,115,22,0))]" />
-        <div className="relative space-y-6">
-          <Badge variant="secondary">Storyworld Production Studio</Badge>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight font-[var(--font-serif)]">
-            Marvox Documentation
+    <div className="space-y-16 pb-16">
+
+      {/* ── Hero ── */}
+      <section
+        className="relative rounded-2xl overflow-hidden p-10"
+        style={{
+          background: "linear-gradient(135deg, rgba(6,12,28,0.92) 0%, rgba(4,9,22,0.97) 100%)",
+          border: "1px solid rgba(125,211,252,0.18)",
+          boxShadow: "0 0 80px rgba(125,211,252,0.07), 0 24px 60px rgba(2,8,22,0.4)",
+        }}
+      >
+        <div
+          className="absolute -top-20 right-0 w-80 h-80 rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(125,211,252,0.13), transparent 70%)" }}
+        />
+        <div className="relative space-y-5 max-w-2xl">
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium"
+            style={{
+              background: "rgba(125,211,252,0.08)",
+              border: "1px solid rgba(125,211,252,0.2)",
+              color: "hsl(196 100% 67%)",
+            }}
+          >
+            <Cpu className="w-3 h-3" />
+            Powered by CharacterOS
+          </div>
+          <h1
+            className="text-4xl sm:text-5xl font-bold"
+            style={{ color: "hsl(0 0% 98%)", letterSpacing: "-0.03em" }}
+          >
+            Marvox<br />
+            <span style={{ color: "hsl(196 100% 67%)" }}>Documentation</span>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl">
-            Build character‑aware storyworlds with CharacterOS. This documentation covers onboarding, workflows, and the
-            production API.
+          <p style={{ color: "hsl(240 5% 65%)", fontSize: "1.05rem", lineHeight: 1.7 }}>
+            Build canon-grounded storyworlds with a 25-agent orchestration network.
+            Full API reference, architecture deep-dives, and production deployment guides.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild size="lg">
-              <Link href="/getting-started">
-                Start Here <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href="/api">API Reference</Link>
-            </Button>
+          <div className="flex flex-wrap gap-3 pt-1">
+            <Link
+              href="/getting-started"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all"
+              style={{
+                background: "hsl(196 100% 67%)",
+                color: "#020817",
+                boxShadow: "0 0 20px rgba(125,211,252,0.28)",
+              }}
+            >
+              Start Here <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/api"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all"
+              style={{
+                border: "1px solid rgba(125,211,252,0.2)",
+                background: "rgba(125,211,252,0.05)",
+                color: "hsl(196 100% 67%)",
+              }}
+            >
+              API Reference
+            </Link>
           </div>
         </div>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="space-y-2">
-            <BookOpen className="h-6 w-6 text-primary" />
-            <CardTitle>Getting Started</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Start with the canonical onboarding flow and launch your first storyworld.
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="space-y-2">
-            <Users className="h-6 w-6 text-primary" />
-            <CardTitle>User Guide</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Learn CharacterOS Studio workflows, collaboration, and audio preview generation.
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="space-y-2">
-            <Code className="h-6 w-6 text-primary" />
-            <CardTitle>API Reference</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            OpenAPI‑driven reference covering auth, projects, CharacterOS, and audio.
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="space-y-2">
-            <Layers className="h-6 w-6 text-primary" />
-            <CardTitle>Architecture</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Understand the agent network, storage, and retrieval stack.
-          </CardContent>
-        </Card>
+      {/* ── Docs grid ── */}
+      <section>
+        <h2
+          className="text-xs font-semibold uppercase tracking-widest mb-5"
+          style={{ color: "hsl(240 5% 45%)" }}
+        >
+          Documentation
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {SECTIONS.map(({ icon: Icon, title, href, description }) => (
+            <Link
+              key={href}
+              href={href}
+              className="group rounded-xl p-5 transition-all"
+              style={{
+                background: "rgba(6,12,28,0.6)",
+                border: "1px solid rgba(148,163,184,0.1)",
+              }}
+            >
+              <div className="flex items-start gap-3">
+                <div
+                  className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                  style={{ background: "rgba(125,211,252,0.08)", border: "1px solid rgba(125,211,252,0.14)" }}
+                >
+                  <Icon className="w-4 h-4" style={{ color: "hsl(196 100% 67%)" }} />
+                </div>
+                <div>
+                  <p className="font-semibold text-sm mb-1" style={{ color: "hsl(0 0% 92%)" }}>
+                    {title}
+                  </p>
+                  <p className="text-xs leading-relaxed" style={{ color: "hsl(240 5% 55%)" }}>
+                    {description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle className="font-[var(--font-serif)]">Core Loop</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground space-y-2">
-            <div>Upload → Analyze → Build CharacterOS → Generate Scene → Validate Continuity → Audio Preview → Export</div>
-            <div>Everything in this loop is documented in the Start Here guide.</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-[var(--font-serif)]">Quick Links</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2 text-sm">
-            <Link href="/developers" className="text-primary hover:underline">
-              Developer Guide
-            </Link>
-            <Link href="/deployment" className="text-primary hover:underline">
-              Deployment
-            </Link>
-            <Link href="/roadmap" className="text-primary hover:underline">
-              Roadmap
-            </Link>
-          </CardContent>
-        </Card>
+      {/* ── Agent network callout ── */}
+      <section>
+        <h2
+          className="text-xs font-semibold uppercase tracking-widest mb-5"
+          style={{ color: "hsl(240 5% 45%)" }}
+        >
+          Agent Network — 25 Agents
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {AGENT_FAMILIES.map(({ label, count, desc }) => (
+            <div
+              key={label}
+              className="rounded-xl px-5 py-4"
+              style={{
+                background: "rgba(6,12,28,0.55)",
+                border: "1px solid rgba(148,163,184,0.08)",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="font-semibold text-sm" style={{ color: "hsl(0 0% 90%)" }}>
+                  {label}
+                </span>
+                <span
+                  className="text-xs px-1.5 py-0.5 rounded-full font-mono"
+                  style={{
+                    background: "rgba(125,211,252,0.09)",
+                    color: "hsl(196 100% 67%)",
+                    border: "1px solid rgba(125,211,252,0.14)",
+                  }}
+                >
+                  {count}
+                </span>
+              </div>
+              <p className="text-xs" style={{ color: "hsl(240 5% 52%)" }}>
+                {desc}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   )

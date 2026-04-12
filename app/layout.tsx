@@ -1,29 +1,29 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Cormorant_Garamond, IBM_Plex_Sans } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
+import { Inter } from "next/font/google"
 import { DocsNavigation } from "@/components/docs-navigation"
 import { DocsHeader } from "@/components/docs-header"
 import { DocsFooter } from "@/components/docs-footer"
-import { SearchProvider } from "@/components/search-provider"
 import { Suspense } from "react"
 import "./globals.css"
 
-const serif = Cormorant_Garamond({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-serif",
-})
-const sans = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
   variable: "--font-sans",
 })
 
 export const metadata: Metadata = {
-  title: "Marvox Documentation",
-  description: "Documentation for Marvox Storyworld Production Studio and CharacterOS.",
+  title: {
+    default: "Marvox Documentation",
+    template: "%s — Marvox Docs",
+  },
+  description: "Build character-aware storyworlds with CharacterOS. API reference, guides, and architecture docs.",
   keywords: ["Marvox", "CharacterOS", "storyworld", "AI", "documentation"],
+  openGraph: {
+    title: "Marvox Documentation",
+    description: "Build character-aware storyworlds with CharacterOS.",
+    siteName: "Marvox Docs",
+  },
 }
 
 export default function RootLayout({
@@ -32,24 +32,24 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${sans.className} ${serif.variable} ${sans.variable}`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <SearchProvider>
-            <div className="flex flex-col min-h-screen bg-background">
-              <DocsHeader />
-              <div className="flex flex-1 overflow-hidden">
-                <DocsNavigation />
-                <main className="flex-1 overflow-y-auto">
-                  <div className="max-w-4xl mx-auto px-6 py-8 min-h-full">
-                    <Suspense fallback={<div className="animate-pulse">Loading...</div>}>{children}</Suspense>
-                  </div>
-                  <DocsFooter />
-                </main>
+    <html lang="en" className="dark">
+      <body className={`${inter.variable}`}>
+        <div className="docs-shell">
+          <DocsHeader />
+          <div className="docs-body">
+            <aside className="docs-sidebar">
+              <DocsNavigation />
+            </aside>
+            <main className="docs-main">
+              <div className="max-w-4xl mx-auto px-8 py-10 min-h-full">
+                <Suspense fallback={<div className="animate-pulse text-muted-foreground text-sm">Loading…</div>}>
+                  {children}
+                </Suspense>
               </div>
-            </div>
-          </SearchProvider>
-        </ThemeProvider>
+              <DocsFooter />
+            </main>
+          </div>
+        </div>
       </body>
     </html>
   )
