@@ -106,6 +106,14 @@ export const DOC_PAGES: DocPage[] = [
     order: 7,
   },
   {
+    slug: "agent-network",
+    title: "Agent Network Diagram",
+    description: "Complete CharacterOS agent network with 25+ agents organized into 5 families with roles and orchestration patterns.",
+    source: "",
+    section: "Developer Guide",
+    order: 8,
+  },
+  {
     slug: "roadmap",
     title: "Roadmap",
     description: "Product roadmap and phase status.",

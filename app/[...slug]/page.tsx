@@ -9,6 +9,7 @@ import ApiReferencePage from "@/components/api-reference-page"
 import WorkflowsPage from "@/components/workflows-page"
 import StudioLayoutDiagram from "@/components/studio-layout-diagram"
 import StoryGraphDiagram from "@/components/story-graph-diagram"
+import AgentNetworkDiagram from "@/components/agent-network-diagram"
 import MarkdownRenderer from "@/components/markdown-renderer"
 import { TableOfContents } from "@/components/table-of-contents"
 
@@ -63,6 +64,11 @@ export default function DocPage({ params }: PageProps) {
   // Story graph interactive diagram
   if (slug === "story-graph") {
     return <StoryGraphDiagram />
+  }
+
+  // Agent network diagram
+  if (slug === "agent-network") {
+    return <AgentNetworkDiagram />
   }
 
   const content = loadDocContent(slug)
