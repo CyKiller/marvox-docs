@@ -1,5 +1,50 @@
 import Link from "next/link"
-import { ArrowRight, BookOpen, Code, Layers, Users, Zap, Shield, Cpu, Network, GitBranch } from "lucide-react"
+import { ArrowRight, BookOpen, Code, Layers, Users, Zap, Shield, Cpu, Network, GitBranch, Sparkles, Eye, Volume2, Map } from "lucide-react"
+
+const FEATURED_DIAGRAMS = [
+  {
+    icon: Sparkles,
+    title: "Story Graph",
+    href: "/story-graph",
+    description: "Interactive knowledge graph visualizing character relationships, plot connections, and story structure.",
+    badge: "New",
+  },
+  {
+    icon: Network,
+    title: "Agent Network Browser",
+    href: "/agent-network",
+    description: "Explore all 25 agents across 5 families: Content, Quality, Audio/Voice, Supporting, and Evolution.",
+    badge: "New",
+  },
+  {
+    icon: Code,
+    title: "API Code Examples",
+    href: "/api-examples",
+    description: "Copy-paste curl and Python workflows for authentication, character chat, scene generation, and audio.",
+    badge: "New",
+  },
+  {
+    icon: Eye,
+    title: "Build Pipeline",
+    href: "/build-pipeline",
+    description: "6-stage project production: Upload → Analyze → CharacterOS → Scene → Audio → Launch.",
+    badge: "New",
+  },
+  {
+    icon: Volume2,
+    title: "Audio Pipeline",
+    href: "/audio-pipeline",
+    description: "Deep dive into 7-step audio orchestration: voice selection, DNA mapping, synthesis, mixing, and QA.",
+    badge: "New",
+  },
+  {
+    icon: Map,
+    title: "Roadmap Timeline",
+    href: "/roadmap",
+    description: "Interactive 9-phase product timeline with feature status, completion tracking, and blockers.",
+    badge: "New",
+  },
+]
 
 const SECTIONS = [
   {
@@ -181,6 +226,73 @@ export default function DocsHomePage() {
         </div>
       </section>
 
+      {/* ── Featured Interactive Components ── */}
+      <section>
+        <div className="flex items-center gap-3 mb-5">
+          <h2
+            className="text-xs font-semibold uppercase tracking-widest"
+            style={{ color: "hsl(240 5% 45%)" }}
+          >
+            Interactive Diagrams & Tools
+          </h2>
+          <span
+            className="text-xs px-2 py-1 rounded-full font-medium"
+            style={{
+              background: "rgba(139, 92, 246, 0.15)",
+              color: "#a78bfa",
+              border: "1px solid rgba(139, 92, 246, 0.2)",
+            }}
+          >
+            Phase 8 New
+          </span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          {FEATURED_DIAGRAMS.map(({ icon: Icon, title, href, description, badge }) => (
+            <Link
+              key={href}
+              href={href}
+              className="group rounded-xl p-5 transition-all hover:shadow-lg"
+              style={{
+                background: "linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(125,211,252,0.05) 100%)",
+                border: "1px solid rgba(139, 92, 246, 0.15)",
+              }}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center"
+                  style={{ background: "rgba(139, 92, 246, 0.12)", border: "1px solid rgba(139, 92, 246, 0.2)" }}
+                >
+                  <Icon className="w-5 h-5" style={{ color: "#a78bfa" }} />
+                </div>
+                {badge && (
+                  <span
+                    className="text-[10px] font-semibold px-2 py-1 rounded-full"
+                    style={{
+                      background: "rgba(139, 92, 246, 0.2)",
+                      color: "#c4b5fd",
+                    }}
+                  >
+                    {badge}
+                  </span>
+                )}
+              </div>
+              <p className="font-semibold text-sm mb-1.5" style={{ color: "hsl(0 0% 92%)" }}>
+                {title}
+              </p>
+              <p className="text-xs leading-relaxed" style={{ color: "hsl(240 5% 55%)" }}>
+                {description}
+              </p>
+              <div className="flex items-center gap-1.5 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-xs font-medium" style={{ color: "#a78bfa" }}>
+                  Explore
+                </span>
+                <ArrowRight className="w-3 h-3" style={{ color: "#a78bfa" }} />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* ── Docs grid ── */}
       <section>
         <h2
@@ -259,6 +371,58 @@ export default function DocsHomePage() {
               </p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── Exploration CTA Section ── */}
+      <section className="pt-8 border-t" style={{ borderColor: "rgba(125,211,252,0.1)" }}>
+        <div className="text-center space-y-6">
+          <div className="space-y-3">
+            <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: "hsl(0 0% 95%)" }}>
+              Ready to Build?
+            </h2>
+            <p style={{ color: "hsl(240 5% 60%)", fontSize: "1rem" }}>
+              Explore CharacterOS with interactive diagrams, API examples, and production workflows.
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3 pt-2">
+            <Link
+              href="/getting-started"
+              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all"
+              style={{
+                background: "linear-gradient(135deg, hsl(196 100% 67%) 0%, hsl(196 100% 60%) 100%)",
+                color: "#020817",
+                boxShadow: "0 0 30px rgba(125,211,252,0.3)",
+              }}
+            >
+              <Zap className="w-4 h-4" />
+              Start Building
+            </Link>
+            <Link
+              href="/api-examples"
+              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all"
+              style={{
+                border: "1.5px solid rgba(125,211,252,0.3)",
+                background: "rgba(125,211,252,0.05)",
+                color: "hsl(196 100% 67%)",
+              }}
+            >
+              <Code className="w-4 h-4" />
+              API Examples
+            </Link>
+            <Link
+              href="/agent-network"
+              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all"
+              style={{
+                border: "1.5px solid rgba(125,211,252,0.3)",
+                background: "rgba(125,211,252,0.05)",
+                color: "hsl(196 100% 67%)",
+              }}
+            >
+              <Network className="w-4 h-4" />
+              Agent Network
+            </Link>
+          </div>
         </div>
       </section>
     </div>
