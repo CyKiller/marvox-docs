@@ -114,6 +114,14 @@ export const DOC_PAGES: DocPage[] = [
     order: 8,
   },
   {
+    slug: "api-examples",
+    title: "API Code Examples",
+    description: "Interactive curl and Python code examples for the 8 most common CharacterOS workflows.",
+    source: "",
+    section: "API Reference",
+    order: 2,
+  },
+  {
     slug: "roadmap",
     title: "Roadmap",
     description: "Product roadmap and phase status.",

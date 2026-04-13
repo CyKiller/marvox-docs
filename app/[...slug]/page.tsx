@@ -10,6 +10,7 @@ import WorkflowsPage from "@/components/workflows-page"
 import StudioLayoutDiagram from "@/components/studio-layout-diagram"
 import StoryGraphDiagram from "@/components/story-graph-diagram"
 import AgentNetworkDiagram from "@/components/agent-network-diagram"
+import APICodeExamples from "@/components/api-code-examples"
 import MarkdownRenderer from "@/components/markdown-renderer"
 import { TableOfContents } from "@/components/table-of-contents"
 
@@ -69,6 +70,11 @@ export default function DocPage({ params }: PageProps) {
   // Agent network diagram
   if (slug === "agent-network") {
     return <AgentNetworkDiagram />
+  }
+
+  // API code examples
+  if (slug === "api-examples") {
+    return <APICodeExamples />
   }
 
   const content = loadDocContent(slug)
