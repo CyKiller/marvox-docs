@@ -11,6 +11,9 @@ import StudioLayoutDiagram from "@/components/studio-layout-diagram"
 import StoryGraphDiagram from "@/components/story-graph-diagram"
 import AgentNetworkDiagram from "@/components/agent-network-diagram"
 import APICodeExamples from "@/components/api-code-examples"
+import BuildPipelineDiagram from "@/components/build-pipeline-diagram"
+import AudioPipelineDiagram from "@/components/audio-pipeline-diagram"
+import RoadmapTimeline from "@/components/roadmap-timeline"
 import MarkdownRenderer from "@/components/markdown-renderer"
 import { TableOfContents } from "@/components/table-of-contents"
 
@@ -75,6 +78,21 @@ export default function DocPage({ params }: PageProps) {
   // API code examples
   if (slug === "api-examples") {
     return <APICodeExamples />
+  }
+
+  // Build pipeline diagram
+  if (slug === "build-pipeline") {
+    return <BuildPipelineDiagram />
+  }
+
+  // Audio pipeline diagram
+  if (slug === "audio-pipeline") {
+    return <AudioPipelineDiagram />
+  }
+
+  // Roadmap timeline
+  if (slug === "roadmap") {
+    return <RoadmapTimeline />
   }
 
   const content = loadDocContent(slug)

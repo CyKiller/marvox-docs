@@ -122,10 +122,26 @@ export const DOC_PAGES: DocPage[] = [
     order: 2,
   },
   {
+    slug: "build-pipeline",
+    title: "Build Pipeline",
+    description: "6-stage project initialization pipeline showing character extraction, RAG indexing, and demo workflows.",
+    source: "",
+    section: "Product",
+    order: 2,
+  },
+  {
+    slug: "audio-pipeline",
+    title: "Audio Pipeline",
+    description: "7-step audio production pipeline from dialogue parsing through TTS synthesis and quality validation.",
+    source: "",
+    section: "Product",
+    order: 3,
+  },
+  {
     slug: "roadmap",
     title: "Roadmap",
-    description: "Product roadmap and phase status.",
-    source: "ROADMAP.md",
+    description: "Interactive product roadmap showing 9 phases from foundation through production hardening.",
+    source: "",
     section: "Product",
     order: 1,
   },
@@ -135,7 +151,7 @@ export const DOC_PAGES: DocPage[] = [
     description: "Security posture and policies.",
     source: "SECURITY.md",
     section: "Product",
-    order: 3,
+    order: 4,
   },
   {
     slug: "changelog",
@@ -143,7 +159,7 @@ export const DOC_PAGES: DocPage[] = [
     description: "Release notes and updates.",
     source: "CHANGELOG.md",
     section: "Product",
-    order: 4,
+    order: 5,
   },
 ]
 
