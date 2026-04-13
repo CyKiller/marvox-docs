@@ -8,6 +8,7 @@ import { ArchitecturePage } from "@/components/architecture-page"
 import ApiReferencePage from "@/components/api-reference-page"
 import WorkflowsPage from "@/components/workflows-page"
 import StudioLayoutDiagram from "@/components/studio-layout-diagram"
+import StoryGraphDiagram from "@/components/story-graph-diagram"
 import MarkdownRenderer from "@/components/markdown-renderer"
 import { TableOfContents } from "@/components/table-of-contents"
 
@@ -57,6 +58,11 @@ export default function DocPage({ params }: PageProps) {
   // Studio layout interactive wireframe
   if (slug === "studio-layout") {
     return <StudioLayoutDiagram />
+  }
+
+  // Story graph interactive diagram
+  if (slug === "story-graph") {
+    return <StoryGraphDiagram />
   }
 
   const content = loadDocContent(slug)

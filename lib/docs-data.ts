@@ -98,6 +98,14 @@ export const DOC_PAGES: DocPage[] = [
     order: 2,
   },
   {
+    slug: "story-graph",
+    title: "Story Graph",
+    description: "Interactive knowledge graph showing character, event, plot point, and world state relationships.",
+    source: "",
+    section: "Developer Guide",
+    order: 7,
+  },
+  {
     slug: "roadmap",
     title: "Roadmap",
     description: "Product roadmap and phase status.",
