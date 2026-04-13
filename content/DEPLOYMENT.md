@@ -5,10 +5,10 @@ Marvox supports one deployment topology:
 - Public frontend: Vercel
 - Browser API origin: same-origin `/api/*` on Vercel
 - Backend runtime: Railway
-- Primary stateful services: Railway Postgres, Railway Redis, Upstash Vector, Vercel Blob
+- Primary stateful services: Railway PostgreSQL, Railway Redis, Upstash Vector, Vercel Blob
 - Staging model: Vercel preview deployments plus a Railway staging backend
 
-Production and preview deployments do not support local SQLite, local file storage, or local vector backends.
+**Database**: PostgreSQL is the only supported database for all environments (development, staging, production). Local development requires Docker for PostgreSQL + Redis.
 
 ## Railway Backend
 

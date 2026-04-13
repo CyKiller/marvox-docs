@@ -2,18 +2,34 @@
 
 **Status**: Active (Storyworld Production Studio)
 
-This guide replaces prior setup notes and Supabase-era instructions. It reflects the current PostgreSQL-only, OpenAI-backed stack in `beta-integration-clean`.
+This guide reflects the current PostgreSQL-only, Docker-based development setup with OpenAI backend.
 
 ---
 
 ## Prerequisites
 
+- **Docker Desktop** (or Docker Engine + Docker Compose) — required for PostgreSQL + Redis
 - Python 3.10+ (3.11+ recommended)
 - Node.js 18+
 
 ---
 
-## Install Dependencies
+## 1. Start Docker Services
+
+PostgreSQL and Redis must run via Docker:
+
+```bash
+docker-compose up -d
+```
+
+Verify connectivity:
+```bash
+docker ps  # Should show postgres and redis containers running
+```
+
+---
+
+## 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -22,42 +38,42 @@ npm install
 
 ---
 
-## Environment Setup
+## 3. Environment Setup
 
 1. Copy `.env.example` to `.env`.
 2. Set required values:
 
-```
+```env
+DATABASE_URL=postgresql://marvox:marvox@localhost:5432/marvox
+REDIS_URL=redis://localhost:6379/0
 OPENAI_API_KEY=sk-...
-JWT_SECRET_KEY=change-me
+JWT_SECRET_KEY=change-me-to-random-256-bit-value
 ```
 
 Optional but common:
-- `OPENAI_MODEL_NAME`
+- `OPENAI_MODEL_NAME` (default: `gpt-4o-mini`)
 - `CORS_ALLOWED_ORIGINS`
-- `CHROMA_PERSIST_DIR`
-- Storage settings in `DEPLOYMENT.md`
-
-Full inventory: `docs/env_inventory.md`
+- `CHROMA_PERSIST_DIR` (local vector storage path)
 
 ---
 
-## Run Services
+## 4. Run Services
 
 Backend:
 ```bash
+# Terminal 1
+source .venv/bin/activate
 python main.py
 ```
 
 Frontend:
 ```bash
+# Terminal 2
 npm run dev
 ```
 
-API docs: `http://localhost:8000/docs`
+API docs: `http://localhost:8000/docs`  
 Frontend: `http://localhost:3000`
-
----
 
 ## Auth in Development
 

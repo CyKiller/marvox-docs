@@ -99,7 +99,7 @@ The `/api/billing/webhook` route verifies every request using `STRIPE_WEBHOOK_SE
 
 ### 8. Database Security
 
-- **PostgreSQL only** in production — SQLite and local file paths are rejected at startup when `ENVIRONMENT=production`.
+- **PostgreSQL only** — all environments (local, staging, production) require PostgreSQL. Local development via Docker ensures parity with production.
 - **Alembic migrations** are the only way to mutate schema — no runtime `CREATE TABLE` or `ALTER TABLE`.
 - All queries use `fetchone_unified` / `fetchall_unified` / `execute_unified` helpers — no raw string interpolation into SQL.
 

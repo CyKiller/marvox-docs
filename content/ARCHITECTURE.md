@@ -43,8 +43,9 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 - **Pydantic** `2.5.0` - Data validation and settings
 
 ### Database Layer
-- **PostgreSQL** (local + production) - Scalable SQL backend
-- **psycopg/asyncpg** - PostgreSQL drivers
+- **PostgreSQL** (all environments: local via Docker, staging, production) - Scalable SQL backend with Alembic migrations
+- **psycopg/asyncpg** - PostgreSQL async drivers
+- **Redis** (local via Docker, Railway staging/production) - Cache, rate limiting, and job queues
 
 ### AI/ML & Embeddings
 - **OpenAI API** `1.51.0` - GPT-4o-mini inference, TTS audio generation
@@ -66,8 +67,8 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 - **OpenAI TTS** (`gpt-4o-mini-tts`) - 13 voice synthesis
 
 ### Security & Performance
-- **Optional Redis** - Cache/limit utilities exist but are not wired by default
-- **Custom Security Middleware** - CSRF/XSS/input sanitization used by select routes
+- **Redis** - Required for rate limiting, caching, and background job queues
+- **Custom Security Middleware** - CSRF/XSS/input sanitization, rate limiting guards (389 lines)
 - **Prometheus Metrics** - `/metrics` endpoint exposed when enabled
 - **Health Probes** - `/api/health` and `/api/health/ready`
 

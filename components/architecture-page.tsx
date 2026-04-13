@@ -930,7 +930,7 @@ export function ArchitecturePage() {
         <SectionBadge>Technology</SectionBadge>
         <SectionHeading>Technology Stack</SectionHeading>
         <SectionSub>
-          Frontend on Vercel, backend on Railway. PostgreSQL is the only supported production database — no SQLite in any environment.
+          Frontend on Vercel, backend on Railway. PostgreSQL is the only database across all environments. Local development uses Docker for PostgreSQL + Redis.
         </SectionSub>
         <TechStack />
       </section>

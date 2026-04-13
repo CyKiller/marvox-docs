@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer base {
+
   :root,
   .dark {
     /* Marvox Dark — obsidian carbon + cyan editorial */
