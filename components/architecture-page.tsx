@@ -515,7 +515,7 @@ const STACK_LAYERS = [
     colorBg: "rgba(125,211,252,0.05)",
     colorBorder: "rgba(125,211,252,0.12)",
     items: [
-      { name: "Next.js 14", role: "App Router, SSR/SSG" },
+      { name: "Next.js 16.x", role: "App Router, SSR/SSG (Node 20.9+)" },
       { name: "React 18", role: "UI runtime" },
       { name: "TypeScript 5", role: "Strict type checking" },
       { name: "Tailwind CSS 3", role: "Utility-first styles" },
@@ -548,11 +548,9 @@ const STACK_LAYERS = [
     colorBorder: "rgba(52,211,153,0.12)",
     items: [
       { name: "OpenAI GPT-4o-mini", role: "LLM inference (all agents)" },
-      { name: "OpenAI TTS", role: "13 voices, gpt-4o-mini-tts" },
-      { name: "Sentence Transformers", role: "all-MiniLM-L6-v2 (384D)" },
-      { name: "BatchEmbeddingService", role: "Batched + cached embeddings" },
-      { name: "ChromaDB", role: "Local vector DB (dev)" },
-      { name: "Upstash Vector", role: "Serverless vector (prod)" },
+      { name: "OpenAI TTS", role: "Multi-voice synthesis" },
+      { name: "OpenAI text-embedding-3-small", role: "1,536-dim embeddings (RAG)" },
+      { name: "pgvector (PostgreSQL)", role: "Vector storage + similarity search (all envs)" },
       { name: "AgentRuntime", role: "Singleton orchestrator" },
       { name: "RuntimePolicy", role: "CHAROS_* env knobs" },
     ],
@@ -563,14 +561,14 @@ const STACK_LAYERS = [
     colorBg: "rgba(251,191,36,0.05)",
     colorBorder: "rgba(251,191,36,0.12)",
     items: [
-      { name: "Railway", role: "Backend hosting" },
-      { name: "Vercel", role: "Frontend hosting" },
-      { name: "PostgreSQL", role: "Primary database (prod only)" },
+      { name: "Railway", role: "Backend hosting (FastAPI + Python)" },
+      { name: "Vercel", role: "Frontend hosting (Next.js)" },
+      { name: "PostgreSQL + pgvector", role: "Primary DB + vector index (all envs)" },
+      { name: "Redis/Dragonfly", role: "Cache + rate limiting + job queues" },
       { name: "Vercel Blob", role: "Audio/object storage (prod)" },
-      { name: "Redis", role: "Rate limiting + cache (prod)" },
       { name: "Sentry", role: "Error monitoring" },
       { name: "Stripe", role: "Billing + webhooks" },
-      { name: "Upstash", role: "Vector + edge Redis" },
+      { name: "Netlify", role: "Docs site (marvox-docs)" },
     ],
   },
 ]
@@ -680,9 +678,9 @@ function DataFlowDiagram() {
       <div className="grid grid-cols-4" style={{ background: "rgba(4,9,20,0.4)" }}>
         {[
           { label: "PostgreSQL", sub: "Projects · chars · scenes", color: "hsl(40 90% 65%)" },
-          { label: "Upstash Vector", sub: "Canon index (384D)", color: "hsl(196 100% 67%)" },
+          { label: "pgvector", sub: "Canon index (1,536D)", color: "hsl(196 100% 67%)" },
           { label: "Vercel Blob", sub: "Audio files · exports", color: "hsl(265 80% 72%)" },
-          { label: "Redis", sub: "Rate limits · cache", color: "hsl(160 70% 62%)" },
+          { label: "Redis/Dragonfly", sub: "Rate limits · cache · queues", color: "hsl(160 70% 62%)" },
         ].map((s, i) => (
           <div
             key={s.label}

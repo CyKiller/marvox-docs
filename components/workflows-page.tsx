@@ -114,7 +114,7 @@ const WORKFLOWS: Workflow[] = [
       {
         agent: "CanonIndexer",
         action: "index_manuscript()",
-        note: "Story text chunked and embedded via BatchEmbeddingService (all-MiniLM-L6-v2, 384D). Persisted to Upstash Vector (prod) or ChromaDB (dev).",
+        note: "Story text chunked and embedded via BatchEmbeddingService (OpenAI text-embedding-3-small, 1,536D). Persisted to PostgreSQL pgvector (all environments).",
         color: "cyan",
         file: "services/characteros/canon_indexer.py",
       },
@@ -486,7 +486,7 @@ const WORKFLOWS: Workflow[] = [
       {
         agent: "VectorDB",
         action: "search(embedding, top_k × multiplier)",
-        note: "Over-fetches by CHAROS_RETRIEVAL_CANDIDATE_MULTIPLIER (default 20) before rerank. Returns candidate chunks from Upstash Vector (prod) or ChromaDB (dev).",
+        note: "Over-fetches by CHAROS_RETRIEVAL_CANDIDATE_MULTIPLIER (default 20) before rerank. Returns candidate chunks from PostgreSQL pgvector (all environments).",
         color: "teal",
         file: "services/vector_db_service.py",
       },

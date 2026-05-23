@@ -113,7 +113,7 @@ const phases: RoadmapPhase[] = [
       "Chapter-scoped retrieval",
       "Relationship-aware context",
       "Multi-modal embeddings",
-      "Upstash vector backend",
+      "pgvector backend (PostgreSQL)",
     ],
     completedFeatures: 6,
   },

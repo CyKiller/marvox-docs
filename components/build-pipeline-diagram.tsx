@@ -42,7 +42,7 @@ const stages: PipelineStage[] = [
     name: "CharacterOS",
     title: "Vector Index & Memory Init",
     description:
-      "Initializes CharacterOS runtime. Chunks canon into semantic blocks, computes embeddings (Upstash/ChromaDB), builds RAG index. Initializes memory bridge for character persistence.",
+      "Initializes CharacterOS runtime. Chunks canon into semantic blocks, computes embeddings (OpenAI text-embedding-3-small, 1,536D via pgvector), builds RAG index in PostgreSQL. Initializes memory bridge for character persistence.",
     duration: "1-2 minutes",
     inputs: ["Canonical text", "Character profiles"],
     outputs: ["Vector indices", "Memory tables", "RAG ready"],
@@ -236,7 +236,7 @@ export default function BuildPipelineDiagram() {
             <h3 className="font-semibold text-slate-300 mb-1">🚀 Performance Optimizations</h3>
             <p>
               Stage parallelization is limited (e.g., character extraction uses semaphore to prevent memory exhaustion). Scene and audio stages are optional demos — users
-              familiar with the tool can skip them. Caching layer bridges requests across stages: embeddings cached in Upstash, character profiles cached in Redis.
+              familiar with the tool can skip them. Caching layer bridges requests across stages: embeddings stored in PostgreSQL pgvector, character profiles cached in Redis.
             </p>
           </div>
         </div>
@@ -262,7 +262,7 @@ export default function BuildPipelineDiagram() {
           <div>
             <h3 className="font-semibold text-slate-300 mb-1">🧠 CharacterOS (1-2m)</h3>
             <p>
-              AgentRuntime initializes: canon chunks → embeddings via BatchEmbeddingService → vector index (ChromaDB local or Upstash production). MemoryBridge tables
+              AgentRuntime initializes: canon chunks → embeddings via BatchEmbeddingService (OpenAI text-embedding-3-small, 1,536D) → stored in PostgreSQL pgvector. MemoryBridge tables
               created. RAG system tested with sample query. This stage blocks character chat and scene generation until complete.
             </p>
           </div>
