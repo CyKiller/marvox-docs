@@ -2,9 +2,10 @@
 
 import type React from "react"
 import Link from "next/link"
-import { BookOpen, Github, ExternalLink, Sun, Moon } from "lucide-react"
+import { BookOpen, Github, ExternalLink, Sun, Moon, Search } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
+import { useSearch } from "@/components/search-provider"
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -26,6 +27,8 @@ function ThemeToggle() {
 }
 
 export const DocsHeader: React.FC = () => {
+  const { openSearch } = useSearch()
+
   return (
     <header
       style={{
@@ -37,18 +40,33 @@ export const DocsHeader: React.FC = () => {
       }}
     >
       <div className="flex items-center justify-between px-6 h-14">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center bg-sky-400/10 border border-sky-400/25 transition-colors group-hover:bg-sky-400/15"
+        {/* Logo and Desktop Search Trigger */}
+        <div className="flex items-center gap-5 flex-1 md:flex-none">
+          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
+            <div
+              className="w-7 h-7 rounded-lg flex items-center justify-center bg-sky-400/10 border border-sky-400/25 transition-colors group-hover:bg-sky-400/15"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-sky-300" strokeWidth={2.2} />
+            </div>
+            <span className="font-semibold text-white tracking-tight text-sm font-sans">
+              Marvox{" "}
+              <span style={{ color: "#7dd3fc" }}>Docs</span>
+            </span>
+          </Link>
+
+          <button
+            onClick={openSearch}
+            className="hidden sm:flex items-center justify-between text-left text-[11px] px-2.5 py-1 rounded-lg border border-slate-800/80 bg-slate-950/40 text-slate-500 hover:text-slate-300 hover:border-slate-700/80 transition-all cursor-pointer w-40 lg:w-48 focus:outline-none focus:ring-1 focus:ring-sky-500/20"
           >
-            <BookOpen className="w-3.5 h-3.5 text-sky-300" strokeWidth={2.2} />
-          </div>
-          <span className="font-semibold text-white tracking-tight text-sm font-sans">
-            Marvox{" "}
-            <span style={{ color: "#7dd3fc" }}>Docs</span>
-          </span>
-        </Link>
+            <span className="flex items-center gap-2">
+              <Search className="w-3 h-3 text-slate-500" />
+              <span>Search docs...</span>
+            </span>
+            <kbd className="inline-flex h-4 select-none items-center gap-0.5 rounded border border-slate-800/80 bg-slate-900/50 px-1.5 font-mono text-[9px] font-medium text-slate-500">
+              <span>⌘</span>K
+            </kbd>
+          </button>
+        </div>
 
         {/* Nav links */}
         <nav className="hidden md:flex items-center gap-5 text-sm">
@@ -72,6 +90,15 @@ export const DocsHeader: React.FC = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-1">
+          {/* Mobile search button */}
+          <button
+            onClick={openSearch}
+            className="flex sm:hidden items-center justify-center w-8 h-8 rounded-md transition-colors text-slate-500 hover:text-slate-200"
+            aria-label="Search"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+          
           <ThemeToggle />
           <Link
             href="https://marvox.ai"

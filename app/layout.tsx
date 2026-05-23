@@ -7,6 +7,7 @@ import { DocsHeader } from "@/components/docs-header"
 import { DocsFooter } from "@/components/docs-footer"
 import { DocsLayoutShell } from "@/components/docs-layout-shell"
 import { ThemeProvider } from "@/components/theme-provider"
+import { SearchProvider } from "@/components/search-provider"
 import { Suspense } from "react"
 import "./globals.css"
 import "highlight.js/styles/github-dark.css"
@@ -91,15 +92,17 @@ export default function RootLayout({
             Skip to content
           </a>
           
-          <DocsLayoutShell
-            header={<DocsHeader />}
-            sidebar={<DocsNavigation />}
-            footer={<DocsFooter />}
-          >
-            <Suspense fallback={<div className="animate-pulse text-muted-foreground text-sm">Loading…</div>}>
-              {children}
-            </Suspense>
-          </DocsLayoutShell>
+          <SearchProvider>
+            <DocsLayoutShell
+              header={<DocsHeader />}
+              sidebar={<DocsNavigation />}
+              footer={<DocsFooter />}
+            >
+              <Suspense fallback={<div className="animate-pulse text-muted-foreground text-sm">Loading…</div>}>
+                {children}
+              </Suspense>
+            </DocsLayoutShell>
+          </SearchProvider>
         </ThemeProvider>
       </body>
     </html>
