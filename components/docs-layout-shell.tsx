@@ -75,7 +75,12 @@ export function DocsLayoutShell({
 
         {/* Main Content Area */}
         <main id="main-content" className="docs-main flex-1 overflow-y-auto relative">
-          <div className="max-w-4xl mx-auto px-8 py-10 min-h-full">
+          <div
+            className={cn(
+              "mx-auto px-8 py-10 min-h-full transition-all duration-300 ease-in-out",
+              isCollapsed ? "max-w-6xl" : "max-w-4xl"
+            )}
+          >
             {children}
           </div>
           {footer}

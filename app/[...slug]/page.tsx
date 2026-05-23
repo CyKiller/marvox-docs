@@ -16,6 +16,7 @@ import AudioPipelineDiagram from "@/components/audio-pipeline-diagram"
 import RoadmapTimeline from "@/components/roadmap-timeline"
 import MarkdownRenderer from "@/components/markdown-renderer"
 import { TableOfContents } from "@/components/table-of-contents"
+import { InteractiveTutorialEmulator } from "@/components/interactive-tutorial-emulator"
 
 const GITHUB_CONTENT_BASE =
   "https://github.com/CyKiller/MarvoxV1/blob/main/"
@@ -154,6 +155,9 @@ export default async function DocPage({ params }: PageProps) {
             </a>
           )}
         </div>
+
+        {/* Custom Emulator injection for User Guide */}
+        {slug === "user-guide" && <InteractiveTutorialEmulator />}
 
         {/* Markdown body */}
         <MarkdownRenderer content={content.markdown} />
