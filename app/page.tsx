@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ArrowRight, BookOpen, Code, Layers, Users, Zap, Shield, Cpu, Network, GitBranch, Sparkles, Eye, Volume2, Map } from "lucide-react"
+import HomepageWorkflowDiagram from "@/components/homepage-workflow-diagram"
 
 const FEATURED_DIAGRAMS = [
   {
@@ -224,6 +225,17 @@ export default function DocsHomePage() {
             Full Changelog →
           </Link>
         </div>
+      </section>
+
+      {/* ── How Marvox Works — workflow trainer diagram ── */}
+      <section>
+        <div className="mb-5 text-center">
+          <h2 className="text-xl font-bold text-white tracking-tight">How Marvox Works</h2>
+          <p className="text-sm mt-1" style={{ color: "hsl(240 5% 55%)" }}>
+            Six steps from manuscript to living storyworld — learn the workflow before you log in
+          </p>
+        </div>
+        <HomepageWorkflowDiagram />
       </section>
 
       {/* ── Featured Interactive Components ── */}

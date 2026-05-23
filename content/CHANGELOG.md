@@ -79,8 +79,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
 - `RuntimePolicy.from_env()` — all `CHAROS_*` tuning knobs centralized.
 
 ### Infrastructure
-- Upstash Vector as production vector backend (`VECTOR_DB_BACKEND=upstash`).
-- ChromaDB for local development.
+> **Note (historical):** Vector storage entries below reflect the stack at the time of this release.
+> The production stack has since migrated to PostgreSQL pgvector — no separate vector DB is required.
+- ~~Upstash Vector as production vector backend (`VECTOR_DB_BACKEND=upstash`).~~ *(replaced by pgvector)*
+- ~~ChromaDB for local development.~~ *(replaced by pgvector)*
 - `BatchEmbeddingService` — batched + cached embedding calls (4× faster than per-call).
 - `IntegratedSecurityMiddleware` — CSRF, rate limiting, XSS sanitization.
 - Stripe billing integration with webhook deduplication.
@@ -91,7 +93,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
 
 ### Added
 - FastAPI backend on Railway (PostgreSQL + Redis).
-- Next.js 14 frontend on Vercel.
+- Next.js 14 frontend on Vercel. *(upgraded to Next.js 16.x — see current package.json)*
 - Manuscript upload and analysis pipeline (`.txt`, `.epub`, `.pdf`).
 - Character extraction — up to 14+ characters per manuscript.
 - AI-powered story analysis: summary, themes, dialogue patterns, publication readiness.

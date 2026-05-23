@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Volume2, Waveform, Zap } from "lucide-react"
+import { Volume2, Zap } from "lucide-react"
 
 type AudioStep = {
   id: string

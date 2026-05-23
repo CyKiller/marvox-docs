@@ -614,7 +614,7 @@ function DataFlowDiagram() {
   return (
     <div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(148,163,184,0.1)" }}>
       {/* Row 1 */}
-      <div className="grid grid-cols-3 divide-x" style={{ borderBottom: "1px solid rgba(148,163,184,0.1)", divideColor: "rgba(148,163,184,0.1)" }}>
+      <div className="grid grid-cols-3 divide-x" style={{ borderBottom: "1px solid rgba(148,163,184,0.1)" }}>
         <FlowCell
           layer="Client"
           label="Next.js Frontend"
@@ -650,7 +650,7 @@ function DataFlowDiagram() {
         <div className="flex-1 h-px" style={{ background: "rgba(125,211,252,0.18)" }} />
       </div>
       {/* Row 3 */}
-      <div className="grid grid-cols-3 divide-x" style={{ divideColor: "rgba(148,163,184,0.1)", borderBottom: "1px solid rgba(148,163,184,0.1)" }}>
+      <div className="grid grid-cols-3 divide-x" style={{ borderBottom: "1px solid rgba(148,163,184,0.1)" }}>
         <FlowCell
           layer="Content Agents"
           label="Writer · Character"

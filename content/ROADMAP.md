@@ -23,7 +23,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 **Delivered**:
 - [x] FastAPI backend with PostgreSQL database
-- [x] Next.js 14 frontend with 9 overview/analysis pages
+- [x] Next.js 14 frontend with 9 overview/analysis pages *(Next.js 16.x as of current main)*
 - [x] Manuscript upload and parsing system
 - [x] Basic AI-powered manuscript analysis (GPT-4o-mini)
 - [x] Character extraction and profile building
@@ -218,7 +218,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 **Validation**:
 - ✅ All claims verified against actual codebase
 - ✅ FastAPI 0.104.1 confirmed (requirements.txt)
-- ✅ Next.js 14.2.16, React 18, TypeScript 5 confirmed (package.json)
+- ✅ Next.js 14.2.16, React 18, TypeScript 5 confirmed (package.json) *(historical — app now runs Next.js 16.x)*
 - ✅ 29 routes counted via file discovery
 - ✅ 6 agents confirmed via directory listing
 - ✅ 13 voices confirmed in main.py
