@@ -8,7 +8,7 @@
 
 ## Current Reality
 
-Marvox is a Storyworld Production Studio built around CharacterOS. The backend is a FastAPI service with PostgreSQL as the production database, Redis for rate limiting and cache-backed workflows, Vercel Blob for production audio/object storage, and Upstash Vector for production character-memory retrieval.
+Marvox is a Storyworld Production Studio built around CharacterOS. The backend is a FastAPI service with PostgreSQL (+ pgvector) as the database for all environments, Redis/Dragonfly-compatible cache for rate limiting and cache-backed workflows, and Vercel Blob for production audio/object storage. Character-memory and canon retrieval use pgvector for vector search — no separate vector database is required.
 
 The frontend is a Next.js app that talks to the Railway-hosted backend through `NEXT_PUBLIC_API_URL`. Stripe billing, email verification, CharacterOS chat, scene generation, collaboration, and audio workflows are all represented in the codebase today, but operational readiness still depends on environment configuration and release-gate verification.
 

@@ -479,7 +479,7 @@ const WORKFLOWS: Workflow[] = [
       {
         agent: "BatchEmbeddingService",
         action: "embed_batch([query])",
-        note: "Query embedded via all-MiniLM-L6-v2 (384D). Calls are batched and cached — never embed one-by-one. Cache hit rate typically 60–80% for repeated queries.",
+        note: "Query embedded via OpenAI text-embedding-3-small (1,536D). Calls are batched and cached — never embed one-by-one. Cache hit rate typically 60–80% for repeated queries.",
         color: "teal",
         file: "services/batch_embedding_service.py",
       },

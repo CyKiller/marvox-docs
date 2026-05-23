@@ -98,7 +98,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 - [x] 4-mode system (CANON, CANON+INFER, BRANCH, WRITER_ROOM)
 
 **Key Components**:
-- **RAG Stack**: sentence-transformers (all-MiniLM-L6-v2) + ChromaDB + Upstash Vector
+- **RAG Stack**: OpenAI text-embedding-3-small (1,536D) + PostgreSQL pgvector
 - **Agents**: 19 specialized agents orchestrated via `AgentRuntime`
 - **Audio**: OpenAI `gpt-4o-mini-tts` with 13 built-in voices
 - **Memory**: Per-character memory bridges for scene persistence
@@ -275,7 +275,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 - [ ] Database query optimization (indexing, caching)
 - [ ] Frontend code splitting and lazy loading
 - [ ] API response caching (Redis)
-- [ ] Vector search optimization (Upstash Vector)
+- [ ] Vector search optimization (pgvector indexes + query tuning)
 - [ ] Image optimization and CDN integration
 - [ ] Build time reduction
 - [ ] Runtime performance profiling
@@ -369,22 +369,21 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ### Core Runtime
 - Python 3.11+
-- Node.js 18+
-- FastAPI 0.104.1
-- Next.js 14.2.16
+- Node.js 20.9+, npm 10+
+- FastAPI ≥0.104.1
+- Next.js 16.x
 - React 18
 
 ### AI/ML
-- OpenAI API 1.51.0
-- sentence-transformers 2.2.2
-- ChromaDB / Upstash Vector
-- PyTorch 2.1.1
+- OpenAI API ≥1.51.0 (LLM + TTS)
+- OpenAI text-embedding-3-small (1,536D, RAG embeddings)
+- PostgreSQL pgvector (vector storage, all environments)
 
 ### DevOps
-- Docker & Docker Compose
-- GitHub Actions (CI/CD)
-- PostgreSQL (production DB)
-- Redis (production cache)
+- Docker & Docker Compose (local dev)
+- GitHub Actions (CI/CD, self-hosted runner)
+- PostgreSQL + pgvector (all environments)
+- Redis/Dragonfly-compatible cache (rate limiting + job queues)
 
 ---
 
