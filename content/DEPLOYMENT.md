@@ -5,8 +5,9 @@ Marvox supports one deployment topology:
 - Public frontend: Vercel
 - Browser API origin: same-origin `/api/*` on Vercel
 - Backend runtime: Railway
-- Primary stateful services: Railway PostgreSQL, Railway Redis, Upstash Vector, Vercel Blob
+- Primary stateful services: Railway PostgreSQL + pgvector, Railway Redis/Dragonfly-compatible cache, Vercel Blob
 - Staging model: Vercel preview deployments plus a Railway staging backend
+- Docs site: Netlify (see [Docs Site Deployment](#docs-site-deployment-netlify) below)
 
 **Database**: PostgreSQL is the only supported database for all environments (development, staging, production). Local development requires Docker for PostgreSQL + Redis.
 
@@ -27,13 +28,11 @@ STRIPE_SECRET_KEY=...
 STRIPE_WEBHOOK_SECRET=...
 FRONTEND_URL=https://<your-vercel-domain>
 CORS_ALLOWED_ORIGINS=https://<your-vercel-domain>
-UPSTASH_VECTOR_REST_URL=https://<your-upstash-index>
-UPSTASH_VECTOR_REST_TOKEN=...
 BLOB_READ_WRITE_TOKEN=...
 FROM_EMAIL=onboarding@<your-domain>
 SUPPORT_EMAIL=support@<your-domain>
 RESEND_API_KEY=...
-VECTOR_DB_BACKEND=upstash
+VECTOR_DB_BACKEND=pgvector
 ```
 
 **New in Phase 4**:
@@ -166,8 +165,30 @@ Treat any `/api/health/ready` failure as launch-blocking.
 
 ## Operations Notes
 
-- Do not commit Vercel, Railway, Stripe, Upstash, Blob, or OpenAI secrets.
+- Do not commit Vercel, Railway, Stripe, Blob, or OpenAI secrets.
 - Store deployment credentials in Railway, Vercel, and GitHub Actions secrets only.
 - Remove unsupported deployment paths rather than keeping them as fallback options.
+
+---
+
+## Docs Site Deployment (Netlify)
+
+The **marvox-docs** site is a separate Next.js static-export site deployed to Netlify. It is not part of the app deployment — it is a public documentation surface only.
+
+**Live URL**: [https://marvox-docs.netlify.app](https://marvox-docs.netlify.app)
+
+**Build**:
+```bash
+# In the marvox-docs/ directory
+npm install
+npm run build   # Produces /out static export
+```
+
+**Deploy**: Netlify auto-deploys from the `marvox-docs` repository `main` branch on push. No backend or API keys are required.
+
+**Security**:
+- The docs site is public and must never contain secrets, tokens, API keys, or any Railway/Vercel/OpenAI credentials.
+- Content must use placeholder values (e.g., `sk-...`, `replace-with-generated-secret`) only.
+- The Netlify site key is stored in Netlify project settings — never committed to the repository.
 
 See [docs/DEPLOYMENT_RUNBOOK.md](docs/DEPLOYMENT_RUNBOOK.md) for the detailed runbook and [docs/DEPLOYMENT_INVENTORY.md](docs/DEPLOYMENT_INVENTORY.md) for the supported artifact map.

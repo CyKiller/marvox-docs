@@ -10,57 +10,29 @@ type CodeExample = {
   python: string
 }
 
+// NOTE: All route paths verified against CyKiller/MarvoxV1 main branch.
+// Backend base URL: https://<your-railway-domain> (accessed via Vercel /api/* rewrite in production).
+// For local dev: http://localhost:8000
 const examples: CodeExample[] = [
   {
-    name: "Character Chat",
-    description: "Send a message to a character and get a response",
-    curl: `curl -X POST https://api.marvox.app/api/characteros/chat \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "project_id": "proj_123abc",
-    "character_id": "char_alice",
-    "message": "What did you find at the bottom of the rabbit hole?",
-    "mode": "CANON"
-  }'`,
-    python: `import requests
-
-response = requests.post(
-  "https://api.marvox.app/api/characteros/chat",
-  headers={
-    "Authorization": "Bearer YOUR_API_KEY",
-    "Content-Type": "application/json"
-  },
-  json={
-    "project_id": "proj_123abc",
-    "character_id": "char_alice",
-    "message": "What did you find at the bottom of the rabbit hole?",
-    "mode": "CANON"
-  }
-)
-
-character_response = response.json()
-print(character_response["response"])`,
-  },
-  {
     name: "Upload Manuscript",
-    description: "Upload a manuscript file to create a new project",
-    curl: `curl -X POST https://api.marvox.app/api/projects/upload \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -F "file=@alice_in_wonderland.txt" \\
+    description: "Upload a manuscript file to create a new project (multipart/form-data)",
+    curl: `curl -X POST https://<your-railway-domain>/api/projects/upload-manuscript \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
   -F "title=Alice in Wonderland" \\
-  -F "description=Classic Victorian fantasy novel"`,
+  -F "description=Classic Victorian fantasy novel" \\
+  -F "file=@alice_in_wonderland.txt"`,
     python: `import requests
 
 with open("alice_in_wonderland.txt", "rb") as f:
   response = requests.post(
-    "https://api.marvox.app/api/projects/upload",
-    headers={"Authorization": "Bearer YOUR_API_KEY"},
-    files={"file": f},
+    "https://<your-railway-domain>/api/projects/upload-manuscript",
+    headers={"Authorization": "Bearer YOUR_JWT_TOKEN"},
+    files={"file": ("alice_in_wonderland.txt", f, "text/plain")},
     data={
       "title": "Alice in Wonderland",
-      "description": "Classic Victorian fantasy novel"
-    }
+      "description": "Classic Victorian fantasy novel",
+    },
   )
 
 project = response.json()
@@ -68,152 +40,188 @@ project_id = project["id"]
 print(f"Project created: {project_id}")`,
   },
   {
-    name: "Generate Scene",
-    description: "Generate a multi-character scene with continuity validation",
-    curl: `curl -X POST https://api.marvox.app/api/characteros/scene/generate \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
+    name: "Build CharacterOS",
+    description: "Index a manuscript and extract character profiles (returns job_id — poll /api/jobs/{job_id})",
+    curl: `curl -X POST https://<your-railway-domain>/api/characteros/projects/YOUR_PROJECT_ID/build \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"`,
+    python: `import requests, time
+
+project_id = "YOUR_PROJECT_ID"
+base = "https://<your-railway-domain>"
+
+# Trigger build
+resp = requests.post(
+  f"{base}/api/characteros/projects/{project_id}/build",
+  headers={"Authorization": "Bearer YOUR_JWT_TOKEN"},
+)
+job_id = resp.json().get("job_id")
+
+# Poll until complete
+while True:
+  status = requests.get(
+    f"{base}/api/jobs/{job_id}",
+    headers={"Authorization": "Bearer YOUR_JWT_TOKEN"},
+  ).json()
+  print(f"Status: {status['status']}")
+  if status["status"] in ("completed", "failed"):
+    break
+  time.sleep(3)`,
+  },
+  {
+    name: "Character Chat",
+    description: "Send a message to a canon-locked character (project_id is in the URL path)",
+    curl: `curl -X POST https://<your-railway-domain>/api/characteros/projects/YOUR_PROJECT_ID/chat \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "project_id": "proj_123abc",
-    "character_ids": ["char_alice", "char_cheshire"],
-    "direction": "A tense conversation in the forest"
+    "character_id": "char_alice",
+    "message": "What did you find at the bottom of the rabbit hole?",
+    "mode": "CANON"
   }'`,
     python: `import requests
 
+project_id = "YOUR_PROJECT_ID"
+
 response = requests.post(
-  "https://api.marvox.app/api/characteros/scene/generate",
+  f"https://<your-railway-domain>/api/characteros/projects/{project_id}/chat",
   headers={
-    "Authorization": "Bearer YOUR_API_KEY",
-    "Content-Type": "application/json"
+    "Authorization": "Bearer YOUR_JWT_TOKEN",
+    "Content-Type": "application/json",
   },
   json={
-    "project_id": "proj_123abc",
+    "character_id": "char_alice",
+    "message": "What did you find at the bottom of the rabbit hole?",
+    "mode": "CANON",  # CANON | CANON+INFER | BRANCH | WRITER_ROOM
+  },
+)
+
+data = response.json()
+print(data["response"])
+print(data.get("citations", []))`,
+  },
+  {
+    name: "Generate Scene",
+    description: "Generate a multi-character scene with 5-layer continuity validation",
+    curl: `curl -X POST https://<your-railway-domain>/api/characteros/projects/YOUR_PROJECT_ID/scene \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{
     "character_ids": ["char_alice", "char_cheshire"],
-    "direction": "A tense conversation in the forest"
-  }
+    "direction": "A tense conversation in the forest",
+    "mood": "tense",
+    "intensity": 0.8
+  }'`,
+    python: `import requests
+
+project_id = "YOUR_PROJECT_ID"
+
+response = requests.post(
+  f"https://<your-railway-domain>/api/characteros/projects/{project_id}/scene",
+  headers={
+    "Authorization": "Bearer YOUR_JWT_TOKEN",
+    "Content-Type": "application/json",
+  },
+  json={
+    "character_ids": ["char_alice", "char_cheshire"],
+    "direction": "A tense conversation in the forest",
+    "mood": "tense",
+    "intensity": 0.8,
+  },
 )
 
 scene = response.json()
-print(f"Scene generated: {scene['text']}")
-print(f"Continuity score: {scene['continuity_score']}")`,
+print(scene["scene_text"])
+print(f"Continuity passed: {scene.get('continuity_passed')}")`,
   },
   {
-    name: "Generate Audio",
-    description: "Synthesize audio for a scene with voice configuration",
-    curl: `curl -X POST https://api.marvox.app/api/audio/scene/generate \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
+    name: "Generate Audio Pipeline",
+    description: "Synthesize multi-voice scene audio through the full production pipeline",
+    curl: `curl -X POST https://<your-railway-domain>/api/audio/characteros/projects/YOUR_PROJECT_ID/generate-audio-pipeline \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "project_id": "proj_123abc",
-    "scene_id": "scene_456def",
-    "voice_config": {
-      "character_alice": {"voice": "alloy", "speed": 1.0},
-      "character_cheshire": {"voice": "nova", "speed": 0.9}
+    "scene_text": "NARRATOR: The forest was quiet.\\nALICE: Where are we?\\nCHESHIRE: Everywhere and nowhere.",
+    "character_voice_map": {
+      "alice": {"voice_id": "alloy", "speed": 1.0},
+      "cheshire": {"voice_id": "nova", "speed": 0.9}
     }
   }'`,
     python: `import requests
 
+project_id = "YOUR_PROJECT_ID"
+
 response = requests.post(
-  "https://api.marvox.app/api/audio/scene/generate",
+  f"https://<your-railway-domain>/api/audio/characteros/projects/{project_id}/generate-audio-pipeline",
   headers={
-    "Authorization": "Bearer YOUR_API_KEY",
-    "Content-Type": "application/json"
+    "Authorization": "Bearer YOUR_JWT_TOKEN",
+    "Content-Type": "application/json",
   },
   json={
-    "project_id": "proj_123abc",
-    "scene_id": "scene_456def",
-    "voice_config": {
-      "character_alice": {"voice": "alloy", "speed": 1.0},
-      "character_cheshire": {"voice": "nova", "speed": 0.9}
-    }
-  }
+    "scene_text": "NARRATOR: The forest was quiet.\\nALICE: Where are we?",
+    "character_voice_map": {
+      "alice": {"voice_id": "alloy", "speed": 1.0},
+      "cheshire": {"voice_id": "nova", "speed": 0.9},
+    },
+  },
 )
 
 audio = response.json()
-audio_url = audio["file_url"]
-duration = audio["duration_seconds"]
-print(f"Audio ready at: {audio_url} ({duration}s)")`,
+print(f"Audio URL: {audio.get('file_url')}")
+print(f"Duration: {audio.get('duration_seconds')}s")`,
   },
   {
     name: "Character Reflection",
     description: "Trigger background character reflection for personality evolution",
-    curl: `curl -X POST https://api.marvox.app/api/characteros/projects/proj_123abc/characters/char_alice/reflect \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -H "Content-Type: application/json"`,
+    curl: `curl -X POST https://<your-railway-domain>/api/characteros/projects/YOUR_PROJECT_ID/characters/char_alice/reflect \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"`,
     python: `import requests
 
+project_id = "YOUR_PROJECT_ID"
+character_id = "char_alice"
+
 response = requests.post(
-  "https://api.marvox.app/api/characteros/projects/proj_123abc/characters/char_alice/reflect",
-  headers={"Authorization": "Bearer YOUR_API_KEY"}
+  f"https://<your-railway-domain>/api/characteros/projects/{project_id}/characters/{character_id}/reflect",
+  headers={"Authorization": "Bearer YOUR_JWT_TOKEN"},
 )
 
 reflection = response.json()
-print(f"Reflection: {reflection['text']}")
-print(f"Arc trend: {reflection['emotional_arc_trend']}")`,
-  },
-  {
-    name: "Collaboration Event",
-    description: "Trigger character reactions in a collaboration session",
-    curl: `curl -X POST https://api.marvox.app/api/collab/rooms/room_xyz/trigger-reactions \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "project_id": "proj_123abc",
-    "scene_event": "SCENE_COMPLETE",
-    "participating_characters": ["char_alice", "char_cheshire"]
-  }'`,
-    python: `import requests
-
-response = requests.post(
-  "https://api.marvox.app/api/collab/rooms/room_xyz/trigger-reactions",
-  headers={
-    "Authorization": "Bearer YOUR_API_KEY",
-    "Content-Type": "application/json"
-  },
-  json={
-    "project_id": "proj_123abc",
-    "scene_event": "SCENE_COMPLETE",
-    "participating_characters": ["char_alice", "char_cheshire"]
-  }
-)
-
-reactions = response.json()
-for character, reaction in reactions.items():
-  print(f"{character}: {reaction['text']}")`,
+print(reflection.get("text", ""))
+print(f"Arc trend: {reflection.get('emotional_arc_trend')}")`,
   },
   {
     name: "Get Project Status",
-    description: "Retrieve project information and current build status",
-    curl: `curl -X GET https://api.marvox.app/api/projects/proj_123abc \\
-  -H "Authorization: Bearer YOUR_API_KEY"`,
+    description: "Retrieve project details and current build/analysis status",
+    curl: `curl -X GET https://<your-railway-domain>/api/projects/YOUR_PROJECT_ID \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"`,
     python: `import requests
 
+project_id = "YOUR_PROJECT_ID"
+
 response = requests.get(
-  "https://api.marvox.app/api/projects/proj_123abc",
-  headers={"Authorization": "Bearer YOUR_API_KEY"}
+  f"https://<your-railway-domain>/api/projects/{project_id}",
+  headers={"Authorization": "Bearer YOUR_JWT_TOKEN"},
 )
 
 project = response.json()
 print(f"Title: {project['title']}")
 print(f"Status: {project['status']}")
-print(f"Characters: {len(project['characters'])}")
-print(f"Word count: {project['word_count']}")`,
+print(f"Word count: {project.get('word_count')}")`,
   },
   {
     name: "List API Keys",
     description: "List all API keys for programmatic authentication",
-    curl: `curl -X GET https://api.marvox.app/api/billing/api-keys \\
-  -H "Authorization: Bearer YOUR_API_KEY"`,
+    curl: `curl -X GET https://<your-railway-domain>/api/billing/api-keys \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"`,
     python: `import requests
 
 response = requests.get(
-  "https://api.marvox.app/api/billing/api-keys",
-  headers={"Authorization": "Bearer YOUR_API_KEY"}
+  "https://<your-railway-domain>/api/billing/api-keys",
+  headers={"Authorization": "Bearer YOUR_JWT_TOKEN"},
 )
 
 keys = response.json()
 for key in keys:
-  print(f"{key['name']} - Last used: {key['last_used_at']}")`,
+  print(f"{key['name']} — prefix: {key['key_prefix']} — last used: {key['last_used_at']}")`,
   },
 ]
 
@@ -307,9 +315,9 @@ export default function APICodeExamples() {
           <div>
             <h3 className="font-semibold text-slate-300 mb-1">📡 Base URL</h3>
             <p>
-              All endpoints use <span className="text-slate-300 font-mono">https://api.marvox.app</span> in production. For local development, use{" "}
-              <span className="text-slate-300 font-mono">http://localhost:8000</span>. Environment variable:{" "}
-              <span className="text-slate-300 font-mono">NEXT_PUBLIC_API_URL</span>.
+              The backend is hosted on Railway. In production the frontend rewrites <span className="text-slate-300 font-mono">/api/*</span> to the Railway origin via{" "}
+              <span className="text-slate-300 font-mono">NEXT_PUBLIC_API_URL</span> (set in Vercel). For direct API calls, use your Railway backend URL. For local development, use{" "}
+              <span className="text-slate-300 font-mono">http://localhost:8000</span>.
             </p>
           </div>
           <div>

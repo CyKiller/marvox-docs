@@ -9,8 +9,8 @@ This guide reflects the current PostgreSQL-only, Docker-based development setup 
 ## Prerequisites
 
 - **Docker Desktop** (or Docker Engine + Docker Compose) — required for PostgreSQL + Redis
-- Python 3.10+ (3.11+ recommended)
-- Node.js 18+
+- Python 3.11+ (match production runtime)
+- Node.js 20.9+, npm 10+
 
 ---
 
@@ -53,7 +53,7 @@ JWT_SECRET_KEY=change-me-to-random-256-bit-value
 Optional but common:
 - `OPENAI_MODEL_NAME` (default: `gpt-4o-mini`)
 - `CORS_ALLOWED_ORIGINS`
-- `CHROMA_PERSIST_DIR` (local vector storage path)
+- `VECTOR_DB_BACKEND` (default: `pgvector` — PostgreSQL is the only supported vector backend)
 
 ---
 

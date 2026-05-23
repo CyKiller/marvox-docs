@@ -26,6 +26,16 @@ Current code-truth status:
 
 **See**: [AGENTS.md](./AGENTS.md) | [ARCHITECTURE.md](./ARCHITECTURE.md) | [START_HERE.md](./START_HERE.md)
 
+## 📌 Source of Truth
+
+The canonical source of truth for all production behavior, routes, schemas, and environment variables is the **CyKiller/MarvoxV1** private repository (the `main` branch). This documentation site reflects the current state of that repository. When in doubt, defer to the code.
+
+- **App source**: `CyKiller/MarvoxV1` (private GitHub repo, `main` branch)
+- **Docs site**: `marvox-docs` (deployed to [marvox-docs.netlify.app](https://marvox-docs.netlify.app) via Netlify)
+- **Production status**: Private beta / active production hardening — not publicly GA
+
+---
+
 ## Private Repo CI
 
 GitHub Actions in this private repository are configured for a Linux self-hosted runner so normal CI does not depend on GitHub-hosted billing. Setup steps are in [SELF_HOSTED_RUNNER_SETUP.md](./SELF_HOSTED_RUNNER_SETUP.md).
@@ -94,8 +104,9 @@ WRITER_ROOM → Improv mode (multi-character invention)
 ## 🚀 Quick Start (3 Minutes)
 
 ### Prerequisites
-- Python 3.10+ (`python --version`)
-- Node.js 18+ (`node --version`)
+- Python 3.11+ (`python --version`)
+- Node.js 20.9+, npm 10+ (`node --version`)
+- Docker Desktop — required for local PostgreSQL + Redis (`docker --version`)
 - OpenAI API key (`OPENAI_API_KEY` in `.env`)
 - JWT secret (`JWT_SECRET_KEY` in `.env`)
 
@@ -201,22 +212,23 @@ curl -X POST http://localhost:8000/api/characteros/projects/{project_id}/chat \
 ## 🏗️ Architecture
 
 ### Backend (Python/FastAPI + AI Orchestration)
-- **FastAPI** 0.104.1 — Async HTTP server
+- **FastAPI** ≥0.104.1 — Async HTTP server
+- **Python** 3.11+ — Type-safe async/await runtime
 - **OpenAI GPT-4o-mini** — LLM inference for all agents
 - **OpenAI TTS** — Multi-voice audio synthesis
-- **ChromaDB / Upstash Vector** — Vector embeddings (text-embedding-3-small)
-- **PostgreSQL** — Project + character data across local and production
-- **AgentRuntime** — Central orchestrator for 10 agents
+- **PostgreSQL + pgvector** — Vector embeddings, project data, and production storage (single backend, all environments)
+- **Redis/Dragonfly-compatible cache** — Rate limiting, session cache, job queues
+- **AgentRuntime** — Central orchestrator for CharacterOS agents
 
-### Frontend (Next.js 14 + React)
-- **Next.js 14** — App Router, SSR
-- **React 18 + TypeScript**
+### Frontend (Next.js 16.x + React)
+- **Next.js 16.x** — App Router, SSR (Node.js 20.9+, npm 10+)
+- **React 18 + TypeScript 5**
 - **Tailwind CSS + shadcn/ui**
 - **Playwright** — E2E testing
 
 ### RAG System
 - **Embeddings**: OpenAI text-embedding-3-small (1,536 dims)
-- **Storage**: ChromaDB (local) or Upstash Vector (hosted)
+- **Storage**: PostgreSQL pgvector (local and production — no separate vector database required)
 - **Chunk Types**: Dialogue (highest priority), chapter summaries, scene segments
 - **Filtering**: Canon scope (chapter restrictions per character)
 
@@ -314,7 +326,7 @@ pytest tests/e2e/ -v
 ## 🔒 Security & Privacy
 
 - **Manuscript**: Encrypted in database, can be deleted on request
-- **Embeddings**: Stored locally (ChromaDB), deleted when project deleted
+- **Embeddings**: PostgreSQL pgvector (same database as project data), deleted when project deleted
 - **Model Training**: Data is NOT used to train external models
 - **Access Control**: Private to project owner only
 - **Rate Limiting**: Implemented on critical endpoints
@@ -346,11 +358,9 @@ BACKEND_URL=https://<your-railway-domain> \
 OPENAI_API_KEY=sk-...
 OPENAI_MODEL_NAME=gpt-4o-mini
 JWT_SECRET_KEY=change-me
-CHROMA_PERSIST_DIR=data/canon_vectors
-VECTOR_DB_BACKEND=chroma  # chroma | upstash
-UPSTASH_VECTOR_REST_URL=https://<your-upstash-endpoint>
-UPSTASH_VECTOR_REST_TOKEN=<your-token>
-UPSTASH_VECTOR_NAMESPACE=marvox
+DATABASE_URL=postgresql://marvox:marvox@localhost:5432/marvox
+REDIS_URL=redis://localhost:6379/0
+VECTOR_DB_BACKEND=pgvector
 BLOB_READ_WRITE_TOKEN=your_blob_token  # optional local blob storage
 ```
 
@@ -391,10 +401,12 @@ BLOB_READ_WRITE_TOKEN=your_blob_token  # optional local blob storage
 3. Test with `test_character_chat_rag.py`
 
 ### Vector Backup / Restore
+
+Vectors are stored in PostgreSQL (pgvector). Back up and restore the `canon_index` table using standard PostgreSQL tools:
+
 ```bash
-python scripts/vector_backup_restore.py backup --output /tmp/marvox_vectors.tar.gz --backend auto
-python scripts/vector_backup_restore.py verify --input /tmp/marvox_vectors.tar.gz
-python scripts/vector_backup_restore.py restore --input /tmp/marvox_vectors.tar.gz --force
+pg_dump --table=canon_index $DATABASE_URL > canon_index_backup.sql
+psql $DATABASE_URL < canon_index_backup.sql
 ```
 
 ---
@@ -402,14 +414,16 @@ python scripts/vector_backup_restore.py restore --input /tmp/marvox_vectors.tar.
 ## 🛠️ Tech Stack
 
 ### Python
-- fastapi 0.104.1, uvicorn — async web server
-- openai 1.51.0 — LLM + TTS
-- chromadb — vector database
-- PostgreSQL drivers — async SQL access
-- sentence-transformers — embeddings
+- fastapi ≥0.104.1, uvicorn 0.24.0 — async web server
+- openai ≥1.51.0 — LLM + TTS
+- asyncpg 0.29.0 + SQLAlchemy 2.x — async PostgreSQL access
+- pgvector (via PostgreSQL) — vector search
+- scikit-learn, numpy — ML utilities
+- ruff, mypy — linting and type checking
 
 ### Node/Frontend
-- next 14, react 18, typescript 5
+- next 16.x, react 18, typescript 5
+- node 20.9+, npm 10+
 - tailwindcss, shadcn/ui — components
 - playwright — E2E testing
 
@@ -463,78 +477,3 @@ A: Post-acquisition, the new owner may choose to open source it. For now, it's p
 
 **Marvox v2 — The storyworld production studio for the AI era.**  
 *Where characters remember. Where canon matters. Where voice has memory.*
-- **Emotional States**: Current emotional context and patterns
-- **Relationship Mapping**: Inter-character relationship dynamics
-- **Dialogue Patterns**: Speech characteristics and communication style
-
-### 📊 **Analytics Dashboard**
-- Project overview with key metrics
-- Character distribution and relationships
-- Chapter-by-chapter analysis
-- Semantic similarity clustering
-- Narrative structure insights
-
-## 🛠️ Tech Stack
-
-### Core Technologies
-- **Python 3.9+** - Backend runtime
-- **FastAPI** - Async web framework
-- **PostgreSQL** - Primary database
-- **Redis** - Caching layer
-- **Next.js 14** - Frontend framework
-- **TypeScript** - Type safety
-
-### AI/ML Stack
-- **sentence-transformers** - Semantic embeddings
-- **torch** - PyTorch for model inference
-- **transformers** - Hugging Face transformers
-- **scikit-learn** - ML utilities
-- **numpy** - Numerical computing
-
-### Development Tools
-- **pytest** - Testing framework
-- **black** - Code formatting
-- **flake8** - Linting
-- **mypy** - Type checking
-
-## 📦 Deployment
-
-### Environment Variables
-Key environment variables needed (see `.env.example`):
-```bash
-DATABASE_URL=postgresql://user:pass@host:5432/db
-REDIS_URL=redis://localhost:6379
-JWT_SECRET_KEY=your_secret_key
-OPENAI_API_KEY=sk-your_key_here
-FRONTEND_URL=https://<your-vercel-domain>
-CORS_ALLOWED_ORIGINS=https://<your-vercel-domain>
-NEXT_PUBLIC_API_URL=https://<your-railway-domain>
-VECTOR_DB_BACKEND=upstash
-UPSTASH_VECTOR_REST_URL=https://<your-upstash-endpoint>
-UPSTASH_VECTOR_REST_TOKEN=<your-token>
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_...
-```
-
-### Production Deployment
-- **Frontend**: Vercel only
-- **Backend**: Railway only
-- **Staging frontend**: Vercel preview deployments
-- **Staging backend**: Railway staging
-- **Verification**: `scripts/production-checklist.sh`
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
-## 🎯 Roadmap
-
-See `ROADMAP.md` for the current status and planned phases.
-
-## 📞 Support
-
-- **Issues**: https://github.com/CyKiller/Marvox/issues
-- **Security**: https://github.com/CyKiller/Marvox/security/advisories/new

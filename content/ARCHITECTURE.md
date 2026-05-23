@@ -9,26 +9,28 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 ```
 ┌─────────────────┐           ┌─────────────────┐
 │   Web Frontend  │◄────────►│   FastAPI       │
-│  (Next.js 14)   │  HTTP/WS  │   Backend       │
-│   29 Routes     │           │  (Python 3.11+) │
+│  (Next.js 16.x) │  HTTP/WS  │   Backend       │
+│   Vercel        │           │  (Python 3.11+) │
 └─────────────────┘           └────────┬────────┘
        ▲                               │
        │                               ▼
        │        ┌──────────────────────────────┐
        │        │  CharacterOS Agent Network   │
-       │        │  (25+ Agents + RAG System)   │
+       │        │  (AgentRuntime orchestrator) │
        │        └──────────────────┬───────────┘
        │                           │
        ▼                           ▼
    localStorage              ┌──────────────────┐
    (auth tokens)             │  PostgreSQL      │
-                             │  (Projects, AI)  │
+                             │  + pgvector      │
+                             │  (all data +     │
+                             │   vector index)  │
                              └────────┬─────────┘
                                       │
                                       ▼
                              ┌──────────────────┐
-                             │  Upstash / CDB   │
-                             │  (Vector Index)  │
+                             │  Redis/Dragonfly │
+                             │  (cache, queues) │
                              └──────────────────┘
 ```
 
@@ -48,15 +50,11 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 - **Redis** (local via Docker, Railway staging/production) - Cache, rate limiting, and job queues
 
 ### AI/ML & Embeddings
-- **OpenAI API** `1.51.0` - GPT-4o-mini inference, TTS audio generation
-- **Provider Adapters** - Planned, not yet implemented in this branch
-- **Sentence Transformers** `2.2.2` - all-MiniLM-L6-v2 (384D embeddings)
-- **ChromaDB** - Local vector database (dev/staging)
-- **Upstash Vector** - Serverless vector DB (production option)
-- **PyTorch** `2.1.1` - Model inference engine
-- **Transformers** `4.36.0` - Hugging Face model library
-- **scikit-learn** `1.3.2` - ML utilities
-- **NumPy** `1.24.4` - Numerical computing
+- **OpenAI API** ≥1.51.0 — GPT-4o-mini inference, TTS audio generation
+- **OpenAI text-embedding-3-small** — 1,536-dim vector embeddings for RAG
+- **PostgreSQL pgvector** — Vector storage and similarity search (local and production, single backend)
+- **scikit-learn** ≥1.5.0 — ML utilities
+- **NumPy** ≥1.26.0 — Numerical computing
 
 ### Document Processing
 - **python-docx** `1.1.0` - DOCX file parsing
@@ -101,9 +99,9 @@ services/
 ## 🎨 Frontend Stack (Next.js/React)
 
 ### Core Framework
-- **Next.js** `14.2.16` - React framework with App Router
-- **React** `18` - UI component library
-- **TypeScript** `5` - Strict type checking (enabled in build)
+- **Next.js** `16.x` — React framework with App Router (Node.js 20.9+, npm 10+)
+- **React** `18` — UI component library
+- **TypeScript** `5` — Strict type checking (enabled in build)
 
 ### Styling & UI
 - **Tailwind CSS** `3.4.17` - Utility-first styling
@@ -125,7 +123,7 @@ services/
 - **cmdk** - Command palette UI
 - **Embla Carousel** - Carousel/slider component
 
-### Route Organization (29 Routes)
+### Route Organization
 ```
 app/
 ├── page.tsx                    # Home
@@ -161,8 +159,7 @@ app/
 │           ├── world/page.tsx
 │           └── profile/[character_id]/page.tsx
 ├── analytics/page.tsx
-├── characters/page.tsx
-└── test-components/page.tsx
+└── characters/page.tsx
 ```
 
 ### API Client Architecture
@@ -255,13 +252,13 @@ app/
 - **Request lifecycle logging** - Entry/exit times
 
 ### Caching Strategy
-- **In-memory cache** with TTL auto-expiration
-- **Character profiles** cached after build (1 hour TTL)
+- **Redis/Dragonfly-compatible cache** — Rate limiting, job queues, session cache
+- **Character profiles** cached after build (TTL-based)
 - **Analysis results** cached by project_id
 
 ### Database Performance
-- **PostgreSQL**: Connection pooling, prepared statements
-- **Vector index**: ChromaDB (local) or Upstash (serverless)
+- **PostgreSQL + pgvector**: Connection pooling (asyncpg), prepared statements
+- **Vector index**: pgvector in PostgreSQL (same connection pool, no separate service required)
 
 ### Metrics Endpoints
 - `GET /metrics` - Prometheus metrics (when enabled)
@@ -275,30 +272,31 @@ app/
 ### Environment Tiers
 
 **Development**
-- PostgreSQL database (local container or managed service)
-- ChromaDB (local vector store)
+- PostgreSQL + Redis via Docker Compose (local)
+- pgvector extension for vector search
 - OpenAI API (real inference)
 - Localhost frontend/backend
 
 **Staging**
-- PostgreSQL (Supabase or similar)
-- Upstash Vector (serverless embeddings)
+- Vercel preview deployment (frontend)
+- Railway staging backend
+- PostgreSQL + pgvector (Railway managed)
 - OpenAI API (real inference)
-- HTTPS domains
 
 **Production**
-- PostgreSQL (managed RDS or Supabase)
-- Upstash Vector (high-availability)
+- Vercel (frontend — the only supported browser-facing surface)
+- Railway (backend FastAPI + Python runtime)
+- PostgreSQL + pgvector (Railway managed)
+- Redis/Dragonfly-compatible cache (Railway or managed Redis)
 - OpenAI API (with rate limiting)
-- CDN for static assets
-- Load balancer for API
 
-### Infrastructure Options
+### Supported Infrastructure
 ```
-Frontend: Vercel, Netlify, or self-hosted
-Backend: Railway, Render, AWS Lambda, or self-hosted
-Database: Supabase, Railway, AWS RDS, or self-hosted
-Vector DB: Upstash, local ChromaDB, or Pinecone
+Frontend:  Vercel only (production), Vercel preview (staging)
+Backend:   Railway only (production + staging)
+Database:  PostgreSQL + pgvector (all environments)
+Cache:     Redis / Dragonfly-compatible (all environments)
+Docs:      Netlify (marvox-docs.netlify.app)
 ```
 
 ---
@@ -351,7 +349,7 @@ Vector DB: Upstash, local ChromaDB, or Pinecone
 - Narration chunks (fallback)
 
 **Retrieval**:
-- Semantic search via sentence-transformers
+- Semantic search via pgvector cosine similarity (OpenAI text-embedding-3-small, 1536 dims)
 - Optional chapter filtering (canon scope)
 - Optional character filtering (dialogue)
 - Top-K ranking by relevance
@@ -412,5 +410,5 @@ ContinuityAgent validates for contradictions
 
 ---
 
-**Last Updated**: February 28, 2026  
-**Version**: 1.0 (Stable)
+**Last Updated**: May 2026 (synced to CyKiller/MarvoxV1 `main`)
+**Status**: Private beta / active production hardening
