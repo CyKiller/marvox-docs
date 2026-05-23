@@ -1,18 +1,27 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Cormorant_Garamond, Manrope } from "next/font/google"
 import Script from "next/script"
 import { DocsNavigation } from "@/components/docs-navigation"
 import { DocsHeader } from "@/components/docs-header"
 import { DocsFooter } from "@/components/docs-footer"
+import { DocsLayoutShell } from "@/components/docs-layout-shell"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
 import "./globals.css"
 import "highlight.js/styles/github-dark.css"
 
-const inter = Inter({
+const sans = Manrope({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+})
+
+const display = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
+  display: "swap",
 })
 
 const SITE_URL = "https://marvox-docs.netlify.app"
@@ -55,8 +64,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${sans.variable} ${display.variable}`}>
+      <body className="font-sans antialiased selection:bg-primary/20 selection:text-primary">
         {/* Google Analytics — no-op if NEXT_PUBLIC_GA_ID is unset */}
         {GA_ID && (
           <>
@@ -81,24 +90,19 @@ export default function RootLayout({
           >
             Skip to content
           </a>
-          <div className="docs-shell">
-            <DocsHeader />
-            <div className="docs-body">
-              <aside className="docs-sidebar">
-                <DocsNavigation />
-              </aside>
-              <main id="main-content" className="docs-main">
-                <div className="max-w-4xl mx-auto px-8 py-10 min-h-full">
-                  <Suspense fallback={<div className="animate-pulse text-muted-foreground text-sm">Loading…</div>}>
-                    {children}
-                  </Suspense>
-                </div>
-                <DocsFooter />
-              </main>
-            </div>
-          </div>
+          
+          <DocsLayoutShell
+            header={<DocsHeader />}
+            sidebar={<DocsNavigation />}
+            footer={<DocsFooter />}
+          >
+            <Suspense fallback={<div className="animate-pulse text-muted-foreground text-sm">Loading…</div>}>
+              {children}
+            </Suspense>
+          </DocsLayoutShell>
         </ThemeProvider>
       </body>
     </html>
   )
 }
+

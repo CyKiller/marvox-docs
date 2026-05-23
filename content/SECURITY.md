@@ -82,7 +82,7 @@ No story excerpt can escalate its privilege or override agent behavior.
 | `STRIPE_SECRET_KEY` | Railway env |
 | `STRIPE_WEBHOOK_SECRET` | Railway env — Stripe signature verification |
 | `BLOB_READ_WRITE_TOKEN` | Railway env (Vercel Blob) |
-| `UPSTASH_VECTOR_REST_TOKEN` | Railway env |
+| `DATABASE_URL` | Railway env (PostgreSQL + pgvector credentials) |
 | `RESEND_API_KEY` | Railway env |
 
 CI secret scanning (`secret-scan.yml`) runs on every push to block accidental commits of credentials.

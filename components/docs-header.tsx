@@ -40,17 +40,13 @@ export const DocsHeader: React.FC = () => {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center"
-            style={{
-              background: "linear-gradient(135deg, hsl(196 100% 67%) 0%, hsl(196 80% 48%) 100%)",
-              boxShadow: "0 0 16px rgba(125,211,252,0.35)",
-            }}
+            className="w-7 h-7 rounded-lg flex items-center justify-center bg-sky-400/10 border border-sky-400/25 transition-colors group-hover:bg-sky-400/15"
           >
-            <BookOpen className="w-3.5 h-3.5 text-[#020817]" strokeWidth={2.5} />
+            <BookOpen className="w-3.5 h-3.5 text-sky-300" strokeWidth={2.2} />
           </div>
-          <span className="font-semibold text-white tracking-tight text-sm">
+          <span className="font-semibold text-white tracking-tight text-sm font-sans">
             Marvox{" "}
-            <span style={{ color: "hsl(196 100% 67%)" }}>Docs</span>
+            <span style={{ color: "#7dd3fc" }}>Docs</span>
           </span>
         </Link>
 
@@ -67,7 +63,7 @@ export const DocsHeader: React.FC = () => {
             <Link
               key={href}
               href={href}
-              className="transition-colors text-slate-500 hover:text-slate-100"
+              className="transition-colors text-slate-500 hover:text-slate-200"
             >
               {label}
             </Link>
@@ -81,21 +77,15 @@ export const DocsHeader: React.FC = () => {
             href="https://marvox.ai"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md transition-all ml-2"
-            style={{
-              color: "hsl(196 100% 67%)",
-              border: "1px solid rgba(125,211,252,0.2)",
-              background: "rgba(125,211,252,0.06)",
-            }}
+            className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md transition-all ml-2 border border-sky-400/15 bg-sky-400/5 text-sky-300 hover:bg-sky-400/10"
           >
-            App <ExternalLink className="w-3 h-3" />
+            App <ExternalLink className="w-3.5 h-3.5" />
           </Link>
           <Link
             href="https://github.com/CyKiller/MarvoxV1"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-8 h-8 rounded-md transition-colors"
-            style={{ color: "hsl(240 5% 60%)" }}
+            className="flex items-center justify-center w-8 h-8 rounded-md transition-colors text-slate-500 hover:text-slate-200"
             aria-label="GitHub"
           >
             <Github className="w-4 h-4" />

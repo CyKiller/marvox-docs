@@ -8,21 +8,8 @@ import { cn } from "@/lib/utils"
 import {
   ChevronDown,
   ChevronRight,
-  BookOpen,
-  Code,
-  Users,
-  Settings,
-  Layers,
 } from "lucide-react"
 import { DOC_SECTIONS } from "@/lib/docs-data"
-
-const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  "Getting Started": BookOpen,
-  "User Guide": Users,
-  "API Reference": Code,
-  "Developer Guide": Settings,
-  Product: Layers,
-}
 
 export function DocsNavigation() {
   const pathname = usePathname()
@@ -33,7 +20,7 @@ export function DocsNavigation() {
         expanded.push(section.title)
       }
     })
-    // Default: expand all
+    // Default: expand all sections
     if (expanded.length === 0) return DOC_SECTIONS.map((s) => s.title)
     return expanded
   })
@@ -44,25 +31,23 @@ export function DocsNavigation() {
     )
 
   return (
-    <nav className="px-3 py-5 space-y-1">
+    <nav className="px-4 py-6 space-y-4 font-sans select-none">
       {DOC_SECTIONS.map((section) => {
-        const Icon = ICONS[section.title] ?? BookOpen
         const isOpen = expandedItems.includes(section.title)
         return (
-          <div key={section.title}>
+          <div key={section.title} className="space-y-1">
             <button
               onClick={() => toggle(section.title)}
-              className="w-full flex items-center gap-2 px-2.5 py-1.5 text-xs font-semibold uppercase tracking-widest rounded-md transition-colors"
-              style={{ color: "hsl(240 5% 50%)" }}
+              className="w-full flex items-center justify-between px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-300 transition-colors"
+              style={{ letterSpacing: "0.08em" }}
             >
-              <Icon className="w-3.5 h-3.5 flex-shrink-0" />
               <span className="flex-1 text-left">{section.title}</span>
               {isOpen
-                ? <ChevronDown className="w-3 h-3 opacity-60" />
-                : <ChevronRight className="w-3 h-3 opacity-60" />}
+                ? <ChevronDown className="w-3 h-3 text-slate-600 shrink-0" />
+                : <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />}
             </button>
             {isOpen && (
-              <div className="mt-0.5 mb-2 ml-2 space-y-0.5">
+              <div className="mt-1 mb-2 pl-2 space-y-0.5 border-l border-slate-900/60">
                 {section.pages.map((page) => {
                   const active = pathname === `/${page.slug}` || pathname === `/${page.slug}/`
                   return (
@@ -70,12 +55,11 @@ export function DocsNavigation() {
                       key={page.slug}
                       href={`/${page.slug}`}
                       className={cn(
-                        "block px-3 py-1.5 text-sm rounded-md transition-all border-l-2",
+                        "block px-3 py-1.5 text-xs rounded transition-all",
                         active
-                          ? "nav-active font-medium"
-                          : "border-transparent hover:border-l-[rgba(125,211,252,0.2)] hover:bg-[rgba(125,211,252,0.04)]"
+                          ? "bg-sky-400/10 text-sky-300 border-l border-sky-400 font-medium"
+                          : "text-slate-400 border-l border-transparent hover:text-slate-200 hover:bg-slate-900/30"
                       )}
-                      style={active ? undefined : { color: "hsl(240 5% 60%)" }}
                     >
                       {page.title}
                     </Link>
@@ -88,26 +72,27 @@ export function DocsNavigation() {
       })}
 
       {/* Divider + external links */}
-      <div style={{ borderTop: "1px solid rgba(148,163,184,0.1)", paddingTop: "1rem", marginTop: "0.5rem" }}>
-        <p className="px-2.5 mb-2 text-xs font-semibold uppercase tracking-widest" style={{ color: "hsl(240 5% 40%)" }}>
-          External
+      <div className="pt-4 border-t border-slate-900/60 space-y-1.5">
+        <p className="px-2.5 text-xs font-bold uppercase tracking-wider text-slate-500" style={{ letterSpacing: "0.08em" }}>
+          Resources
         </p>
-        {[
-          { label: "Main App", href: "https://marvox.ai" },
-          { label: "GitHub", href: "https://github.com/CyKiller/MarvoxV1" },
-          { label: "Changelog", href: "/changelog" },
-        ].map(({ label, href }) => (
-          <a
-            key={href}
-            href={href}
-            target={href.startsWith("http") ? "_blank" : undefined}
-            rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="block px-3 py-1.5 text-sm rounded-md border-l-2 border-transparent transition-all hover:bg-[rgba(125,211,252,0.04)]"
-            style={{ color: "hsl(240 5% 55%)" }}
-          >
-            {label}
-          </a>
-        ))}
+        <div className="pl-2 space-y-0.5 border-l border-transparent">
+          {[
+            { label: "Main App", href: "https://marvox.ai" },
+            { label: "GitHub Repository", href: "https://github.com/CyKiller/MarvoxV1" },
+            { label: "Changelog Notes", href: "/changelog" },
+          ].map(({ label, href }) => (
+            <a
+              key={href}
+              href={href}
+              target={href.startsWith("http") ? "_blank" : undefined}
+              rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="block px-3 py-1.5 text-xs rounded text-slate-400 hover:text-slate-200 hover:bg-slate-900/30 transition-colors"
+            >
+              {label}
+            </a>
+          ))}
+        </div>
       </div>
     </nav>
   )

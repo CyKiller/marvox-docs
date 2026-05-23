@@ -29,10 +29,23 @@
     --radius: 0.75rem;
 
     /* Marvox surface tokens */
-    --surface-border: rgba(148, 163, 184, 0.14);
-    --surface-border-glow: rgba(125, 211, 252, 0.22);
-    --surface-panel: rgba(6, 11, 24, 0.72);
-    --shadow-panel: 0 24px 60px rgba(2, 8, 22, 0.32);
+    --surface-border: rgba(148, 163, 184, 0.12);
+    --surface-border-glow: rgba(125, 211, 252, 0.20);
+    --surface-panel: rgba(6, 11, 24, 0.68);
+    --shadow-panel: 0 24px 60px rgba(2, 8, 22, 0.24);
+
+    /* Stricter Marvox brand design tokens */
+    --marvox-bg: #010409;
+    --marvox-bg-soft: #040a15;
+    --marvox-panel: rgba(6, 11, 24, 0.68);
+    --marvox-panel-strong: rgba(6, 11, 24, 0.84);
+    --marvox-border: rgba(148, 163, 184, 0.12);
+    --marvox-border-strong: rgba(125, 211, 252, 0.20);
+    --marvox-accent: #7dd3fc;
+    --marvox-accent-muted: rgba(125, 211, 252, 0.10);
+    --marvox-text: #f8fafc;
+    --marvox-text-muted: #94a3b8;
+    --marvox-text-faint: #64748b;
   }
 
   /* Light mode overrides */
@@ -81,12 +94,10 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
-    background-color: #020817;
+    background-color: #010409;
     background-image:
-      radial-gradient(1180px 820px at -8% -10%, rgba(56, 189, 248, 0.13), transparent 58%),
-      radial-gradient(1080px 640px at 106% 0%, rgba(34, 211, 238, 0.10), transparent 56%),
-      radial-gradient(900px 560px at 50% 110%, rgba(14, 165, 233, 0.07), transparent 62%),
-      linear-gradient(180deg, #020c1b 0%, #010409 100%);
+      radial-gradient(1200px 800px at 50% -10%, rgba(125, 211, 252, 0.04), transparent 60%),
+      linear-gradient(180deg, #040a15 0%, #010409 100%);
     background-attachment: fixed;
   }
 
@@ -119,6 +130,14 @@
   border-right: 1px solid var(--surface-border);
   background: rgba(4, 9, 20, 0.72);
   backdrop-filter: blur(20px);
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 250ms ease, border-color 300ms;
+}
+
+.docs-sidebar.collapsed {
+  width: 0 !important;
+  opacity: 0;
+  border-right-color: transparent !important;
+  pointer-events: none;
 }
 
 .docs-main {
@@ -472,17 +491,17 @@ aside {
 
 .prose h1 {
   @apply text-3xl font-bold tracking-tight mb-6 mt-0;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
 }
 
 .prose h2 {
   @apply text-2xl font-semibold tracking-tight mb-4 mt-8;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
 }
 
 .prose h3 {
   @apply text-xl font-semibold tracking-tight mb-3 mt-6;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
 }
 
 .prose h4 {
@@ -589,4 +608,45 @@ html {
     padding: 1rem !important;
     max-width: none !important;
   }
+}
+
+/* Custom Marvox Helper Classes */
+.marvox-panel {
+  background: var(--marvox-panel);
+  border: 1px solid var(--marvox-border);
+  box-shadow: 0 24px 60px rgba(2, 8, 22, 0.24);
+  backdrop-filter: blur(18px);
+  border-radius: var(--radius);
+}
+
+.marvox-panel-strong {
+  background: var(--marvox-panel-strong);
+  border: 1px solid var(--marvox-border-strong);
+  box-shadow: 0 28px 80px rgba(2, 8, 22, 0.34);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius);
+}
+
+.marvox-eyebrow {
+  color: var(--marvox-accent);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+}
+
+.marvox-muted {
+  color: var(--marvox-text-muted);
+}
+
+.font-display {
+  font-family: var(--font-display), serif;
+  letter-spacing: -0.03em;
+}
+
+.docs-prose h1,
+.docs-prose h2,
+.docs-prose h3 {
+  font-family: var(--font-display), serif;
+  letter-spacing: -0.02em;
 }

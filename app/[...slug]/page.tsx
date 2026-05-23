@@ -21,7 +21,7 @@ const GITHUB_CONTENT_BASE =
   "https://github.com/CyKiller/MarvoxV1/blob/main/"
 
 type PageProps = {
-  params: { slug: string[] }
+  params: Promise<{ slug: string[] }>
 }
 
 export function generateStaticParams() {
@@ -29,7 +29,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const slug = params.slug?.join("/") || ""
+  const resolvedParams = await params
+  const slug = resolvedParams.slug?.join("/") || ""
   const content = loadDocContent(slug)
   if (!content) return {}
   return {
@@ -42,8 +43,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default function DocPage({ params }: PageProps) {
-  const slug = params.slug?.join("/") || ""
+export default async function DocPage({ params }: PageProps) {
+  const resolvedParams = await params
+  const slug = resolvedParams.slug?.join("/") || ""
 
   // Architecture has a fully custom visual page
   if (slug === "architecture") {

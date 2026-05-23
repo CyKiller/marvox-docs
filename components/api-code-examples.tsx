@@ -10,9 +10,7 @@ type CodeExample = {
   python: string
 }
 
-// NOTE: All route paths verified against CyKiller/MarvoxV1 main branch.
-// Backend base URL: https://<your-railway-domain> (accessed via Vercel /api/* rewrite in production).
-// For local dev: http://localhost:8000
+// NOTE: All route paths and request validation schemas verified directly against CyKiller/MarvoxV1 main backend routes.
 const examples: CodeExample[] = [
   {
     name: "Upload Manuscript",
@@ -69,13 +67,13 @@ while True:
   },
   {
     name: "Character Chat",
-    description: "Send a message to a canon-locked character (project_id is in the URL path)",
+    description: "Send a message to a canon-locked character in CharacterOS",
     curl: `curl -X POST https://<your-railway-domain>/api/characteros/projects/YOUR_PROJECT_ID/chat \\
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
   -H "Content-Type: application/json" \\
   -d '{
     "character_id": "char_alice",
-    "message": "What did you find at the bottom of the rabbit hole?",
+    "message": "Why did you follow the rabbit?",
     "mode": "CANON"
   }'`,
     python: `import requests
@@ -90,26 +88,30 @@ response = requests.post(
   },
   json={
     "character_id": "char_alice",
-    "message": "What did you find at the bottom of the rabbit hole?",
+    "message": "Why did you follow the rabbit?",
     "mode": "CANON",  # CANON | CANON+INFER | BRANCH | WRITER_ROOM
   },
 )
 
 data = response.json()
 print(data["response"])
-print(data.get("citations", []))`,
+print(data.get("citation_passages", []))`,
   },
   {
     name: "Generate Scene",
-    description: "Generate a multi-character scene with 5-layer continuity validation",
+    description: "Generate a multi-character scene with 3-pass continuity validation",
     curl: `curl -X POST https://<your-railway-domain>/api/characteros/projects/YOUR_PROJECT_ID/scene \\
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
   -H "Content-Type: application/json" \\
   -d '{
     "character_ids": ["char_alice", "char_cheshire"],
-    "direction": "A tense conversation in the forest",
-    "mood": "tense",
-    "intensity": 0.8
+    "prompt": "Alice confronts the Cheshire Cat in the forest about the path to take.",
+    "scene_type": "dialogue-heavy",
+    "director_controls": {
+      "mood": "tense",
+      "pacing": "moderate",
+      "intensity": 0.8
+    }
   }'`,
     python: `import requests
 
@@ -123,9 +125,13 @@ response = requests.post(
   },
   json={
     "character_ids": ["char_alice", "char_cheshire"],
-    "direction": "A tense conversation in the forest",
-    "mood": "tense",
-    "intensity": 0.8,
+    "prompt": "Alice confronts the Cheshire Cat in the forest about the path to take.",
+    "scene_type": "dialogue-heavy",
+    "director_controls": {
+      "mood": "tense",
+      "pacing": "moderate",
+      "intensity": 0.8,
+    },
   },
 )
 
@@ -140,11 +146,18 @@ print(f"Continuity passed: {scene.get('continuity_passed')}")`,
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
   -H "Content-Type: application/json" \\
   -d '{
+    "character_ids": ["char_alice", "char_cheshire"],
     "scene_text": "NARRATOR: The forest was quiet.\\nALICE: Where are we?\\nCHESHIRE: Everywhere and nowhere.",
-    "character_voice_map": {
-      "alice": {"voice_id": "alloy", "speed": 1.0},
-      "cheshire": {"voice_id": "nova", "speed": 0.9}
-    }
+    "voice_assignments": {
+      "alice": "alloy",
+      "cheshire": "nova"
+    },
+    "director_controls": {
+      "mood": "neutral",
+      "pacing": "moderate",
+      "intensity": 0.5
+    },
+    "output_format": "mp3"
   }'`,
     python: `import requests
 
@@ -157,16 +170,23 @@ response = requests.post(
     "Content-Type": "application/json",
   },
   json={
-    "scene_text": "NARRATOR: The forest was quiet.\\nALICE: Where are we?",
-    "character_voice_map": {
-      "alice": {"voice_id": "alloy", "speed": 1.0},
-      "cheshire": {"voice_id": "nova", "speed": 0.9},
+    "character_ids": ["char_alice", "char_cheshire"],
+    "scene_text": "NARRATOR: The forest was quiet.\\nALICE: Where are we?\\nCHESHIRE: Everywhere and nowhere.",
+    "voice_assignments": {
+      "alice": "alloy",
+      "cheshire": "nova",
     },
+    "director_controls": {
+      "mood": "neutral",
+      "pacing": "moderate",
+      "intensity": 0.5,
+    },
+    "output_format": "mp3",
   },
 )
 
 audio = response.json()
-print(f"Audio URL: {audio.get('file_url')}")
+print(f"Audio URL: {audio.get('audio_url')}")
 print(f"Duration: {audio.get('duration_seconds')}s")`,
   },
   {
@@ -185,8 +205,8 @@ response = requests.post(
 )
 
 reflection = response.json()
-print(reflection.get("text", ""))
-print(f"Arc trend: {reflection.get('emotional_arc_trend')}")`,
+print(reflection.get("response", ""))
+print(f"Quality Score: {reflection.get('quality_score')}")`,
   },
   {
     name: "Get Project Status",
@@ -204,8 +224,7 @@ response = requests.get(
 
 project = response.json()
 print(f"Title: {project['title']}")
-print(f"Status: {project['status']}")
-print(f"Word count: {project.get('word_count')}")`,
+print(f"Status: {project['status']}")`,
   },
   {
     name: "List API Keys",
@@ -221,7 +240,7 @@ response = requests.get(
 
 keys = response.json()
 for key in keys:
-  print(f"{key['name']} — prefix: {key['key_prefix']} — last used: {key['last_used_at']}")`,
+  print(f"{key['name']} — prefix: {key['key_prefix']} — expires: {key['expires_at']}")`,
   },
 ]
 
@@ -236,10 +255,10 @@ export default function APICodeExamples() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <div className="rounded-lg border border-slate-800 bg-slate-950 p-6">
-        <h1 className="font-display text-3xl font-semibold text-white mb-2">API Code Examples</h1>
-        <p className="text-slate-400 mb-6">
+    <div className="flex flex-col gap-8 font-sans">
+      <div className="rounded-lg border border-slate-900 bg-slate-950/40 p-6">
+        <h1 className="font-display text-3xl font-medium text-white mb-2">API Code Examples</h1>
+        <p className="text-slate-400 mb-6 text-sm">
           Interactive code examples for the most common CharacterOS workflows. Select between curl and Python implementations.
           All examples use Bearer token authentication with your API key.
         </p>
@@ -248,20 +267,20 @@ export default function APICodeExamples() {
         <div className="flex gap-3 mb-6">
           <button
             onClick={() => setSelectedLanguage("curl")}
-            className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wide uppercase transition-all ${
               selectedLanguage === "curl"
-                ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white"
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                ? "bg-sky-400/10 text-sky-300 border border-sky-400/20"
+                : "bg-slate-900/40 text-slate-400 hover:text-slate-300 border border-slate-800"
             }`}
           >
             curl
           </button>
           <button
             onClick={() => setSelectedLanguage("python")}
-            className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wide uppercase transition-all ${
               selectedLanguage === "python"
-                ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white"
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                ? "bg-sky-400/10 text-sky-300 border border-sky-400/20"
+                : "bg-slate-900/40 text-slate-400 hover:text-slate-300 border border-slate-800"
             }`}
           >
             Python
@@ -271,14 +290,14 @@ export default function APICodeExamples() {
         {/* Code Examples Grid */}
         <div className="space-y-6">
           {examples.map((example) => (
-            <div key={example.name} className="rounded-lg border border-slate-700 bg-slate-900 overflow-hidden">
-              <div className="px-6 py-4 border-b border-slate-700">
-                <h3 className="font-semibold text-white mb-1">{example.name}</h3>
-                <p className="text-sm text-slate-400">{example.description}</p>
+            <div key={example.name} className="rounded-lg border border-slate-800/80 bg-slate-950/20 overflow-hidden">
+              <div className="px-6 py-4 border-b border-slate-900 bg-slate-950/10">
+                <h3 className="font-semibold text-slate-200 text-sm mb-1">{example.name}</h3>
+                <p className="text-xs text-slate-400">{example.description}</p>
               </div>
 
-              <div className="relative bg-slate-950 p-6">
-                <pre className="text-xs text-slate-300 font-mono overflow-x-auto">
+              <div className="relative bg-slate-950/80 p-6">
+                <pre className="text-xs text-sky-300 font-mono overflow-x-auto leading-relaxed">
                   <code>{selectedLanguage === "curl" ? example.curl : example.python}</code>
                 </pre>
 
@@ -286,13 +305,13 @@ export default function APICodeExamples() {
                   onClick={() =>
                     copyToClipboard(selectedLanguage === "curl" ? example.curl : example.python, example.name)
                   }
-                  className="absolute top-4 right-4 p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors"
+                  className="absolute top-4 right-4 p-2 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 transition-colors border border-slate-800"
                   title="Copy to clipboard"
                 >
                   {copiedCode === example.name ? (
-                    <Check className="w-4 h-4 text-emerald-400" />
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
                   ) : (
-                    <Copy className="w-4 h-4 text-slate-400" />
+                    <Copy className="w-3.5 h-3.5 text-slate-400" />
                   )}
                 </button>
               </div>
@@ -301,23 +320,23 @@ export default function APICodeExamples() {
         </div>
       </div>
 
-      <div className="rounded-lg border border-slate-800 bg-slate-950 p-6">
-        <h2 className="font-display text-xl font-semibold text-white mb-4">Authentication & Setup</h2>
-        <div className="space-y-4 text-sm text-slate-400">
+      <div className="rounded-lg border border-slate-900 bg-slate-950/40 p-6">
+        <h2 className="font-display text-xl font-medium text-white mb-4">Authentication & Setup</h2>
+        <div className="space-y-4 text-xs text-slate-400">
           <div>
             <h3 className="font-semibold text-slate-300 mb-1">🔑 API Keys</h3>
             <p>
               Generate API keys in your project settings under <span className="text-slate-300">/api/billing/api-keys</span>. Each key is{" "}
-              <span className="text-blue-400">one-time displayed</span> — store it securely. Use as Bearer token:{" "}
-              <span className="text-slate-300 font-mono">Authorization: Bearer YOUR_API_KEY</span>. Keys are SHA256-hashed in the database for security.
+              <span className="text-sky-300 font-semibold">one-time displayed</span> — store it securely. Use as Bearer token:{" "}
+              <span className="text-slate-300 font-mono text-[11px] bg-slate-900 px-1 py-0.5 rounded">Authorization: Bearer YOUR_API_KEY</span>. Keys are SHA256-hashed in the database for security.
             </p>
           </div>
           <div>
             <h3 className="font-semibold text-slate-300 mb-1">📡 Base URL</h3>
             <p>
-              The backend is hosted on Railway. In production the frontend rewrites <span className="text-slate-300 font-mono">/api/*</span> to the Railway origin via{" "}
-              <span className="text-slate-300 font-mono">NEXT_PUBLIC_API_URL</span> (set in Vercel). For direct API calls, use your Railway backend URL. For local development, use{" "}
-              <span className="text-slate-300 font-mono">http://localhost:8000</span>.
+              The backend is hosted on Railway. In production the frontend rewrites <span className="text-slate-300 font-mono text-[11px]">/api/*</span> to the Railway origin via{" "}
+              <span className="text-slate-300 font-mono text-[11px]">NEXT_PUBLIC_API_URL</span> (set in Vercel). For direct API calls, use your Railway backend URL. For local development, use{" "}
+              <span className="text-slate-300 font-mono text-[11px]">http://localhost:8080</span>.
             </p>
           </div>
           <div>
@@ -325,30 +344,30 @@ export default function APICodeExamples() {
             <p>
               Rate limiting is enforced per API key via Redis: <span className="text-slate-300">100 requests/minute</span> by default. Burst limits
               are <span className="text-slate-300">150 requests/10 seconds</span>. Check response headers{" "}
-              <span className="text-slate-300 font-mono">X-RateLimit-Remaining</span> and{" "}
-              <span className="text-slate-300 font-mono">X-RateLimit-Reset</span> for limit info.
+              <span className="text-slate-300 font-mono text-[11px]">X-RateLimit-Remaining</span> and{" "}
+              <span className="text-slate-300 font-mono text-[11px]">X-RateLimit-Reset</span> for limit info.
             </p>
           </div>
           <div>
             <h3 className="font-semibold text-slate-300 mb-1">🔄 Error Handling</h3>
             <p>
-              All errors return JSON with <span className="text-slate-300 font-mono">code</span> and{" "}
-              <span className="text-slate-300 font-mono">recovery_suggestions</span>. Examples: <span className="text-violet-400">CHARACTER_PROFILE_NOT_FOUND</span>,{" "}
-              <span className="text-violet-400">CANON_RETRIEVAL_FAILED</span>, <span className="text-violet-400">WRITER_TIMEOUT</span>. Always check HTTP status before
+              All errors return JSON with <span className="text-slate-300 font-mono text-[11px]">error_code</span> and{" "}
+              <span className="text-slate-300 font-mono text-[11px]">recovery_suggestions</span>. Examples: <span className="text-sky-300">CHARACTER_PROFILE_NOT_FOUND</span>,{" "}
+              <span className="text-sky-300">CANON_RETRIEVAL_FAILED</span>, <span className="text-sky-300">WRITER_TIMEOUT</span>. Always check HTTP status before
               using the response body.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="rounded-lg border border-slate-800 bg-slate-950 p-6">
-        <h2 className="font-display text-xl font-semibold text-white mb-4">Common Patterns</h2>
-        <div className="space-y-4 text-sm text-slate-400">
+      <div className="rounded-lg border border-slate-900 bg-slate-950/40 p-6">
+        <h2 className="font-display text-xl font-medium text-white mb-4">Common Patterns</h2>
+        <div className="space-y-4 text-xs text-slate-400">
           <div>
             <h3 className="font-semibold text-slate-300 mb-1">🎯 Project & Character IDs</h3>
             <p>
-              All CharacterOS operations require <span className="text-slate-300 font-mono">project_id</span> and often{" "}
-              <span className="text-slate-300 font-mono">character_id</span>. Get these from the project details endpoint or project creation response.
+              All CharacterOS operations require <span className="text-slate-300 font-mono text-[11px]">project_id</span> and often{" "}
+              <span className="text-slate-300 font-mono text-[11px]">character_id</span>. Get these from the project details endpoint or project creation response.
               IDs are UUIDs or slug-like identifiers (e.g., <span className="text-slate-300">proj_123abc</span>,{" "}
               <span className="text-slate-300">char_alice</span>).
             </p>
@@ -356,19 +375,19 @@ export default function APICodeExamples() {
           <div>
             <h3 className="font-semibold text-slate-300 mb-1">ℹ️ Mode Parameter</h3>
             <p>
-              Character responses are scoped by <span className="text-slate-300 font-mono">mode</span>:{" "}
-              <span className="text-emerald-400">CANON</span> (strict source material),{" "}
-              <span className="text-blue-400">CANON+INFER</span> (safe inference),{" "}
-              <span className="text-violet-400">BRANCH</span> (creative exploration),{" "}
-              <span className="text-amber-400">WRITER_ROOM</span> (collaboration mode). Default is{" "}
+              Character responses are scoped by <span className="text-slate-300 font-mono text-[11px]">mode</span>:{" "}
+              <span className="text-sky-300">CANON</span> (strict source material),{" "}
+              <span className="text-sky-300">CANON+INFER</span> (safe inference),{" "}
+              <span className="text-sky-300">BRANCH</span> (creative exploration),{" "}
+              <span className="text-sky-300">WRITER_ROOM</span> (collaboration mode). Default is{" "}
               <span className="text-slate-300">CANON</span>.
             </p>
           </div>
           <div>
             <h3 className="font-semibold text-slate-300 mb-1">⏳ Async Operations</h3>
             <p>
-              Long-running operations (build, scene generation, audio synthesis) return immediately with a <span className="text-slate-300 font-mono">job_id</span>.
-              Poll <span className="text-slate-300 font-mono">GET /api/jobs/&lt;job_id&gt;</span> to check status. Status values:{" "}
+              Long-running operations (build, scene generation, audio synthesis) return immediately with a <span className="text-slate-300 font-mono text-[11px]">job_id</span>.
+              Poll <span className="text-slate-300 font-mono text-[11px]">GET /api/jobs/&lt;job_id&gt;</span> to check status. Status values:{" "}
               <span className="text-slate-300">pending</span>, <span className="text-slate-300">running</span>,{" "}
               <span className="text-slate-300">completed</span>, <span className="text-slate-300">failed</span>.
             </p>

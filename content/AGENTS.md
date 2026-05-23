@@ -47,8 +47,6 @@ Production startup is gated by `backend/runtime_config.py`. In production, the b
 - `REDIS_URL`
 - `CORS_ALLOWED_ORIGINS`
 - `BLOB_READ_WRITE_TOKEN`
-- `UPSTASH_VECTOR_REST_URL`
-- `UPSTASH_VECTOR_REST_TOKEN`
 
 Important implementation notes:
 
