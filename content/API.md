@@ -1,10 +1,35 @@
-# Marvox API
+# Marvox API Reference
 
-Version: 1.0.0
+Marvox provides two tiers of REST API surfaces to support core storyworld production, administrative tools, autonomous agent integrations, and commercial robotics systems.
 
-This file is generated from `docs/openapi.json`. Do not edit manually.
+---
 
-## Authentication
+## 📂 API Surface Tiers
+
+### 🟢 Core API
+These primary endpoints support standard storyworld ingestion, character RAG interactions, audio synthesis pipelines, and workspace management. They represent the primary runtime surface of the Marvox platform.
+
+* **[Authentication](#authentication)** - Register, login, token refresh, and user session management.
+* **[Projects](#projects)** - Create projects, upload manuscripts, branch stories, manage settings.
+* **[CharacterOS](#characteros)** - Canonical character chat, multi-character scene generation, and workspace queries.
+* **[Analysis](#analysis)** - Run narrative analysis, extract dialogue metrics, plot arcs, and theme scopes.
+* **[Audio](#audio)** - Assign voice profiles, stream dialogues, and synthesize complete MP3 audio pipelines.
+* **[Jobs](#jobs)** - Track asynchronous project ingestion, analysis, and build states.
+* **[Auth & Recovery](#auth)** - Admin DB status, password reset, and user onboarding completion.
+* **[Billing](#billing)** - Set up Stripe plans, check quotas, and manage developer API keys.
+
+### 🟡 Extended / Experimental API (Specialized Environments)
+These specialized API surfaces support custom multi-device deployments, third-party editor add-ons, enterprise roles, and SRE operations.
+* **[Collaboration & Conflicts](#characteros)** - Create WebSocket-backed workspace sharing rooms and resolve narrative continuity breaches.
+* **[Enterprise Workspace Controls](#projects)** - Fleet dashboard metrics, custom seat licensing, and high-volume limits.
+* **[Audiobook Production Pipeline](#audiobook-production-pipeline)** - Chapter-by-chapter narrator orchestration and unified book stitching.
+* **[Third-Party Add-ons](#addons)** - Google Docs and Microsoft Word add-in token exchanges.
+* **[Robotics Persona & Fleet Sync (Experimental)](#robotics-persona-and-fleet-sync-experimental)** - Embody Marvox character personas in local hardware devices, configure behavioral policies, and compute group drift consensus.
+* **[OpenClaw SRE Webhooks (Experimental)](#openclaw-sre-webhooks-experimental)** - Autonomous agent telemetry triggers, heartbeat logs, and self-healing deployment hooks.
+
+---
+
+## Global Authentication Details
 
 Most `/api/*` endpoints require a Bearer token. Use `/api/auth/register` or `/api/auth/demo-login` to obtain a JWT, then send:
 
@@ -3931,3 +3956,67 @@ is_warned = await openai_service.should_warn_about_usage()
 if is_warned:
     # Log warning, notify user, throttle API calls, etc.
     logger.warning("OpenAI usage approaching limit")
+
+---
+
+## Robotics Persona and Fleet Sync (Experimental)
+
+The `/api/v2/personas` API tier manages localized deployment of Marvox character personas on physical hardware and edge robotics systems.
+
+### GET /api/v2/personas
+Summary: List available personas in the workspace.
+Authentication: Bearer token required.
+
+Request body: none
+
+Responses:
+- 200 — Success
+- 401 — Unauthorized
+
+### PATCH /api/v2/personas/{character_id}/behavior
+Summary: Update behavior policies (formality thresholds, empathy coefficients, tone constraints) for a localized persona.
+Authentication: Bearer token required.
+
+Request body:
+- application/json — BehaviorPolicyUpdate
+
+Responses:
+- 200 — Success
+- 404 — Character not found
+- 401 — Unauthorized
+
+### GET /api/v2/personas/group/{group_id}/consensus-state
+Summary: Returns the fleet-wide averaged consensus state of all localized personas sharing a common group ID. Useful for identifying narrative drift across hardware units.
+Authentication: Bearer token required.
+
+Responses:
+- 200 — Success
+- 401 — Unauthorized
+
+---
+
+## OpenClaw SRE Webhooks (Experimental)
+
+Integrates Marvox with local OpenClaw autonomous agents for self-healing SRE telemetry.
+
+### POST /api/openclaw/event
+Summary: Receive autonomous agent status updates (health degraded alerts, restart events, hotfixes applied).
+Authentication: None (secured via request signature).
+
+Request body:
+- application/json — OpenClawEvent (contains event_type, message, severity, details)
+
+Responses:
+- 200 — Event processed
+- 400 — Invalid signature
+
+### POST /api/openclaw/character-turn
+Summary: Executes an embodied task turn via a local character personality.
+Authentication: Bearer token required.
+
+Request body:
+- application/json — OpenClawCharacterTurnRequest
+
+Responses:
+- 200 — Turn success (returns emotion-tagged speech response)
+- 401 — Unauthorized

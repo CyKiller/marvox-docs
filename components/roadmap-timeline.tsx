@@ -325,10 +325,9 @@ export default function RoadmapTimeline() {
         <h2 className="font-display text-xl font-semibold text-white mb-4">Phase Highlights</h2>
         <div className="space-y-4 text-sm text-slate-400">
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">✅ Phases 1-7: Core Features (Production Ready)</h3>
+            <h3 className="font-semibold text-slate-300 mb-1">✅ Phases 1-7: Core Features (Verification Verified)</h3>
             <p>
-              Foundational CharacterOS runtime, collaboration, scene generation, audio production, memory/reflection, advanced RAG, and documentation. All 7 phases complete and
-              deployed. Architecture validated through hundreds of test scenarios.
+              Foundational CharacterOS runtime, collaboration, scene generation, audio production, memory/reflection, advanced RAG, and documentation. All 7 phases complete and verified. Architecture validated through rigorous test scenarios.
             </p>
           </div>
           <div>

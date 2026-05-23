@@ -67,30 +67,26 @@ export default function DocsHomePage() {
         </div>
       </section>
 
-      {/* ── Glamorous Live Simulator CTA ── */}
-      <section className="relative rounded-2xl overflow-hidden border border-sky-400/25 bg-gradient-to-r from-sky-950/25 via-slate-900/40 to-slate-950/60 p-6 sm:p-8">
+      {/* ── Studio Workflow Showcase CTA ── */}
+      <section className="relative rounded-2xl overflow-hidden border border-slate-800/80 bg-slate-950/40 p-6 sm:p-8">
         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-64 h-64 rounded-full bg-sky-500/5 blur-3xl pointer-events-none" />
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider text-sky-400 uppercase bg-sky-950/50 border border-sky-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
-              Live Interactive Simulator
+              CharacterOS Studio
             </div>
             <h2 className="text-xl sm:text-2xl font-medium text-white tracking-tight font-display">
-              Experience the Studio v2 Workspace
+              Explore the Studio Workflow
             </h2>
             <p className="text-sm text-slate-300 leading-relaxed font-sans">
-              Interact with our storyworld production emulator directly in the docs. Explore canon-grounded chat evidence boxes, creative BRANCH settings, token stream tracking with automatic conflict triggers, and multi-voice DNA audio synthesis waves.
+              Review the main CharacterOS workspace flow: canon-grounded chat, scene generation, evidence panels, and audio production handoff.
             </p>
           </div>
           <Link
             href="/user-guide"
-            className="flex-shrink-0 flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-medium text-sm transition-all bg-sky-400/10 hover:bg-sky-400/20 text-sky-300 border border-sky-400/30 hover:border-sky-400/50"
-            style={{
-              boxShadow: "0 0 15px rgba(56, 189, 248, 0.1)",
-            }}
+            className="flex-shrink-0 flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all bg-sky-400/10 hover:bg-sky-400/20 text-sky-300 border border-sky-400/30 hover:border-sky-400/50"
           >
-            Launch Live Simulator <ArrowRight className="w-4 h-4" />
+            Open user guide <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>

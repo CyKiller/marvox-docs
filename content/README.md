@@ -221,7 +221,7 @@ curl -X POST http://localhost:8000/api/characteros/projects/{project_id}/chat \
 - **AgentRuntime** — Central orchestrator for CharacterOS agents
 
 ### Frontend (Next.js 16.x + React)
-- **Next.js 16.x** — App Router, SSR (Node.js 20.9+, npm 10+)
+- **Next.js 16.x** — App Router, SSR (Node.js 20.9+, npm 10+; Marvox Core App only, Docs site uses Next.js 15.x)
 - **React 18 + TypeScript 5**
 - **Tailwind CSS + shadcn/ui**
 - **Playwright** — E2E testing
@@ -422,7 +422,7 @@ psql $DATABASE_URL < canon_index_backup.sql
 - ruff, mypy — linting and type checking
 
 ### Node/Frontend
-- next 16.x, react 18, typescript 5
+- next 16.x (Marvox Core App) / next 15.x (Docs Site), react 18, typescript 5
 - node 20.9+, npm 10+
 - tailwindcss, shadcn/ui — components
 - playwright — E2E testing

@@ -99,7 +99,7 @@ services/
 ## 🎨 Frontend Stack (Next.js/React)
 
 ### Core Framework
-- **Next.js** `16.x` — React framework with App Router (Node.js 20.9+, npm 10+)
+- **Next.js** `16.x` — React framework with App Router for the Marvox Core App (Note: this documentation site runs on Next.js 15.x; requires Node.js 20.9+, npm 10+)
 - **React** `18` — UI component library
 - **TypeScript** `5` — Strict type checking (enabled in build)
 

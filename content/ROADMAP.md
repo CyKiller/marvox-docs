@@ -210,20 +210,18 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ---
 
-## Key Metrics
+## Validation Targets
 
-### Performance
-- Character chat latency: < 2s
-- Scene generation: < 5s
-- Audio generation: < 10s
-- API response time (p95): < 500ms
-- CanonIndex build time: < 30s
+Current release gates track:
+- Character chat latency
+- Scene generation latency
+- Audio generation completion
+- API response p95
+- TypeScript and ESLint build health
+- Security middleware coverage
+- Continuity validation pass/fail status
 
-### Quality
-- TypeScript strictness: 100%
-- ESLint compliance: 100%
-- Security tests: All passing
-- Continuity validation: 100%
+Do not treat these as static guarantees. Current values should come from CI, production telemetry, or release-gate reports.
 
 ---
 
@@ -233,7 +231,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 - Python 3.11+
 - Node.js 20.9+, npm 10+
 - FastAPI ≥0.104.1
-- Next.js 16.x
+- Next.js 16.x (Marvox App), Next.js 15.x (Docs Site)
 - React 18
 
 ### AI/ML

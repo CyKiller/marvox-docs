@@ -119,7 +119,7 @@ export default function AgentNetworkDiagram() {
                               <span className="font-semibold">Family:</span> {family.name}
                             </p>
                             <p className="text-xs text-slate-300 mt-1">
-                              <span className="font-semibold">Status:</span> Production Ready
+                              <span className="font-semibold">Status:</span> Active / Verified
                             </p>
                           </div>
                         )}
