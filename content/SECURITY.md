@@ -8,8 +8,8 @@ Marvox is built with a defense-in-depth security architecture. This page documen
 
 | Version | Supported |
 | ------- | --------- |
-| 1.x     | ✅ Active patches |
-| < 1.0   | ❌ End of life |
+| 1.x     | Active patches |
+| < 1.0   | End of life |
 
 ## Reporting a Vulnerability
 

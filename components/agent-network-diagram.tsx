@@ -15,7 +15,7 @@ type AgentFamily = {
 const agentFamilies: AgentFamily[] = [
   {
     name: "Content Generation",
-    color: "from-violet-500 to-purple-500",
+    color: "from-sky-400 to-cyan-500",
     agents: [
       { name: "ReaderAgent", role: "Story Q&A with RAG + chapter citations" },
       { name: "CharacterAgent", role: "Canon-locked character roleplay" },
@@ -48,7 +48,7 @@ const agentFamilies: AgentFamily[] = [
   },
   {
     name: "Supporting",
-    color: "from-yellow-500 to-orange-500",
+    color: "from-slate-400 to-slate-500",
     agents: [
       { name: "DirectorAgent", role: "Mood/pacing injection" },
       { name: "SummarizationAgent", role: "2-sentence memory compression" },
@@ -62,7 +62,7 @@ const agentFamilies: AgentFamily[] = [
   },
   {
     name: "Evolution & Consensus",
-    color: "from-pink-500 to-rose-500",
+    color: "from-indigo-400 to-blue-500",
     agents: [
       { name: "ConsensusAnalyzerAgent", role: "Multi-writer character consensus" },
       { name: "EmotionalArcEvolverAgent", role: "Personality evolution from reactions" },
@@ -159,7 +159,7 @@ export default function AgentNetworkDiagram() {
                 <span className="text-emerald-400">CharacterAgent</span> → <span className="text-emerald-400">MemoryBridge</span> (memory persistence)
               </li>
               <li>
-                <span className="text-violet-400">AudioSceneAgent</span> → <span className="text-violet-400">VoiceSelectionAgent</span> (voice mapping)
+                <span className="text-sky-400">AudioSceneAgent</span> → <span className="text-sky-400">VoiceSelectionAgent</span> (voice mapping)
               </li>
               <li>
                 <span className="text-orange-400">DirectorAgent</span> → <span className="text-orange-400">WriterAgent</span> (mood injection)

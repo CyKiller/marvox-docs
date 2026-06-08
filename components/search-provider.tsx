@@ -109,7 +109,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
       case "api":
         return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
       case "example":
-        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+        return "bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200"
       case "feature":
         return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
     }

@@ -107,7 +107,7 @@ export function InteractiveTutorialEmulator() {
       "Generating text-to-speech audio streams...",
       "Analyzing vocal prosody performance...",
       "Compositing voice tracks & scheduling spacing...",
-      "Uploading to Vercel Blob cloud storage...",
+      "Uploading to Cloud blob cloud storage...",
     ]
 
     let stepIndex = 0
@@ -501,7 +501,7 @@ export function InteractiveTutorialEmulator() {
                     ))}
                   </div>
                   <div className="flex items-center justify-between text-[10px] font-mono text-slate-500">
-                    <span>PERSISTENCE: Vercel Blob cloud storage</span>
+                    <span>PERSISTENCE: Cloud blob cloud storage</span>
                     <span className="text-emerald-400 font-bold">AUDIO_BLOB_STRICT: Gated</span>
                   </div>
                 </div>

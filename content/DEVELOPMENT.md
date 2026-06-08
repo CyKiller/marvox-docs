@@ -2,7 +2,7 @@
 
 **Status**: Active (Storyworld Production Studio)
 
-This guide reflects the current PostgreSQL-only, Docker-based development setup with OpenAI backend.
+This guide reflects the current PostgreSQL-only, Docker-based development setup with the inference provider backend.
 
 ---
 
@@ -51,7 +51,7 @@ JWT_SECRET_KEY=change-me-to-random-256-bit-value
 ```
 
 Optional but common:
-- `OPENAI_MODEL_NAME` (default: `gpt-4o-mini`)
+- `OPENAI_MODEL_NAME` (configures the language model)
 - `CORS_ALLOWED_ORIGINS`
 - `VECTOR_DB_BACKEND` (default: `pgvector` — PostgreSQL is the only supported vector backend)
 

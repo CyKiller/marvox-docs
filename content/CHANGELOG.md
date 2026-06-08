@@ -20,7 +20,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
   - Nightly automatic reflections at 02:00 UTC via background scheduler.
   - Produces: reflection text, emotional arc trend (improving / stable / declining), saved memory ID.
   - Error codes: `REFLECT_FAILED`, `REFLECT_NO_MEMORIES`.
-- **OpenAI Cost Tracking** — `OPENAI_API_USAGE_WARNING_THRESHOLD` env var alerts when costs exceed the configured percentage (default: 80%).
+- **Inference Cost Tracking** — `OPENAI_API_USAGE_WARNING_THRESHOLD` env var alerts when costs exceed the configured percentage (default: 80%).
 
 ### Changed
 - `DEPLOYMENT.md` — Updated required Railway env vars to include Phase 4 additions.
@@ -104,7 +104,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
 
 
 ### Phase 3: Audio Pipeline (Target: 8 days)
-- [x] Integrate OpenAI TTS
+- [x] Integrate neural TTS engine
 - [ ] Build multi-voice audio combining
 - [ ] Add voice binding to characters
 - [ ] Create `/audio` endpoint
@@ -123,5 +123,5 @@ Historical progress reports moved to `archive_docs/`:
 - DAY3_COMPLETE.md
 - CHARACTEROS_DAY1_COMPLETE.md
 - BACKEND_CONTRACT_FIXES_COMPLETE.md
-- OPENAI_MIGRATION_COMPLETE.md
+- INFERENCE_MIGRATION_COMPLETE.md
 - And 15 other completion reports (see archive_docs/)

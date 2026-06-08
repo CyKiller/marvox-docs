@@ -1,4 +1,4 @@
-# 🎭 Marvox v2: Storyworld Production Studio
+# Marvox v2: Storyworld Production Studio
 
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](#licensing)
 [![Powered by CharacterOS](https://img.shields.io/badge/Powered%20by-CharacterOS-blueviolet.svg)](#-characteros-runtime)
@@ -13,20 +13,20 @@ Marvox is a writer-first **Storyworld Production Studio** built around **Charact
 
 ---
 
-## ⚡ Status
+## Status
 
 Current code-truth status:
 
-- ✅ Writer-first public funnel with auth callback preservation
-- ✅ Canon-grounded CharacterOS runtime
-- ✅ Scene generation with continuity validation
-- ✅ Downstream audio pipeline and voice identity path
-- ✅ PostgreSQL-first orchestration with production-primary backend contracts
-- ✅ Frontend release gate with bundle budgets plus deterministic Playwright verification
+- Writer-first public funnel with auth callback preservation
+- Canon-grounded CharacterOS runtime
+- Scene generation with continuity validation
+- Downstream audio pipeline and voice identity path
+- PostgreSQL-first orchestration with production-primary backend contracts
+- Frontend release gate with bundle budgets plus deterministic Playwright verification
 
 **See**: [AGENTS.md](./AGENTS.md) | [ARCHITECTURE.md](./ARCHITECTURE.md) | [START_HERE.md](./START_HERE.md)
 
-## 📌 Source of Truth
+## Source of Truth
 
 The canonical source of truth for all production behavior, routes, schemas, and environment variables is the **CyKiller/MarvoxV1** private repository (the `main` branch). This documentation site reflects the current state of that repository. When in doubt, defer to the code.
 
@@ -42,7 +42,7 @@ GitHub Actions in this private repository are configured for a Linux self-hosted
 
 ---
 
-## 🎭 What is Marvox?
+## What is Marvox?
 
 Marvox is **not** a generic TTS app. The codebase centers on a production workflow that keeps manuscript context intact as work moves downstream:
 
@@ -53,20 +53,20 @@ Marvox is **not** a generic TTS app. The codebase centers on a production workfl
 - audio preview and downstream handoff
 
 ### The Problem We Solve
-- ❌ Generic AI characters that spoil plot points
-- ❌ Characters with no memory of previous dialogue
-- ❌ Voice that changes every call (no identity)
-- ❌ Scene generation that contradicts canon
+- Generic AI characters that spoil plot points
+- Characters with no memory of previous dialogue
+- Voice that changes every call (no identity)
+- Scene generation that contradicts canon
 
 ### The Marvox Solution
-- ✅ **Canon-Grounded**: Characters refuse spoilers. They only know their story arc.
-- ✅ **Persistent Memory**: Characters remember conversations and scenes they participated in.
-- ✅ **Voice Identity**: Each character has a persistent voice personality that evolves with their story.
-- ✅ **Continuity Validation**: Scenes auto-revise if they contradict canon or character traits.
+- **Canon-Grounded**: Characters refuse spoilers. They only know their story arc.
+- **Persistent Memory**: Characters remember conversations and scenes they participated in.
+- **Voice Identity**: Each character has a persistent voice personality that evolves with their story.
+- **Continuity Validation**: Scenes auto-revise if they contradict canon or character traits.
 
 ---
 
-## 🧠 CharacterOS Runtime
+## CharacterOS Runtime
 
 CharacterOS is the runtime layer behind the studio experience. The implementation includes canon retrieval, character chat, scene generation, continuity validation, and audio orchestration. Public release copy should describe the workflow and runtime behavior, not depend on a fixed public agent-count headline.
 
@@ -85,7 +85,7 @@ CharacterOS is the runtime layer behind the studio experience. The implementatio
 
 | Agent | Role | Input | Output |
 |-------|------|-------|--------|
-| **VoiceSelectionAgent** | Map traits → OpenAI voice | Character traits + personality | Best voice + alternatives |
+| **VoiceSelectionAgent** | Map traits → voice | Character traits + personality | Best voice + alternatives |
 | **VoiceConfigurationAgent** | Create voice configs | Personality data | 300+ configs (speed 0.25x–4.0x) |
 | **AudioSceneAgent** | Per-block emotion detection | Scene text | Dynamic speed + emotion instructions |
 | **AudioContinuityAgent** | 5-layer audio validation | Generated audio | Quality report + warnings |
@@ -101,7 +101,7 @@ WRITER_ROOM → Improv mode (multi-character invention)
 
 ---
 
-## 🚀 Quick Start (3 Minutes)
+## Quick Start (3 Minutes)
 
 ### Prerequisites
 - Python 3.11+ (`python --version`)
@@ -174,33 +174,33 @@ curl -X POST http://localhost:8000/api/characteros/projects/{project_id}/chat \
 
 ---
 
-## 🎯 Core Features
+## Core Features
 
-### ✅ Real-Time Character Chat
+### Real-Time Character Chat
 - Canon-locked responses (spoiler protection)
 - Context-aware with chapter citations
 - Conversation memory persists across sessions
 - Three interaction modes: CANON, CANON+INFER, BRANCH
 
-### ✅ Multi-Character Scene Generation
+### Multi-Character Scene Generation
 - 2-5 character interactions in one scene
 - Automatic continuity validation
 - High-severity contradictions trigger auto-revision
 - Character relationships maintained from canon
 
-### ✅ Story Q&A with Grounding
+### Story Q&A with Grounding
 - Answers cite specific chapters
 - Retrieves relevant canon chunks via semantic search
 - Confidence scores based on retrieval quality
 - Supports manuscript exploration
 
-### ✅ Multi-Voice Audio Production
-- Each character bound to OpenAI voice + personality instructions
+### Multi-Voice Audio Production
+- Each character bound to a Marvox voice + personality instructions
 - Dynamic speed/emotion adjustment per dialogue block
 - Narrator voice for scene framing
 - 50–100ms silence padding for natural flow
 
-### ✅ Continuity Validation Loop
+### Continuity Validation Loop
 - **Layer 1**: Trait consistency (character personality preserved)
 - **Layer 2**: Relationship dynamics (respects canon bonds)
 - **Layer 3**: Timeline coherence (chronological accuracy)
@@ -209,13 +209,13 @@ curl -X POST http://localhost:8000/api/characteros/projects/{project_id}/chat \
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Backend (Python/FastAPI + AI Orchestration)
 - **FastAPI** ≥0.104.1 — Async HTTP server
 - **Python** 3.11+ — Type-safe async/await runtime
-- **OpenAI GPT-4o-mini** — LLM inference for all agents
-- **OpenAI TTS** — Multi-voice audio synthesis
+- **Frontier LLM** — LLM inference for all agents
+- **Neural TTS engine** — Multi-voice audio synthesis
 - **PostgreSQL + pgvector** — Vector embeddings, project data, and production storage (single backend, all environments)
 - **Redis/Dragonfly-compatible cache** — Rate limiting, session cache, job queues
 - **AgentRuntime** — Central orchestrator for CharacterOS agents
@@ -227,14 +227,14 @@ curl -X POST http://localhost:8000/api/characteros/projects/{project_id}/chat \
 - **Playwright** — E2E testing
 
 ### RAG System
-- **Embeddings**: OpenAI text-embedding-3-small (1,536 dims)
+- **Embeddings**: the embedding model (1,536 dims)
 - **Storage**: PostgreSQL pgvector (local and production — no separate vector database required)
 - **Chunk Types**: Dialogue (highest priority), chapter summaries, scene segments
 - **Filtering**: Canon scope (chapter restrictions per character)
 
 ---
 
-## 📡 Production API Endpoints
+## Production API Endpoints
 
 ### CharacterOS Routes (`/api/characteros`)
 - `POST /api/characteros/projects/{id}/build` — Index manuscript + extract profiles
@@ -260,7 +260,7 @@ curl -X POST http://localhost:8000/api/characteros/projects/{project_id}/chat \
 
 ---
 
-## 🧪 Testing & Validation
+## Testing & Validation
 
 ### Run Tests
 ```bash
@@ -285,7 +285,7 @@ pytest tests/e2e/ -v
 
 ---
 
-## 📊 Data Models
+## Data Models
 
 ### CharacterProfile (Extracted)
 ```json
@@ -303,8 +303,8 @@ pytest tests/e2e/ -v
     "omniscient": false
   },
   "voice_binding": {
-    "voice_id": "alloy",
-    "provider": "openai"
+    "voice_id": "marvox-voice",
+    "provider": "marvox"
   }
 }
 ```
@@ -323,7 +323,7 @@ pytest tests/e2e/ -v
 
 ---
 
-## 🔒 Security & Privacy
+## Security & Privacy
 
 - **Manuscript**: Encrypted in database, can be deleted on request
 - **Embeddings**: PostgreSQL pgvector (same database as project data), deleted when project deleted
@@ -333,7 +333,7 @@ pytest tests/e2e/ -v
 
 ---
 
-## 📦 Deployment
+## Deployment
 
 ### Development
 ```bash
@@ -356,7 +356,7 @@ BACKEND_URL=https://<your-railway-domain> \
 ### Environment Variables (`.env`)
 ```
 OPENAI_API_KEY=sk-...
-OPENAI_MODEL_NAME=gpt-4o-mini
+OPENAI_MODEL_NAME=  # configures the language model
 JWT_SECRET_KEY=change-me
 DATABASE_URL=postgresql://marvox:marvox@localhost:5432/marvox
 REDIS_URL=redis://localhost:6379/0
@@ -366,7 +366,7 @@ BLOB_READ_WRITE_TOKEN=your_blob_token  # optional local blob storage
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 | Document | Purpose |
 |----------|---------|
@@ -381,7 +381,7 @@ BLOB_READ_WRITE_TOKEN=your_blob_token  # optional local blob storage
 
 ---
 
-## 🎓 For Developers
+## For Developers
 
 ### Adding a Character Agent Feature
 1. Add method to `CharacterAgent` → [agent_runtime.py](./services/characteros/agent_runtime.py#L1)
@@ -411,11 +411,11 @@ psql $DATABASE_URL < canon_index_backup.sql
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Python
 - fastapi ≥0.104.1, uvicorn 0.24.0 — async web server
-- openai ≥1.51.0 — LLM + TTS
+- AI SDK — LLM + TTS
 - asyncpg 0.29.0 + SQLAlchemy 2.x — async PostgreSQL access
 - pgvector (via PostgreSQL) — vector search
 - scikit-learn, numpy — ML utilities
@@ -429,7 +429,7 @@ psql $DATABASE_URL < canon_index_backup.sql
 
 ---
 
-## 📜 Licensing
+## Licensing
 
 **Marvox v2 is released under a Proprietary License** (not open source).
 
@@ -448,7 +448,7 @@ For commercial licensing, contact licensing@marvox.ai
 
 ---
 
-## ❓ FAQ
+## FAQ
 
 **Q: Will my manuscript be used to train models?**  
 A: No. Data is private to your project only and never used for external model training.
@@ -457,7 +457,7 @@ A: No. Data is private to your project only and never used for external model tr
 A: No. Mode=CANON enforces strict canon scope. Characters refuse questions about chapters they haven't experienced.
 
 **Q: What's the cost?**  
-A: Transparent pricing: OpenAI API calls billed at cost (typically $0.0002/character chat).
+A: Transparent pricing: inference provider API calls billed at cost (typically $0.0002/character chat).
 
 **Q: Can I self-host?**  
 A: Local development is supported. The only supported deployed topology in this repo is Vercel for the frontend plus Railway for the backend. See [DEPLOYMENT.md](./DEPLOYMENT.md).
@@ -467,7 +467,7 @@ A: Post-acquisition, the new owner may choose to open source it. For now, it's p
 
 ---
 
-## 📞 Support
+## Support
 
 - **Docs**: [START_HERE.md](./START_HERE.md)
 - **Issues**: GitHub Issues (for evaluation users)

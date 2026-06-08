@@ -2,7 +2,7 @@
 
 Marvox supports generic messaging and monitoring integrations through **OpenClaw**, an agentic bridge that connects Marvox to your preferred enterprise stack.
 
-## 🌐 Supported Channels
+## Supported Channels
 
 OpenClaw can bridge Marvox events and character interactions to any messaging service it supports, including:
 
@@ -12,7 +12,7 @@ OpenClaw can bridge Marvox events and character interactions to any messaging se
 - **Telegram**
 - **Sentry** (Error Triage and Feedback)
 
-## 🛠 Webhook Contract
+## Webhook Contract
 
 Marvox emits events to OpenClaw via a standardized JSON webhook.
 
@@ -33,7 +33,7 @@ Marvox emits events to OpenClaw via a standardized JSON webhook.
 }
 ```
 
-## 🚀 Pro & Enterprise Features
+## Pro & Enterprise Features
 
 ### 1. Project Assistant (OpenClaw Bridge)
 Allows developers to interact with Marvox characters directly from their IDE or messaging app.
@@ -52,7 +52,7 @@ Autonomous monitoring of production infrastructure.
 - **Incident Alerts**: Critical notifications when database, redis, or AI services degrade.
 - **Recovery Updates**: Notifications when services return to health.
 
-## 📝 Configuration
+## Configuration
 
 Configure your OpenClaw agent to point to your Marvox deployment:
 

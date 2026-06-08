@@ -4450,7 +4450,7 @@ curl -X POST "http://localhost:8000/api/addons/word/sync-storyworld" \
 
 ### POST /api/speech-to-text/projects/{project_id}/transcribe
 Summary: Transcribe Voice Input
-Transcribe audio file to text using OpenAI Whisper API.
+Transcribe audio file to text using the speech-to-text engine.
 
 Supports: MP3, MP4, MPEG, MPGA, M4A, WAV, WEBM
 Max file size: 25 MB
@@ -5108,7 +5108,7 @@ curl -X GET "http://localhost:8000/"
 ```
 
 ### POST /api/admin/admin/flush-openai-cache
-Summary: Flush all cached OpenAI analysis responses from Redis
+Summary: Flush all cached analysis responses from Redis
 Delete every ``openai_cache:*`` key from Redis.
 
 Use this after fixing a bug that caused incorrect responses to be cached
@@ -5206,7 +5206,7 @@ curl -X GET "http://localhost:8000/api/admin/agents/related-reports" \
 
 ### GET /api/admin/agents/runtime-health
 Summary: Admin Agent Runtime Health
-Live circuit-breaker state for the OpenAI chat/TTS/embedding boundaries.
+Live circuit-breaker state for the model chat/TTS/embedding boundaries.
 
 Reads the module-level named breakers used by the agent runtime — the same
 source surfaced in the audio and live-voice health endpoints — so operators

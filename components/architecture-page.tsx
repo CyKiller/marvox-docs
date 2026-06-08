@@ -68,7 +68,7 @@ function Card({
 function Badge({ children, color = "cyan" }: { children: React.ReactNode; color?: "cyan" | "purple" | "green" | "amber" | "slate" }) {
   const colors: Record<string, { bg: string; text: string; border: string }> = {
     cyan: { bg: "rgba(125,211,252,0.09)", text: "hsl(196 100% 67%)", border: "rgba(125,211,252,0.18)" },
-    purple: { bg: "rgba(167,139,250,0.09)", text: "hsl(265 80% 75%)", border: "rgba(167,139,250,0.18)" },
+    purple: { bg: "rgba(129,140,248,0.09)", text: "hsl(224 76% 74%)", border: "rgba(129,140,248,0.18)" },
     green: { bg: "rgba(52,211,153,0.09)", text: "hsl(160 70% 65%)", border: "rgba(52,211,153,0.18)" },
     amber: { bg: "rgba(251,191,36,0.09)", text: "hsl(40 90% 68%)", border: "rgba(251,191,36,0.18)" },
     slate: { bg: "rgba(148,163,184,0.08)", text: "hsl(240 5% 65%)", border: "rgba(148,163,184,0.14)" },
@@ -119,7 +119,7 @@ const PIPELINE_STEPS = [
   },
   {
     n: "07", label: "Audio", sub: "8-step TTS pipeline", desc: "Multi-voice · Semaphore(5) guarded",
-    detail: "AudioPipelineOrchestrator: parse → voice resolution → config → TTS generation (asyncio.Semaphore(5)) → mixing → quality check → storage → telemetry. Output stored to Vercel Blob in production.",
+    detail: "AudioPipelineOrchestrator: parse → voice resolution → config → TTS generation (asyncio.Semaphore(5)) → mixing → quality check → storage → telemetry. Output stored to Cloud blob in production.",
     file: "services/characteros/audio_pipeline_orchestrator.py",
   },
 ]
@@ -240,9 +240,9 @@ const AGENT_FAMILIES = [
     label: "Audio & Voice",
     count: 7,
     color: "purple" as const,
-    colorHex: "hsl(265 80% 75%)",
-    colorBg: "rgba(167,139,250,0.05)",
-    colorBorder: "rgba(167,139,250,0.12)",
+    colorHex: "hsl(224 76% 74%)",
+    colorBg: "rgba(129,140,248,0.05)",
+    colorBorder: "rgba(129,140,248,0.12)",
     agents: [
       { name: "VoiceSelectionAgent", role: "Trait → neural DNA mapping" },
       { name: "VoiceConfigurationAgent", role: "300+ voice configs" },
@@ -379,7 +379,7 @@ const SCENE_STEPS = [
     action: "add_framing()",
     note: "Adds prose framing and scene transitions",
     color: "purple",
-    colorHex: "hsl(265 80% 75%)",
+    colorHex: "hsl(224 76% 74%)",
     detail: "AtmosphereAgent injects atmospheric context before NarratorAgent calls the LLM. Outputs prose framing, act/chapter transitions, and scene polish.",
     file: "services/characteros/narrator_agent.py",
   },
@@ -527,9 +527,9 @@ const STACK_LAYERS = [
   },
   {
     label: "Backend",
-    colorHex: "hsl(265 80% 75%)",
-    colorBg: "rgba(167,139,250,0.05)",
-    colorBorder: "rgba(167,139,250,0.12)",
+    colorHex: "hsl(224 76% 74%)",
+    colorBg: "rgba(129,140,248,0.05)",
+    colorBorder: "rgba(129,140,248,0.12)",
     items: [
       { name: "FastAPI 0.104+", role: "Async framework, auto-docs" },
       { name: "Python 3.11+", role: "Type-safe async/await" },
@@ -547,9 +547,9 @@ const STACK_LAYERS = [
     colorBg: "rgba(52,211,153,0.05)",
     colorBorder: "rgba(52,211,153,0.12)",
     items: [
-      { name: "OpenAI GPT-4o-mini", role: "LLM inference (all agents)" },
-      { name: "OpenAI TTS", role: "Multi-voice synthesis" },
-      { name: "OpenAI text-embedding-3-small", role: "1,536-dim embeddings (RAG)" },
+      { name: "Frontier LLM", role: "LLM inference (all agents)" },
+      { name: "Neural TTS engine", role: "Multi-voice synthesis" },
+      { name: "Embedding model", role: "1,536-dim embeddings (RAG)" },
       { name: "pgvector (PostgreSQL)", role: "Vector storage + similarity search (all envs)" },
       { name: "AgentRuntime", role: "Singleton orchestrator" },
       { name: "RuntimePolicy", role: "CHAROS_* env knobs" },
@@ -565,7 +565,7 @@ const STACK_LAYERS = [
       { name: "Vercel", role: "Frontend hosting (Next.js)" },
       { name: "PostgreSQL + pgvector", role: "Primary DB + vector index (all envs)" },
       { name: "Redis/Dragonfly", role: "Cache + rate limiting + job queues" },
-      { name: "Vercel Blob", role: "Audio/object storage (prod)" },
+      { name: "Cloud blob", role: "Audio/object storage (prod)" },
       { name: "Sentry", role: "Error monitoring" },
       { name: "Stripe", role: "Billing + webhooks" },
       { name: "Netlify", role: "Docs site (marvox-docs)" },
@@ -679,7 +679,7 @@ function DataFlowDiagram() {
         {[
           { label: "PostgreSQL", sub: "Projects · chars · scenes", color: "hsl(40 90% 65%)" },
           { label: "pgvector", sub: "Canon index (1,536D)", color: "hsl(196 100% 67%)" },
-          { label: "Vercel Blob", sub: "Audio files · exports", color: "hsl(265 80% 72%)" },
+          { label: "Cloud blob", sub: "Audio files · exports", color: "hsl(224 76% 72%)" },
           { label: "Redis/Dragonfly", sub: "Rate limits · cache · queues", color: "hsl(160 70% 62%)" },
         ].map((s, i) => (
           <div
@@ -717,7 +717,7 @@ function FlowCell({
 }) {
   const colorMap: Record<string, string> = {
     cyan: "hsl(196 100% 67%)",
-    purple: "hsl(265 80% 75%)",
+    purple: "hsl(224 76% 74%)",
     amber: "hsl(40 90% 68%)",
     green: "hsl(160 70% 65%)",
   }
@@ -769,9 +769,9 @@ const MODES = [
     label: "BRANCH",
     desc: "Creative expansion, personality-locked not plot-locked",
     detail: "Unrestricted retrieval. Characters stay true to personality but can explore alternate outcomes.",
-    colorHex: "hsl(265 80% 75%)",
-    colorBg: "rgba(167,139,250,0.06)",
-    colorBorder: "rgba(167,139,250,0.14)",
+    colorHex: "hsl(224 76% 74%)",
+    colorBg: "rgba(129,140,248,0.06)",
+    colorBorder: "rgba(129,140,248,0.14)",
   },
   {
     id: "WRITER_ROOM",
@@ -839,7 +839,7 @@ export function ArchitecturePage() {
             { val: "4", label: "Runtime Modes" },
             { val: "8-step", label: "Audio Pipeline" },
             { val: "3×", label: "Continuity Passes" },
-            { val: "gpt-4o-mini", label: "Inference Model" },
+            { val: "frontier LLM", label: "Inference Model" },
           ].map(({ val, label }) => (
             <div
               key={label}

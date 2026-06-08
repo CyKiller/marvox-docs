@@ -24,9 +24,9 @@ const PANELS: PanelInfo[] = [
     id: "controls",
     label: "Controls",
     subtitle: "Prompt & Configuration",
-    colorHex: "hsl(265 80% 75%)",
-    colorBg: "rgba(167,139,250,0.06)",
-    colorBorder: "rgba(167,139,250,0.16)",
+    colorHex: "hsl(224 76% 74%)",
+    colorBg: "rgba(129,140,248,0.06)",
+    colorBorder: "rgba(129,140,248,0.16)",
     description:
       "The left panel hosts all scene-generation inputs. Writers configure prompt, characters, Director settings, and mode before triggering generation.",
     agents: [
@@ -140,10 +140,10 @@ function StreamingScene({ isPlaying }: { isPlaying: boolean }) {
 const EVENTS = [
   { type: "TRACE", label: "character_chat", value: "42ms", color: "hsl(196 100% 67%)" },
   { type: "PASS", label: "continuity_pass_1", value: "✓ valid", color: "hsl(160 70% 65%)" },
-  { type: "REACT", label: "CHARACTER_REACTION", value: "Alice", color: "hsl(265 80% 75%)" },
+  { type: "REACT", label: "CHARACTER_REACTION", value: "Alice", color: "hsl(224 76% 74%)" },
   { type: "TRACE", label: "narrator_framing", value: "88ms", color: "hsl(196 100% 67%)" },
   { type: "WARN", label: "continuity_pass_3", value: "1 warning", color: "hsl(40 90% 68%)" },
-  { type: "REACT", label: "CHARACTER_REACTION", value: "Queen", color: "hsl(265 80% 75%)" },
+  { type: "REACT", label: "CHARACTER_REACTION", value: "Queen", color: "hsl(224 76% 74%)" },
   { type: "STORE", label: "save_scene_generation", value: "ok", color: "hsl(160 70% 65%)" },
 ]
 
@@ -420,12 +420,12 @@ export default function StudioLayoutDiagram() {
               className="flex flex-col gap-3 p-4 relative cursor-pointer transition-all duration-200"
               style={{
                 borderRight: "1px solid rgba(148,163,184,0.08)",
-                background: activePanel === "controls" ? "rgba(167,139,250,0.03)" : "transparent",
+                background: activePanel === "controls" ? "rgba(129,140,248,0.03)" : "transparent",
               }}
               onClick={() => setActivePanel(activePanel === "controls" ? null : "controls")}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: "hsl(265 80% 75%)" }}>
+                <span className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: "hsl(224 76% 74%)" }}>
                   Controls
                 </span>
                 <span className="text-[10px]" style={{ color: "hsl(240 5% 35%)" }}>
@@ -462,9 +462,9 @@ export default function StudioLayoutDiagram() {
                       key={c}
                       className="text-[10px] font-mono px-1.5 py-0.5 rounded-full"
                       style={{
-                        background: "rgba(167,139,250,0.1)",
-                        color: "hsl(265 80% 75%)",
-                        border: "1px solid rgba(167,139,250,0.2)",
+                        background: "rgba(129,140,248,0.1)",
+                        color: "hsl(224 76% 74%)",
+                        border: "1px solid rgba(129,140,248,0.2)",
                       }}
                     >
                       {c}
@@ -492,7 +492,7 @@ export default function StudioLayoutDiagram() {
                         className="h-1 rounded-full"
                         style={{
                           width: `${s.value * 100}%`,
-                          background: "linear-gradient(90deg, rgba(167,139,250,0.6), rgba(167,139,250,1))",
+                          background: "linear-gradient(90deg, rgba(129,140,248,0.6), rgba(129,140,248,1))",
                         }}
                       />
                     </div>
@@ -521,9 +521,9 @@ export default function StudioLayoutDiagram() {
               <button
                 className="mt-auto w-full py-2 rounded-lg text-xs font-semibold"
                 style={{
-                  background: "linear-gradient(135deg, rgba(167,139,250,0.3), rgba(125,211,252,0.2))",
-                  border: "1px solid rgba(167,139,250,0.3)",
-                  color: "hsl(265 80% 80%)",
+                  background: "linear-gradient(135deg, rgba(129,140,248,0.3), rgba(125,211,252,0.2))",
+                  border: "1px solid rgba(129,140,248,0.3)",
+                  color: "hsl(224 76% 78%)",
                 }}
               >
                 Generate Scene
@@ -726,7 +726,7 @@ export default function StudioLayoutDiagram() {
           <div className="p-4" style={{ minHeight: 300 }}>
             {mobileTab === "controls" && (
               <div className="space-y-3">
-                <span className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: "hsl(265 80% 75%)" }}>
+                <span className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: "hsl(224 76% 74%)" }}>
                   Controls
                 </span>
                 <div
@@ -743,9 +743,9 @@ export default function StudioLayoutDiagram() {
                       key={c}
                       className="text-[10px] font-mono px-1.5 py-0.5 rounded-full"
                       style={{
-                        background: "rgba(167,139,250,0.1)",
-                        color: "hsl(265 80% 75%)",
-                        border: "1px solid rgba(167,139,250,0.2)",
+                        background: "rgba(129,140,248,0.1)",
+                        color: "hsl(224 76% 74%)",
+                        border: "1px solid rgba(129,140,248,0.2)",
                       }}
                     >
                       {c}
@@ -755,9 +755,9 @@ export default function StudioLayoutDiagram() {
                 <button
                   className="w-full py-2 rounded-lg text-xs font-semibold"
                   style={{
-                    background: "linear-gradient(135deg, rgba(167,139,250,0.3), rgba(125,211,252,0.2))",
-                    border: "1px solid rgba(167,139,250,0.3)",
-                    color: "hsl(265 80% 80%)",
+                    background: "linear-gradient(135deg, rgba(129,140,248,0.3), rgba(125,211,252,0.2))",
+                    border: "1px solid rgba(129,140,248,0.3)",
+                    color: "hsl(224 76% 78%)",
                   }}
                 >
                   Generate Scene
@@ -793,7 +793,7 @@ export default function StudioLayoutDiagram() {
             style={{ borderTop: "1px solid rgba(148,163,184,0.08)" }}
           >
             {[
-              { id: "controls" as Panel, label: "Controls", color: "hsl(265 80% 75%)" },
+              { id: "controls" as Panel, label: "Controls", color: "hsl(224 76% 74%)" },
               { id: "scene" as Panel, label: "Scene", color: "hsl(196 100% 67%)" },
               { id: "events" as Panel, label: "Events", color: "hsl(40 90% 68%)" },
             ].map((tab) => (

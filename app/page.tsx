@@ -1,205 +1,219 @@
 import Link from "next/link"
-import { ArrowRight, BookOpen, Code, Layers, Users, Zap, Shield, Cpu, Network, GitBranch, Volume2, Map, Activity } from "lucide-react"
+import { ArrowRight, BookOpen, Code, Layers, Network, Cpu, Sparkles, Mic, Database, Shield } from "lucide-react"
 import HomepageWorkflowDiagram from "@/components/homepage-workflow-diagram"
+
+const CAPABILITIES = [
+  { icon: Sparkles, label: "Frontier LLM", note: "canon-grounded" },
+  { icon: Mic, label: "Neural TTS", note: "multi-voice" },
+  { icon: Database, label: "pgvector RAG", note: "retrieval" },
+  { icon: Network, label: "25+ agents", note: "CharacterOS" },
+]
+
+const PATHS = [
+  {
+    icon: BookOpen,
+    title: "Start",
+    body: "Upload a manuscript and initialize a storyworld workspace. Learn the dashboard, the core loop, and first configurations.",
+    links: [
+      { href: "/getting-started", label: "Getting Started" },
+      { href: "/user-guide", label: "User Guide" },
+    ],
+  },
+  {
+    icon: Network,
+    title: "Understand",
+    body: "Explore character profiles, continuity validation, story graphs, and the 25-agent specialized runtime behind every scene.",
+    links: [
+      { href: "/agents", label: "Agent Reference" },
+      { href: "/architecture", label: "Architecture" },
+    ],
+  },
+  {
+    icon: Code,
+    title: "Build",
+    body: "Interface with the REST API. Build character chats, run RAG story Q&A, and generate multi-character scenes programmatically.",
+    links: [
+      { href: "/api", label: "API Reference" },
+      { href: "/api-examples", label: "Code Examples" },
+      { href: "/workflows", label: "Workflows" },
+    ],
+  },
+  {
+    icon: Layers,
+    title: "Ship",
+    body: "Deploy to staging and production. Review runtime config, storage health, pgvector readiness, and security posture.",
+    links: [
+      { href: "/developers", label: "Developer Guide" },
+      { href: "/security", label: "Security" },
+    ],
+  },
+]
 
 export default function DocsHomePage() {
   return (
-    <div className="space-y-16 pb-16">
-      {/* ── Quiet Hero ── */}
-      <section className="relative rounded-2xl p-8 sm:p-12 marvox-panel-strong">
-        <div className="relative space-y-6 max-w-2xl">
+    <div className="space-y-20 sm:space-y-28 pb-20">
+      {/* ── Hero ── */}
+      <section className="relative pt-6 sm:pt-10">
+        <div className="max-w-3xl space-y-7">
           <div className="inline-flex items-center gap-2 marvox-eyebrow rise-in">
             <Cpu className="w-3.5 h-3.5" />
             CharacterOS Runtime Environment
           </div>
-          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-white font-display rise-in rise-in-delay-1">
-            Marvox Docs
+          <h1 className="display-hero text-white rise-in rise-in-delay-1">
+            The operating manual for storyworld production.
           </h1>
-          <p className="text-slate-300 text-lg leading-relaxed font-sans rise-in rise-in-delay-2">
-            The operating manual for CharacterOS, story analysis, canon-grounded scenes, and multi-voice production.
+          <p className="text-slate-300 text-lg sm:text-xl leading-relaxed max-w-2xl rise-in rise-in-delay-2">
+            Marvox turns a manuscript into canon-grounded characters, validated scenes, and
+            multi-voice audio. This is the reference for the runtime, the API, and the studio.
           </p>
-          <div className="flex flex-wrap gap-3 pt-2 rise-in rise-in-delay-3">
+          <div className="flex flex-wrap items-center gap-3 pt-1 rise-in rise-in-delay-3">
             <Link
               href="/getting-started"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all bg-sky-400 text-slate-950 hover:bg-sky-300"
-              style={{
-                boxShadow: "0 0 20px rgba(125, 211, 252, 0.2)",
-              }}
+              className="cta-primary inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm bg-sky-400 text-slate-950 hover:bg-sky-300"
             >
               Start with the workflow <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/api"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all border border-sky-400/20 bg-sky-400/5 text-sky-300 hover:bg-sky-400/10"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-sm border border-sky-400/25 bg-sky-400/5 text-sky-300 hover:bg-sky-400/10 transition-colors"
             >
-              View API reference
-            </Link>
-            <Link
-              href="/developers"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all border border-slate-800 bg-slate-950/40 text-slate-400 hover:text-slate-300"
-            >
-              Read deployment guide
+              API Reference
             </Link>
           </div>
         </div>
-      </section>
 
-      {/* ── Neutral Current Status ── */}
-      <section className="reveal rounded-xl px-6 py-5 marvox-panel border-sky-400/10">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-              <span className="text-xs font-semibold tracking-wider text-amber-500 uppercase">
-                Current Status: Private Beta / Production Hardening
-              </span>
+        {/* Capability strip */}
+        <div className="reveal-stagger mt-12 grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {CAPABILITIES.map((c) => (
+            <div
+              key={c.label}
+              className="marvox-panel marvox-card-hover flex items-center gap-3 px-4 py-3.5"
+            >
+              <div className="w-9 h-9 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center shrink-0">
+                <c.icon className="w-4 h-4 text-sky-300" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-slate-100">{c.label}</div>
+                <div className="text-xs text-slate-500">{c.note}</div>
+              </div>
             </div>
-            <p className="text-sm text-slate-300 leading-relaxed max-w-3xl">
-              Docs are aligned directly with `MarvoxV1` main branch. Launch readiness and actual production deployment depend on configured environment variables, upstream API health checks, and release-gate verification.
-            </p>
-          </div>
-          <Link
-            href="/changelog"
-            className="text-xs font-semibold px-3 py-1.5 rounded border border-slate-800 hover:bg-slate-900 text-slate-400 transition-colors"
-          >
-            Changelog →
-          </Link>
+          ))}
         </div>
       </section>
 
-      {/* ── Studio Workflow Showcase CTA ── */}
-      <section className="reveal relative rounded-2xl overflow-hidden border border-slate-800/80 bg-slate-950/40 p-6 sm:p-8">
-        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-64 h-64 rounded-full bg-sky-500/5 blur-3xl pointer-events-none" />
+      {/* ── Status ── */}
+      <section className="reveal flex flex-wrap items-center justify-between gap-4 rounded-xl px-6 py-5 marvox-panel border-sky-400/10">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            <span className="text-xs font-semibold tracking-wider text-amber-500 uppercase">
+              Private Beta · Production Hardening
+            </span>
+          </div>
+          <p className="text-sm text-slate-300 leading-relaxed max-w-3xl">
+            Docs are aligned with the <code className="text-sky-300">MarvoxV1</code> main branch. Launch readiness
+            depends on configured environment, upstream health checks, and release-gate verification.
+          </p>
+        </div>
+        <Link
+          href="/changelog"
+          className="text-xs font-semibold px-3 py-1.5 rounded border border-slate-800 hover:bg-slate-900 text-slate-400 transition-colors"
+        >
+          Changelog →
+        </Link>
+      </section>
+
+      {/* ── Featured visual: the production loop ── */}
+      <section className="reveal space-y-7">
+        <div className="max-w-2xl space-y-3">
+          <h2 className="display-section text-white">The Marvox production loop</h2>
+          <p className="text-base text-slate-400 leading-relaxed">
+            Six stages take a raw manuscript to canonical, synthesized audio. Understand the flow
+            before you initialize CharacterOS.
+          </p>
+        </div>
+        <HomepageWorkflowDiagram />
+      </section>
+
+      {/* ── Studio CTA ── */}
+      <section className="reveal relative rounded-2xl overflow-hidden border border-slate-800/80 bg-slate-950/40 p-7 sm:p-10">
+        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-72 h-72 rounded-full bg-sky-500/5 blur-3xl pointer-events-none" />
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider text-sky-400 uppercase bg-sky-950/50 border border-sky-500/20">
-              CharacterOS Studio
-            </div>
-            <h2 className="text-xl sm:text-2xl font-medium text-white tracking-tight font-display">
-              Explore the Studio Workflow
-            </h2>
-            <p className="text-sm text-slate-300 leading-relaxed font-sans">
-              Review the main CharacterOS workspace flow: canon-grounded chat, scene generation, evidence panels, and audio production handoff.
+          <div className="space-y-3 max-w-xl">
+            <div className="marvox-eyebrow">CharacterOS Studio</div>
+            <h2 className="display-section text-white">Explore the studio workflow</h2>
+            <p className="text-base text-slate-400 leading-relaxed">
+              Walk the main workspace flow: canon-grounded chat, scene generation, evidence panels,
+              and the audio production handoff.
             </p>
           </div>
           <Link
             href="/user-guide"
-            className="flex-shrink-0 flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all bg-sky-400/10 hover:bg-sky-400/20 text-sky-300 border border-sky-400/30 hover:border-sky-400/50"
+            className="cta-primary shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm bg-sky-400 text-slate-950 hover:bg-sky-300"
           >
             Open user guide <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
 
-      {/* ── Workflow Diagram ── */}
-      <section className="reveal space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-medium text-white tracking-tight font-display">
-            The Marvox Production Loop
-          </h2>
-          <p className="text-sm text-slate-400 max-w-xl mx-auto">
-            Six steps from raw manuscript to canonical, synthesized audio scenes. Understand the flow before programmatically initializing CharacterOS.
+      {/* ── Documentation paths ── */}
+      <section className="space-y-8">
+        <div className="max-w-2xl space-y-3 reveal">
+          <h2 className="display-section text-white">Find your path</h2>
+          <p className="text-base text-slate-400 leading-relaxed">
+            Four routes through the manual, from first upload to production deploy.
           </p>
         </div>
-        <HomepageWorkflowDiagram />
-      </section>
-
-      {/* ── Core Documentation Paths (Start / Understand / Build / Ship) ── */}
-      <section className="reveal space-y-6">
-        <h2 className="marvox-eyebrow">
-          Core Operating Manual Paths
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Start */}
-          <div className="marvox-panel marvox-card-hover p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center">
-                <BookOpen className="w-4 h-4 text-sky-400" />
+        <div className="reveal-stagger grid grid-cols-1 md:grid-cols-2 gap-6">
+          {PATHS.map((p) => (
+            <div key={p.title} className="marvox-panel marvox-card-hover p-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center">
+                  <p.icon className="w-4 h-4 text-sky-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white font-display">{p.title}</h3>
               </div>
-              <h3 className="text-lg font-medium text-white font-display">Start</h3>
-            </div>
-            <p className="text-sm text-slate-400">
-              Upload manuscripts and initialize a storyworld workspace. Discover basic workflows, dashboard components, and initial configurations.
-            </p>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 pt-2 text-xs">
-              <Link href="/getting-started" className="text-sky-400 hover:text-sky-300 hover:underline">Getting Started →</Link>
-              <Link href="/user-guide" className="text-sky-400 hover:text-sky-300 hover:underline">User Guide →</Link>
-            </div>
-          </div>
-
-          {/* Understand */}
-          <div className="marvox-panel marvox-card-hover p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center">
-                <Network className="w-4 h-4 text-sky-400" />
+              <p className="text-sm text-slate-400 leading-relaxed">{p.body}</p>
+              <div className="flex flex-wrap gap-x-4 gap-y-2 pt-1 text-xs">
+                {p.links.map((l) => (
+                  <Link key={l.href} href={l.href} className="text-sky-400 hover:text-sky-300 hover:underline">
+                    {l.label} →
+                  </Link>
+                ))}
               </div>
-              <h3 className="text-lg font-medium text-white font-display">Understand</h3>
             </div>
-            <p className="text-sm text-slate-400">
-              Explore character profiles, narrative continuity validation, story graphs, and the underlying 25-agent specialized runtime architecture.
-            </p>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 pt-2 text-xs">
-              <Link href="/agents" className="text-sky-400 hover:text-sky-300 hover:underline">Agent Reference →</Link>
-              <Link href="/architecture" className="text-sky-400 hover:text-sky-300 hover:underline">Architecture Deep Dive →</Link>
-            </div>
-          </div>
-
-          {/* Build */}
-          <div className="marvox-panel marvox-card-hover p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center">
-                <Code className="w-4 h-4 text-sky-400" />
-              </div>
-              <h3 className="text-lg font-medium text-white font-display">Build</h3>
-            </div>
-            <p className="text-sm text-slate-400">
-              Interface programmatically with the REST API. Build character chats, perform RAG-based story Q&A, and generate multi-character scenes.
-            </p>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 pt-2 text-xs">
-              <Link href="/api" className="text-sky-400 hover:text-sky-300 hover:underline">API Reference →</Link>
-              <Link href="/api-examples" className="text-sky-400 hover:text-sky-300 hover:underline">Code Examples →</Link>
-              <Link href="/workflows" className="text-sky-400 hover:text-sky-300 hover:underline">Production Workflows →</Link>
-            </div>
-          </div>
-
-          {/* Ship */}
-          <div className="marvox-panel marvox-card-hover p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center">
-                <Layers className="w-4 h-4 text-sky-400" />
-              </div>
-              <h3 className="text-lg font-medium text-white font-display">Ship</h3>
-            </div>
-            <p className="text-sm text-slate-400">
-              Deploy to staging and production environments. Review Railway configs, Stripe webhooks, pgvector storage health, and OWASP security compliance.
-            </p>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 pt-2 text-xs">
-              <Link href="/developers" className="text-sky-400 hover:text-sky-300 hover:underline">Developer Guide →</Link>
-              <Link href="/security" className="text-sky-400 hover:text-sky-300 hover:underline">Security Audit →</Link>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* ── Quiet Brand Verification ── */}
+      {/* ── Brand verification ── */}
       <section className="reveal pt-8 border-t border-slate-800">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-400">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
           <div className="space-y-1.5">
-            <h4 className="font-semibold text-slate-200">Obsidian Carbon Foundation</h4>
+            <div className="flex items-center gap-2">
+              <Layers className="w-4 h-4 text-sky-400 shrink-0" />
+              <h4 className="font-semibold text-slate-200">Obsidian foundation</h4>
+            </div>
             <p className="text-xs leading-relaxed text-slate-500">
-              Styled to mirror the exact surface styling and low-glow principles of the core storyworld studio layout.
+              Mirrors the exact surface styling and low-glow principles of the core studio layout.
             </p>
           </div>
           <div className="space-y-1.5">
-            <h4 className="font-semibold text-slate-200">Verification-Gated</h4>
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-sky-400 shrink-0" />
+              <h4 className="font-semibold text-slate-200">Verification-gated</h4>
+            </div>
             <p className="text-xs leading-relaxed text-slate-500">
-              All REST contracts, schemas, and variables are automatically verified and aligned with the `MarvoxV1` runtime engine.
+              REST contracts, schemas, and variables are verified against the <code className="text-sky-300/80">MarvoxV1</code> runtime.
             </p>
           </div>
           <div className="space-y-1.5">
-            <h4 className="font-semibold text-slate-200">Restrained & Editorial</h4>
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-sky-400 shrink-0" />
+              <h4 className="font-semibold text-slate-200">Restrained &amp; editorial</h4>
+            </div>
             <p className="text-xs leading-relaxed text-slate-500">
-              Calm typography, spacious formatting, and technical clarity designed exclusively for developers and creators.
+              Calm typography and technical clarity, built for developers and creators.
             </p>
           </div>
         </div>

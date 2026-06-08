@@ -165,7 +165,7 @@ Treat any `/api/health/ready` failure as launch-blocking.
 
 ## Operations Notes
 
-- Do not commit Vercel, Railway, Stripe, Blob, or OpenAI secrets.
+- Do not commit Vercel, Railway, Stripe, Blob, or inference-provider secrets.
 - Store deployment credentials in Railway, Vercel, and GitHub Actions secrets only.
 - Remove unsupported deployment paths rather than keeping them as fallback options.
 
@@ -187,7 +187,7 @@ npm run build   # Produces /out static export
 **Deploy**: Netlify auto-deploys from the `marvox-docs` repository `main` branch on push. No backend or API keys are required.
 
 **Security**:
-- The docs site is public and must never contain secrets, tokens, API keys, or any Railway/Vercel/OpenAI credentials.
+- The docs site is public and must never contain secrets, tokens, API keys, or any Railway/Vercel/inference-provider credentials.
 - Content must use placeholder values (e.g., `sk-...`, `replace-with-generated-secret`) only.
 - The Netlify site key is stored in Netlify project settings — never committed to the repository.
 

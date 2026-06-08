@@ -75,7 +75,7 @@ const phases: RoadmapPhase[] = [
     features: [
       "VoiceSelectionAgent mapping",
       "VoiceConfigurationAgent (300+ params)",
-      "OpenAI TTS synthesis",
+      "Neural TTS synthesis",
       "Parallel synthesis with semaphore guards",
       "AudioContinuityAgent QA (5-layer)",
       "Voice DNA evolution",

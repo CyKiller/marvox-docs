@@ -29,7 +29,7 @@ const audioSteps: AudioStep[] = [
     name: "Voice Map",
     title: "Character to Voice Assignment",
     description:
-      "VoiceSelectionAgent maps character traits (age, gender, accent, personality) to voice options from pool of 13 OpenAI voices. Generates voice DNA: numeric vector encoding tone, cadence, and emotional range.",
+      "VoiceSelectionAgent maps character traits (age, gender, accent, personality) to voice options from a multi-voice catalog. Generates voice DNA: numeric vector encoding tone, cadence, and emotional range.",
     inputs: ["Character profiles", "Traits"],
     outputs: ["Voice configs", "Voice DNA", "Emotional range"],
     agents: ["VoiceSelectionAgent"],
@@ -49,10 +49,10 @@ const audioSteps: AudioStep[] = [
     name: "Synthesize",
     title: "TTS Audio Generation",
     description:
-      "OpenAIService.tts_batch() synthesizes dialogue blocks in parallel (guarded by Semaphore(5) to prevent OOM). Each line → OpenAI TTS → MP3. Audio cached in Vercel Blob with cache key = hash(text + voice_id + config). Rate limit: 150 requests/minute per organization.",
+      "The synthesis service batches dialogue blocks in parallel (guarded by Semaphore(5) to prevent OOM). Each line → neural TTS engine → MP3. Audio cached in Cloud blob with cache key = hash(text + voice_id + config). Rate limit: 150 requests/minute per organization.",
     inputs: ["Dialogue blocks", "Voice configs"],
     outputs: ["MP3 files", "Duration metadata"],
-    agents: ["OpenAI TTS Service"],
+    agents: ["Neural TTS Service"],
   },
   {
     id: "mix",
@@ -62,7 +62,7 @@ const audioSteps: AudioStep[] = [
       "pydub composes MP3s in sequence, overlaying stage direction audio at lower volume. Normalizes loudness across blocks to −20dBFS. Inserts 500ms silence between speakers. Detects and handles edge cases: very long dialogue lines, emotional spikes, silence periods.",
     inputs: ["Individual MP3s", "Timings"],
     outputs: ["Mixed WAV/M4A", "Duration"],
-    agents: ["OpenAITTSService (audio composition)"],
+    agents: ["NeuralTTSService (audio composition)"],
   },
   {
     id: "continuity",
@@ -79,10 +79,10 @@ const audioSteps: AudioStep[] = [
     name: "Store",
     title: "Blob Storage & Indexing",
     description:
-      "Audio blob stored in Vercel Blob (production) or local file system (dev). File URL recorded in scene_audio table. Metadata: duration_seconds, file_size, audio_quality_score. Scene marked 'Audio Ready'. User can download or stream.",
+      "Audio blob stored in Cloud blob (production) or local file system (dev). File URL recorded in scene_audio table. Metadata: duration_seconds, file_size, audio_quality_score. Scene marked 'Audio Ready'. User can download or stream.",
     inputs: ["Final audio"],
     outputs: ["File URL", "S3/Blob metadata"],
-    agents: ["Vercel Blob Service"],
+    agents: ["Cloud blob Service"],
   },
 ]
 
@@ -114,7 +114,7 @@ export default function AudioPipelineDiagram() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 text-white text-xs font-bold">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-sky-400 to-cyan-500 text-white text-xs font-bold">
                           {idx + 1}
                         </span>
                         <h3 className="font-semibold text-white">{step.title}</h3>
@@ -226,13 +226,13 @@ export default function AudioPipelineDiagram() {
             <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Database className="w-4 h-4 text-sky-400 shrink-0" /> Caching Strategy</h3>
             <p>
               Audio cache key = <span className="text-slate-300 font-mono">hash(text + voice_id + config)</span>. Identical dialogue lines with same voice + config
-              reuse cached audio. Saves OpenAI API calls and speeds generation. Cache stored in Vercel Blob with TTL = 90 days.
+              reuse cached audio. Saves inference provider calls and speeds generation. Cache stored in Cloud blob with TTL = 90 days.
             </p>
           </div>
           <div>
             <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Gauge className="w-4 h-4 text-sky-400 shrink-0" /> Rate Limiting</h3>
             <p>
-              OpenAI TTS: 150 requests/minute per organization. Marvox queues overflow requests and retries with exponential backoff. Users see "waiting in queue" UI while
+              Neural TTS engine: 150 requests/minute per organization. Marvox queues overflow requests and retries with exponential backoff. Users see "waiting in queue" UI while
               synthesis completes. Prevents API 429 errors.
             </p>
           </div>

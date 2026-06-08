@@ -2,6 +2,10 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import {
+  Upload, MessageSquare, Clapperboard, Volume2, Moon, Users, KeyRound, Database,
+  Workflow, Check, CornerDownRight, Play, Square, ArrowLeft, ArrowRight,
+} from "lucide-react"
 
 // ── Shared primitives ──────────────────────────────────────────────────────────
 
@@ -20,56 +24,9 @@ function SectionBadge({ children }: { children: React.ReactNode }) {
   )
 }
 
-// ── Color map ──────────────────────────────────────────────────────────────────
+// ── Step type ──────────────────────────────────────────────────────────────────
 
 type WorkflowColor = "cyan" | "purple" | "green" | "amber" | "orange" | "pink" | "teal"
-
-const COLOR_MAP: Record<WorkflowColor, { hex: string; bg: string; border: string; glow: string }> = {
-  cyan: {
-    hex: "hsl(196 100% 67%)",
-    bg: "rgba(125,211,252,0.06)",
-    border: "rgba(125,211,252,0.18)",
-    glow: "rgba(125,211,252,0.25)",
-  },
-  purple: {
-    hex: "hsl(265 80% 75%)",
-    bg: "rgba(167,139,250,0.06)",
-    border: "rgba(167,139,250,0.18)",
-    glow: "rgba(167,139,250,0.25)",
-  },
-  green: {
-    hex: "hsl(160 70% 65%)",
-    bg: "rgba(52,211,153,0.06)",
-    border: "rgba(52,211,153,0.18)",
-    glow: "rgba(52,211,153,0.25)",
-  },
-  amber: {
-    hex: "hsl(40 90% 68%)",
-    bg: "rgba(251,191,36,0.06)",
-    border: "rgba(251,191,36,0.18)",
-    glow: "rgba(251,191,36,0.25)",
-  },
-  orange: {
-    hex: "hsl(25 95% 65%)",
-    bg: "rgba(251,146,60,0.06)",
-    border: "rgba(251,146,60,0.18)",
-    glow: "rgba(251,146,60,0.25)",
-  },
-  pink: {
-    hex: "hsl(330 85% 72%)",
-    bg: "rgba(244,114,182,0.06)",
-    border: "rgba(244,114,182,0.18)",
-    glow: "rgba(244,114,182,0.25)",
-  },
-  teal: {
-    hex: "hsl(174 72% 60%)",
-    bg: "rgba(45,212,191,0.06)",
-    border: "rgba(45,212,191,0.18)",
-    glow: "rgba(45,212,191,0.25)",
-  },
-}
-
-// ── Step type ──────────────────────────────────────────────────────────────────
 
 type WorkflowStep = {
   agent: string
@@ -114,7 +71,7 @@ const WORKFLOWS: Workflow[] = [
       {
         agent: "CanonIndexer",
         action: "index_manuscript()",
-        note: "Story text chunked and embedded via BatchEmbeddingService (OpenAI text-embedding-3-small, 1,536D). Persisted to PostgreSQL pgvector (all environments).",
+        note: "Story text chunked and embedded via BatchEmbeddingService (the embedding model, 1,536D). Persisted to PostgreSQL pgvector (all environments).",
         color: "cyan",
         file: "services/characteros/canon_indexer.py",
       },
@@ -176,11 +133,11 @@ const WORKFLOWS: Workflow[] = [
         file: "services/characteros/system_prompts.py",
       },
       {
-        agent: "OpenAIService",
+        agent: "InferenceService",
         action: "acreate_completion()",
-        note: "LLM call to gpt-4o-mini (OPENAI_MODEL_NAME). Response cached; cost tracked for OPENAI_API_USAGE_WARNING_THRESHOLD.",
+        note: "Call to the configured language model. Response cached; cost tracked against the usage-warning threshold.",
         color: "purple",
-        file: "services/openai_service.py",
+        file: "services/inference_service.py",
       },
       {
         agent: "MemoryBridge",
@@ -272,7 +229,7 @@ const WORKFLOWS: Workflow[] = [
       {
         agent: "VoiceSelectionAgent",
         action: "select_voices(characters)",
-        note: "Character trait → voice neural DNA mapping. 13 OpenAI TTS voices available. VoiceVault verifies IP-lock: DNA bound to project/org boundary.",
+        note: "Character trait → voice neural DNA mapping from a multi-voice catalog. VoiceVault verifies IP-lock: DNA bound to project/org boundary.",
         color: "amber",
         file: "services/characteros/voice_selection_agent.py",
       },
@@ -288,14 +245,14 @@ const WORKFLOWS: Workflow[] = [
         action: "asyncio.Semaphore(5)",
         note: "Concurrent TTS calls guarded by semaphore(5). Prevents OOM under parallel audio generation. asyncio.gather() over all dialogue blocks.",
         color: "orange",
-        file: "services/openai_tts_service.py",
+        file: "services/tts_service.py",
       },
       {
-        agent: "OpenAI TTS",
+        agent: "Neural TTS",
         action: "generate(block, voice, speed)",
-        note: "gpt-4o-mini-tts model per block. Each block returns raw audio bytes. Per-block emotion and SSML-style instructions injected into the voice prompt.",
+        note: "Neural TTS model per block. Each block returns raw audio bytes. Per-block emotion and SSML-style instructions injected into the voice prompt.",
         color: "amber",
-        file: "services/openai_tts_service.py",
+        file: "services/tts_service.py",
       },
       {
         agent: "AudioPipelineOrchestrator",
@@ -314,7 +271,7 @@ const WORKFLOWS: Workflow[] = [
       {
         agent: "BlobStorage",
         action: "upload_audio()",
-        note: "Final audio stored to Vercel Blob (prod) or local files (dev). AUDIO_BLOB_STRICT=true forces hard failure if blob is unhealthy. URL returned to caller.",
+        note: "Final audio stored to Cloud blob (prod) or local files (dev). AUDIO_BLOB_STRICT=true forces hard failure if blob is unhealthy. URL returned to caller.",
         color: "teal",
         file: "services/storage/blob_storage.py",
       },
@@ -479,7 +436,7 @@ const WORKFLOWS: Workflow[] = [
       {
         agent: "BatchEmbeddingService",
         action: "embed_batch([query])",
-        note: "Query embedded via OpenAI text-embedding-3-small (1,536D). Calls are batched and cached — never embed one-by-one. Cache hit rate typically 60–80% for repeated queries.",
+        note: "Query embedded via the embedding model (1,536D). Calls are batched and cached, never embedded one-by-one. Cache hit rate typically 60-80% for repeated queries.",
         color: "teal",
         file: "services/batch_embedding_service.py",
       },
@@ -522,42 +479,66 @@ const WORKFLOWS: Workflow[] = [
   },
 ]
 
-// ── StepCard ──────────────────────────────────────────────────────────────────
+// ── Workflow icons ──────────────────────────────────────────────────────────────
 
-function StepCard({
+const WF_ICONS: Record<string, React.ElementType> = {
+  build: Upload,
+  chat: MessageSquare,
+  scene: Clapperboard,
+  audio: Volume2,
+  reflection: Moon,
+  collab: Users,
+  apikey: KeyRound,
+  rag: Database,
+}
+
+// ── PipelineNode ──────────────────────────────────────────────────────────────
+
+function PipelineNode({
   step,
   index,
-  isLast,
+  total,
   isActive,
+  isDone,
   onClick,
 }: {
   step: WorkflowStep
   index: number
-  isLast: boolean
+  total: number
   isActive: boolean
+  isDone: boolean
   onClick: () => void
 }) {
-  const c = COLOR_MAP[step.color]
-  const stepColor = COLOR_MAP[step.color]
+  const isLast = index === total - 1
 
   return (
-    <div className="flex gap-3 items-start">
-      {/* Timeline */}
-      <div className="flex flex-col items-center flex-shrink-0 pt-1">
+    <div className="flex gap-3 items-stretch">
+      {/* Rail node + connector */}
+      <div className="flex flex-col items-center flex-shrink-0">
         <div
-          className="w-2.5 h-2.5 rounded-full flex-shrink-0 transition-all duration-300"
+          className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-mono font-semibold transition-all duration-300"
           style={{
-            background: isActive ? stepColor.hex : `${stepColor.hex}55`,
-            boxShadow: isActive ? `0 0 8px ${stepColor.glow}` : undefined,
-            transform: isActive ? "scale(1.3)" : "scale(1)",
+            background: isActive
+              ? "rgba(125,211,252,0.16)"
+              : isDone
+                ? "rgba(125,211,252,0.08)"
+                : "rgba(148,163,184,0.05)",
+            border: `1px solid ${
+              isActive ? "rgba(125,211,252,0.5)" : isDone ? "rgba(125,211,252,0.25)" : "rgba(148,163,184,0.14)"
+            }`,
+            color: isActive || isDone ? "hsl(196 100% 72%)" : "hsl(240 5% 45%)",
+            boxShadow: isActive ? "0 0 14px rgba(125,211,252,0.35)" : undefined,
+            transform: isActive ? "scale(1.08)" : "scale(1)",
           }}
-        />
+        >
+          {isDone && !isActive ? <Check className="w-3.5 h-3.5" /> : String(index + 1).padStart(2, "0")}
+        </div>
         {!isLast && (
           <div
-            className="w-px flex-1 mt-1 transition-all duration-300"
+            className="w-px flex-1 my-1 transition-all duration-300"
             style={{
-              background: isActive ? `${stepColor.hex}50` : "rgba(148,163,184,0.12)",
-              minHeight: "24px",
+              minHeight: "18px",
+              background: isDone ? "rgba(125,211,252,0.3)" : "rgba(148,163,184,0.12)",
             }}
           />
         )}
@@ -566,44 +547,33 @@ function StepCard({
       {/* Content card */}
       <button
         onClick={onClick}
-        className="flex-1 rounded-lg px-4 py-3 mb-1 text-left transition-all duration-200 cursor-pointer"
+        className="flex-1 min-w-0 text-left rounded-lg px-4 py-3 mb-2 transition-all duration-200"
         style={{
-          background: isActive ? `${c.bg}` : "rgba(6,12,28,0.6)",
-          border: isActive
-            ? `1px solid ${c.border}`
-            : "1px solid rgba(148,163,184,0.08)",
-          boxShadow: isActive ? `0 0 12px ${c.glow}30` : undefined,
+          background: isActive ? "rgba(125,211,252,0.05)" : "rgba(6,12,28,0.5)",
+          border: `1px solid ${isActive ? "rgba(125,211,252,0.25)" : "rgba(148,163,184,0.08)"}`,
+          boxShadow: isActive ? "0 0 18px rgba(125,211,252,0.10)" : undefined,
         }}
       >
-        <div className="flex flex-wrap items-center gap-2 mb-1.5">
+        <div className="flex flex-wrap items-center gap-2">
           <span
-            className="font-mono text-xs font-bold transition-colors"
-            style={{ color: isActive ? c.hex : `${c.hex}88` }}
+            className="font-mono text-xs font-semibold"
+            style={{ color: isActive ? "hsl(196 100% 72%)" : "hsl(196 55% 62%)" }}
           >
             {step.agent}
           </span>
           <span
-            className="font-mono text-xs px-2 py-0.5 rounded"
+            className="font-mono text-[11px] px-2 py-0.5 rounded"
             style={{
               background: "rgba(0,0,0,0.3)",
-              color: isActive ? "hsl(0 0% 80%)" : "hsl(0 0% 50%)",
+              color: "hsl(0 0% 66%)",
               border: "1px solid rgba(148,163,184,0.1)",
             }}
           >
             .{step.action}
           </span>
-          <span
-            className="font-mono text-xs font-medium px-1.5 py-0.5 rounded"
-            style={{
-              background: "rgba(0,0,0,0.2)",
-              color: "hsl(240 5% 40%)",
-            }}
-          >
-            {String(index + 1).padStart(2, "0")}
-          </span>
           {step.conditional && (
             <span
-              className="text-xs font-semibold font-mono px-2 py-0.5 rounded-full"
+              className="text-[10px] font-semibold font-mono px-1.5 py-0.5 rounded-full"
               style={{
                 background: "rgba(251,191,36,0.1)",
                 color: "hsl(40 90% 68%)",
@@ -614,245 +584,25 @@ function StepCard({
             </span>
           )}
         </div>
-        <p
-          className="text-xs leading-relaxed transition-colors"
-          style={{ color: isActive ? "hsl(240 5% 68%)" : "hsl(240 5% 45%)" }}
-        >
-          {step.note}
-        </p>
-        {isActive && step.file && (
-          <div
-            className="mt-2 pt-2 flex items-center gap-1.5"
-            style={{ borderTop: "1px solid rgba(148,163,184,0.08)" }}
-          >
-            <span className="text-xs" style={{ color: "hsl(240 5% 38%)" }}>
-              ↳
-            </span>
-            <code
-              className="text-xs font-mono"
-              style={{ color: c.hex, opacity: 0.7 }}
-            >
-              {step.file}
-            </code>
-          </div>
+        {isActive && (
+          <>
+            <p className="text-xs leading-relaxed mt-2" style={{ color: "hsl(240 5% 70%)" }}>
+              {step.note}
+            </p>
+            {step.file && (
+              <div
+                className="mt-2 pt-2 flex items-center gap-1.5"
+                style={{ borderTop: "1px solid rgba(148,163,184,0.08)" }}
+              >
+                <CornerDownRight className="w-3 h-3" style={{ color: "hsl(240 5% 38%)" }} />
+                <code className="text-[11px] font-mono" style={{ color: "hsl(196 100% 70%)", opacity: 0.75 }}>
+                  {step.file}
+                </code>
+              </div>
+            )}
+          </>
         )}
       </button>
-    </div>
-  )
-}
-
-// ── WorkflowStepper ───────────────────────────────────────────────────────────
-
-function WorkflowStepper({
-  steps,
-  isWalking,
-  activeStep,
-  onStepClick,
-}: {
-  steps: WorkflowStep[]
-  isWalking: boolean
-  activeStep: number | null
-  onStepClick: (i: number) => void
-}) {
-  return (
-    <div className="space-y-0 pt-1">
-      {steps.map((step, i) => (
-        <StepCard
-          key={i}
-          step={step}
-          index={i}
-          isLast={i === steps.length - 1}
-          isActive={activeStep === i}
-          onClick={() => onStepClick(i)}
-        />
-      ))}
-    </div>
-  )
-}
-
-// ── WorkflowAccordion ─────────────────────────────────────────────────────────
-
-function WorkflowAccordion({
-  workflow,
-  isOpen,
-  onToggle,
-}: {
-  workflow: Workflow
-  isOpen: boolean
-  onToggle: () => void
-}) {
-  const [activeStep, setActiveStep] = useState<number | null>(null)
-  const [isWalking, setIsWalking] = useState(false)
-  const walkRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const c = COLOR_MAP[workflow.color]
-
-  // Stop walk-through when accordion closes
-  useEffect(() => {
-    if (!isOpen) {
-      stopWalk()
-    }
-  }, [isOpen])
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (walkRef.current) clearInterval(walkRef.current)
-    }
-  }, [])
-
-  function startWalk() {
-    setIsWalking(true)
-    setActiveStep(0)
-    if (walkRef.current) clearInterval(walkRef.current)
-    let step = 0
-    walkRef.current = setInterval(() => {
-      step++
-      if (step >= workflow.steps.length) {
-        stopWalk()
-        return
-      }
-      setActiveStep(step)
-    }, 1400)
-  }
-
-  function stopWalk() {
-    setIsWalking(false)
-    if (walkRef.current) {
-      clearInterval(walkRef.current)
-      walkRef.current = null
-    }
-    setActiveStep(null)
-  }
-
-  function handleStepClick(i: number) {
-    if (isWalking) stopWalk()
-    setActiveStep(activeStep === i ? null : i)
-  }
-
-  return (
-    <div
-      className="rounded-xl overflow-hidden transition-all duration-200"
-      style={{
-        background: isOpen ? "rgba(6,12,28,0.8)" : "rgba(6,12,28,0.5)",
-        border: isOpen
-          ? `1px solid ${c.border}`
-          : "1px solid rgba(148,163,184,0.1)",
-        boxShadow: isOpen ? `0 0 20px ${c.glow}20` : undefined,
-      }}
-    >
-      {/* Header */}
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center gap-4 px-5 py-4 text-left transition-colors"
-        style={{ cursor: "pointer" }}
-      >
-        {/* Color dot */}
-        <div
-          className="w-3 h-3 rounded-full flex-shrink-0"
-          style={{
-            background: c.hex,
-            boxShadow: isOpen ? `0 0 8px ${c.glow}` : undefined,
-          }}
-        />
-
-        {/* Title */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <span
-              className="font-semibold text-sm leading-tight"
-              style={{ color: isOpen ? "hsl(0 0% 96%)" : "hsl(0 0% 70%)" }}
-            >
-              {workflow.title}
-            </span>
-            <span
-              className="text-xs font-mono px-2 py-0.5 rounded-full flex-shrink-0"
-              style={{
-                background: `${c.bg}`,
-                color: c.hex,
-                border: `1px solid ${c.border}`,
-              }}
-            >
-              {workflow.steps.length} steps
-            </span>
-          </div>
-          {isOpen && (
-            <p className="text-xs mt-0.5 leading-relaxed" style={{ color: "hsl(240 5% 50%)" }}>
-              {workflow.subtitle}
-            </p>
-          )}
-        </div>
-
-        {/* Chevron */}
-        <svg
-          className="flex-shrink-0 transition-transform duration-200"
-          style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)", color: "hsl(240 5% 40%)" }}
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-        >
-          <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-
-      {/* Body */}
-      {isOpen && (
-        <div style={{ borderTop: `1px solid ${c.border}40` }}>
-          {/* Walk Through controls */}
-          <div
-            className="flex items-center justify-between px-5 py-3"
-            style={{ borderBottom: "1px solid rgba(148,163,184,0.07)" }}
-          >
-            <span className="text-xs" style={{ color: "hsl(240 5% 40%)" }}>
-              Click any step to inspect · or use Walk Through
-            </span>
-            <button
-              onClick={isWalking ? stopWalk : startWalk}
-              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-all"
-              style={
-                isWalking
-                  ? {
-                      background: "rgba(239,68,68,0.08)",
-                      border: "1px solid rgba(239,68,68,0.2)",
-                      color: "hsl(0 80% 68%)",
-                    }
-                  : {
-                      background: c.bg,
-                      border: `1px solid ${c.border}`,
-                      color: c.hex,
-                    }
-              }
-            >
-              {isWalking ? (
-                <>
-                  <span
-                    className="inline-block w-1.5 h-1.5 rounded-full animate-pulse"
-                    style={{ background: "hsl(0 80% 68%)" }}
-                  />
-                  Stop
-                </>
-              ) : (
-                <>
-                  <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
-                    <path d="M1 1l8 5-8 5V1z" />
-                  </svg>
-                  Walk Through
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Steps */}
-          <div className="px-5 py-4">
-            <WorkflowStepper
-              steps={workflow.steps}
-              isWalking={isWalking}
-              activeStep={activeStep}
-              onStepClick={handleStepClick}
-            />
-          </div>
-        </div>
-      )}
     </div>
   )
 }
@@ -860,96 +610,174 @@ function WorkflowAccordion({
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function WorkflowsPage() {
-  const [openId, setOpenId] = useState<string>("build")
+  const [activeId, setActiveId] = useState<string>("build")
+  const [activeStep, setActiveStep] = useState<number | null>(null)
+  const [isWalking, setIsWalking] = useState(false)
+  const walkRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  function toggle(id: string) {
-    setOpenId(openId === id ? "" : id)
+  const wf = WORKFLOWS.find((w) => w.id === activeId) ?? WORKFLOWS[0]
+
+  function stopWalk() {
+    setIsWalking(false)
+    if (walkRef.current) {
+      clearInterval(walkRef.current)
+      walkRef.current = null
+    }
   }
+
+  function startWalk() {
+    stopWalk()
+    setIsWalking(true)
+    setActiveStep(0)
+    let s = 0
+    walkRef.current = setInterval(() => {
+      s++
+      if (s >= wf.steps.length) {
+        stopWalk()
+        return
+      }
+      setActiveStep(s)
+    }, 1500)
+  }
+
+  function selectWorkflow(id: string) {
+    stopWalk()
+    setActiveId(id)
+    setActiveStep(null)
+  }
+
+  function clickStep(i: number) {
+    stopWalk()
+    setActiveStep(activeStep === i ? null : i)
+  }
+
+  useEffect(() => () => {
+    if (walkRef.current) clearInterval(walkRef.current)
+  }, [])
+
+  const progress = activeStep === null ? 0 : ((activeStep + 1) / wf.steps.length) * 100
 
   return (
     <div className="pb-16">
       {/* Page header */}
       <div className="mb-8 pb-6" style={{ borderBottom: "1px solid rgba(148,163,184,0.1)" }}>
         <SectionBadge>Production Workflows</SectionBadge>
-        <h1
-          className="text-3xl font-bold mb-2"
-          style={{ color: "hsl(0 0% 98%)", letterSpacing: "-0.025em" }}
-        >
-          CharacterOS Workflows
-        </h1>
-        <p className="text-sm leading-relaxed max-w-2xl" style={{ color: "hsl(240 5% 55%)" }}>
-          8 interactive flow references covering every production runtime path — from manuscript
-          upload to audio generation. Click any step to inspect the implementation, or use
-          <strong style={{ color: "hsl(196 100% 67%)" }}> Walk Through</strong> to animate the full
-          sequence.
+        <h1 className="display-section text-white mb-2">CharacterOS workflows</h1>
+        <p className="text-sm leading-relaxed max-w-2xl" style={{ color: "hsl(240 5% 58%)" }}>
+          Eight production runtime paths, from manuscript upload to audio. Pick a flow, then walk
+          each step. Click a node to inspect its implementation, or press{" "}
+          <span style={{ color: "hsl(196 100% 67%)" }}>Walk through</span> to animate the sequence.
         </p>
       </div>
 
-      {/* Legend */}
-      <div
-        className="rounded-xl px-5 py-4 mb-8 flex flex-wrap gap-x-6 gap-y-2"
-        style={{
-          background: "rgba(6,12,28,0.5)",
-          border: "1px solid rgba(148,163,184,0.08)",
-        }}
-      >
-        <span className="text-xs font-medium" style={{ color: "hsl(240 5% 40%)" }}>
-          Color coding:
-        </span>
-        {[
-          { color: "cyan" as const, label: "Data Ingestion" },
-          { color: "purple" as const, label: "LLM / Character" },
-          { color: "green" as const, label: "Continuity / QA" },
-          { color: "amber" as const, label: "Audio / TTS" },
-          { color: "orange" as const, label: "Lifecycle / Auth" },
-          { color: "pink" as const, label: "Collaboration" },
-          { color: "teal" as const, label: "Storage / RAG" },
-        ].map(({ color, label }) => (
-          <div key={color} className="flex items-center gap-1.5">
-            <div
-              className="w-2 h-2 rounded-full flex-shrink-0"
-              style={{ background: COLOR_MAP[color].hex }}
-            />
-            <span className="text-xs" style={{ color: "hsl(240 5% 55%)" }}>
-              {label}
-            </span>
+      <div className="grid grid-cols-1 md:grid-cols-[248px_1fr] gap-6">
+        {/* ── Stage rail ── */}
+        <nav className="md:sticky md:top-2 self-start">
+          <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 -mx-1 px-1">
+            {WORKFLOWS.map((w) => {
+              const Icon = WF_ICONS[w.id] ?? Workflow
+              const active = w.id === activeId
+              return (
+                <button
+                  key={w.id}
+                  onClick={() => selectWorkflow(w.id)}
+                  className="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-left transition-all duration-200 flex-shrink-0 md:w-full"
+                  style={{
+                    background: active ? "rgba(125,211,252,0.08)" : "rgba(6,12,28,0.4)",
+                    border: `1px solid ${active ? "rgba(125,211,252,0.25)" : "rgba(148,163,184,0.08)"}`,
+                    boxShadow: active ? "inset 2px 0 0 hsl(196 100% 67%)" : undefined,
+                  }}
+                >
+                  <div
+                    className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{
+                      background: active ? "rgba(125,211,252,0.12)" : "rgba(148,163,184,0.05)",
+                      border: `1px solid ${active ? "rgba(125,211,252,0.2)" : "rgba(148,163,184,0.1)"}`,
+                    }}
+                  >
+                    <Icon className="w-3.5 h-3.5" style={{ color: active ? "hsl(196 100% 72%)" : "hsl(240 5% 55%)" }} />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-xs font-semibold truncate" style={{ color: active ? "hsl(0 0% 96%)" : "hsl(0 0% 72%)" }}>
+                      {w.title}
+                    </div>
+                    <div className="text-[10px]" style={{ color: "hsl(240 5% 45%)" }}>{w.steps.length} steps</div>
+                  </div>
+                </button>
+              )
+            })}
           </div>
-        ))}
+        </nav>
+
+        {/* ── Stage ── */}
+        <div className="min-w-0">
+          {/* Stage header + controls */}
+          <div className="marvox-panel rounded-xl p-5 mb-5">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h2 className="text-base font-semibold text-white">{wf.title}</h2>
+                <p className="text-xs mt-1 leading-relaxed max-w-xl" style={{ color: "hsl(240 5% 55%)" }}>
+                  {wf.subtitle}
+                </p>
+              </div>
+              <button
+                onClick={isWalking ? stopWalk : startWalk}
+                className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all flex-shrink-0"
+                style={
+                  isWalking
+                    ? { background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "hsl(0 80% 70%)" }
+                    : { background: "rgba(125,211,252,0.1)", border: "1px solid rgba(125,211,252,0.25)", color: "hsl(196 100% 72%)" }
+                }
+              >
+                {isWalking ? (
+                  <>
+                    <Square className="w-3 h-3 fill-current" /> Stop
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3 h-3 fill-current" /> Walk through
+                  </>
+                )}
+              </button>
+            </div>
+            {/* Progress */}
+            <div className="mt-4 flex items-center gap-3">
+              <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "rgba(148,163,184,0.12)" }}>
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{ width: `${progress}%`, background: "linear-gradient(90deg, hsl(196 100% 58%), hsl(196 100% 74%))" }}
+                />
+              </div>
+              <span className="text-[11px] font-mono flex-shrink-0" style={{ color: "hsl(240 5% 50%)" }}>
+                {activeStep === null ? `0 / ${wf.steps.length}` : `${activeStep + 1} / ${wf.steps.length}`}
+              </span>
+            </div>
+          </div>
+
+          {/* Pipeline */}
+          <div className="pt-1">
+            {wf.steps.map((step, i) => (
+              <PipelineNode
+                key={`${wf.id}-${i}`}
+                step={step}
+                index={i}
+                total={wf.steps.length}
+                isActive={activeStep === i}
+                isDone={activeStep !== null && i < activeStep}
+                onClick={() => clickStep(i)}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* Workflow list */}
-      <div className="space-y-3">
-        {WORKFLOWS.map((wf) => (
-          <WorkflowAccordion
-            key={wf.id}
-            workflow={wf}
-            isOpen={openId === wf.id}
-            onToggle={() => toggle(wf.id)}
-          />
-        ))}
-      </div>
-
-      {/* Footer link */}
-      <div className="mt-10 flex flex-wrap gap-4">
-        <Link
-          href="/architecture"
-          className="text-sm flex items-center gap-1.5 transition-colors"
-          style={{ color: "hsl(196 100% 67%)", opacity: 0.8 }}
-        >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M11 7H3M6 4l-3 3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Architecture overview
+      {/* Footer links */}
+      <div className="mt-12 flex flex-wrap gap-5">
+        <Link href="/architecture" className="text-sm flex items-center gap-1.5 text-sky-400 hover:text-sky-300 transition-colors">
+          <ArrowLeft className="w-3.5 h-3.5" /> Architecture overview
         </Link>
-        <Link
-          href="/agents"
-          className="text-sm flex items-center gap-1.5 transition-colors"
-          style={{ color: "hsl(265 80% 75%)", opacity: 0.8 }}
-        >
-          Agent network reference
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+        <Link href="/agents" className="text-sm flex items-center gap-1.5 text-sky-400 hover:text-sky-300 transition-colors">
+          Agent network reference <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
     </div>

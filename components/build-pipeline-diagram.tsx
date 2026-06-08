@@ -20,7 +20,7 @@ const stages: PipelineStage[] = [
     name: "Upload",
     title: "Manuscript Upload & Validation",
     description:
-      "User uploads manuscript (TXT, DOCX, PDF). System validates file size (<100MB), extracts text, and stores in Vercel Blob. Word count and character count computed.",
+      "User uploads manuscript (TXT, DOCX, PDF). System validates file size (<100MB), extracts text, and stores in Cloud blob. Word count and character count computed.",
     duration: "30 seconds",
     inputs: ["Manuscript file"],
     outputs: ["Project ID", "Word count", "Character list (preview)"],
@@ -42,7 +42,7 @@ const stages: PipelineStage[] = [
     name: "CharacterOS",
     title: "Vector Index & Memory Init",
     description:
-      "Initializes CharacterOS runtime. Chunks canon into semantic blocks, computes embeddings (OpenAI text-embedding-3-small, 1,536D via pgvector), builds RAG index in PostgreSQL. Initializes memory bridge for character persistence.",
+      "Initializes CharacterOS runtime. Chunks canon into semantic blocks, computes embeddings (the embedding model, 1,536D via pgvector), builds RAG index in PostgreSQL. Initializes memory bridge for character persistence.",
     duration: "1-2 minutes",
     inputs: ["Canonical text", "Character profiles"],
     outputs: ["Vector indices", "Memory tables", "RAG ready"],
@@ -249,7 +249,7 @@ export default function BuildPipelineDiagram() {
             <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Upload className="w-4 h-4 text-sky-400 shrink-0" /> Upload (30s)</h3>
             <p>
               Client uploads file up to 100MB via multipart form. Backend validates MIME type, extracts text (python-docx for .docx, PyPDF for .pdf, plain text otherwise).
-              File stored in Vercel Blob with unique key. Word/character counts streamed to database immediately, unblocking UI "Corpus" display.
+              File stored in Cloud blob with unique key. Word/character counts streamed to database immediately, unblocking UI "Corpus" display.
             </p>
           </div>
           <div>
@@ -262,7 +262,7 @@ export default function BuildPipelineDiagram() {
           <div>
             <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Brain className="w-4 h-4 text-sky-400 shrink-0" /> CharacterOS (1-2m)</h3>
             <p>
-              AgentRuntime initializes: canon chunks → embeddings via BatchEmbeddingService (OpenAI text-embedding-3-small, 1,536D) → stored in PostgreSQL pgvector. MemoryBridge tables
+              AgentRuntime initializes: canon chunks → embeddings via BatchEmbeddingService (the embedding model, 1,536D) → stored in PostgreSQL pgvector. MemoryBridge tables
               created. RAG system tested with sample query. This stage blocks character chat and scene generation until complete.
             </p>
           </div>

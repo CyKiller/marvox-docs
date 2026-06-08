@@ -52,7 +52,7 @@ Important implementation notes:
 
 - PostgreSQL is the only supported production database.
 - JWT secret resolution is compatible with `JWT_SECRET_KEY`, `SECRET_KEY`, `AUTH_SECRET`, and `NEXTAUTH_SECRET`, but production should still set `JWT_SECRET_KEY` explicitly.
-- The OpenAI model is configured by `OPENAI_MODEL_NAME` and defaults to `gpt-4o-mini`.
+- The language model is configured by `OPENAI_MODEL_NAME`.
 - The frontend Stripe key is `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
 
 ---
@@ -205,7 +205,7 @@ High-level flow:
 1. Resolve current project and character profile.
 2. Retrieve canon and memory context.
 3. Build a mode-aware system prompt.
-4. Generate a response through the OpenAI service.
+4. Generate a response through the model provider.
 5. Persist memory and telemetry where applicable.
 
 ### Scene Generation
@@ -342,7 +342,7 @@ Start here when auditing or extending CharacterOS:
 - `backend/auth_routes.py`
 - `backend/security_middleware.py`
 - `services/project_manager.py`
-- `services/openai_service.py`
+- `services/inference_service.py`
 - `services/storage/blob_storage.py`
 - `services/characteros/agent_runtime.py`
 

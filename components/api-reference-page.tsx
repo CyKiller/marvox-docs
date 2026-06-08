@@ -513,14 +513,14 @@ const API_GROUPS: ApiGroup[] = [
         path: "/api/audio/characteros/projects/{project_id}/generate-audio-pipeline",
         summary: "Generate scene audio pipeline",
         auth: true,
-        description: "Executes the 8-step audio synthesis pipeline: parses dialogue blocks, resolves voice DNA, executes TTS generation, composites tracks, and validates quality. Uploads to Vercel Blob storage in production.",
+        description: "Executes the 8-step audio synthesis pipeline: parses dialogue blocks, resolves voice DNA, executes TTS generation, composites tracks, and validates quality. Uploads to Cloud blob storage in production.",
         curl: `curl -X POST "https://your-domain/api/audio/characteros/projects/{project_id}/generate-audio-pipeline" \\
   -H "Authorization: Bearer <token>" \\
   -H "Content-Type: application/json" \\
   -d '{
     "character_ids": ["alice", "queen"],
     "scene_text": "ALICE: Hello.\\nQUEEN: Off with her head!",
-    "voice_assignments": {"alice": "alloy", "queen": "nova"},
+    "voice_assignments": {"alice": "voice_01", "queen": "voice_02"},
     "director_controls": {"mood": "tense", "pacing": "moderate", "intensity": 0.8},
     "output_format": "mp3"
   }'`,

@@ -149,8 +149,8 @@ print(f"Continuity passed: {scene.get('continuity_passed')}")`,
     "character_ids": ["char_alice", "char_cheshire"],
     "scene_text": "NARRATOR: The forest was quiet.\\nALICE: Where are we?\\nCHESHIRE: Everywhere and nowhere.",
     "voice_assignments": {
-      "alice": "alloy",
-      "cheshire": "nova"
+      "alice": "voice_01",
+      "cheshire": "voice_02"
     },
     "director_controls": {
       "mood": "neutral",
@@ -173,8 +173,8 @@ response = requests.post(
     "character_ids": ["char_alice", "char_cheshire"],
     "scene_text": "NARRATOR: The forest was quiet.\\nALICE: Where are we?\\nCHESHIRE: Everywhere and nowhere.",
     "voice_assignments": {
-      "alice": "alloy",
-      "cheshire": "nova",
+      "alice": "voice_01",
+      "cheshire": "voice_02",
     },
     "director_controls": {
       "mood": "neutral",

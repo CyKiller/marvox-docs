@@ -17,7 +17,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ## Phases
 
-### ✅ Phase 1: Core MVP Foundation (Completed Jan 1-15, 2026)
+### Phase 1: Core MVP Foundation (Completed Jan 1-15, 2026)
 
 **Objective**: Build the foundational platform for manuscript analysis and project management.
 
@@ -25,7 +25,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 - [x] FastAPI backend with PostgreSQL database
 - [x] Next.js frontend with 9 overview/analysis pages (Next.js 16.x as of current main)
 - [x] Manuscript upload and parsing system
-- [x] Basic AI-powered manuscript analysis (GPT-4o-mini)
+- [x] Basic AI-powered manuscript analysis (frontier LLM)
 - [x] Character extraction and profile building
 - [x] Story summary and theme analysis
 - [x] Dialogue analysis system
@@ -38,7 +38,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ---
 
-### ✅ Phase 2: Advanced Analytics & Character Intelligence (Completed Jan 15-25, 2026)
+### Phase 2: Advanced Analytics & Character Intelligence (Completed Jan 15-25, 2026)
 
 **Objective**: Deepen manuscript analysis and character understanding.
 
@@ -60,7 +60,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ---
 
-### ✅ Phase 3: CharacterOS Agent Network (Completed Jan 25 - Feb 1, 2026)
+### Phase 3: CharacterOS Agent Network (Completed Jan 25 - Feb 1, 2026)
 
 **Objective**: Create AI agent network for character interaction and scene generation.
 
@@ -74,19 +74,19 @@ Complete product development roadmap with phases, timeline, and completion statu
 - [x] RAG system with semantic search
 - [x] CanonIndex with pgvector storage
 - [x] CharacterMemory persistence
-- [x] OpenAI TTS audio generation (13 voices)
+- [x] Multi-voice neural TTS audio generation
 - [x] Scene audio streaming
 - [x] 4-mode system (CANON, CANON+INFER, BRANCH, WRITER_ROOM)
 
 **Key Components**:
-- **RAG Stack**: OpenAI text-embedding-3-small (1,536D) + PostgreSQL pgvector
+- **RAG Stack**: the embedding model (1,536D) + PostgreSQL pgvector
 - **Agents**: Specialized agents orchestrated via `AgentRuntime`
 - **Memory**: Per-character memory bridges for scene persistence
 - **Continuity**: Automated validation with fix suggestions
 
 ---
 
-### ✅ Phase 4: Production Hardening & UX Polish (Completed Feb 1-4, 2026)
+### Phase 4: Production Hardening & UX Polish (Completed Feb 1-4, 2026)
 
 **Objective**: Harden platform for production use and improve user experience.
 
@@ -115,7 +115,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ---
 
-### ⏳ Phase 5: Documentation Alignment (Completed Feb 4, 2026)
+### Phase 5: Documentation Alignment (Completed Feb 4, 2026)
 
 **Objective**: Align docs with current code, make onboarding actionable, and generate API docs from OpenAPI.
 
@@ -128,7 +128,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ---
 
-### 🟡 Phase 6: Billing + Gateway (Completed / Hardening)
+### Phase 6: Billing + Gateway (Completed / Hardening)
 
 **Objective**: Enforce usage metering, billing, and gateway-first integrations.
 
@@ -140,7 +140,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ---
 
-### 🟡 Phase 7: GitHub Governance (Planned)
+### Phase 7: GitHub Governance (Planned)
 
 **Objective**: Implement GitHub-native project governance and collaboration tools.
 
@@ -154,7 +154,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ---
 
-### ⏳ Phase 8: Performance Optimization (Q2 2026)
+### Phase 8: Performance Optimization (Q2 2026)
 
 **Objective**: Optimize for scale and reduce latency.
 
@@ -166,7 +166,7 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ---
 
-### ⏳ Phase 9: Enterprise Features (Q3 2026)
+### Phase 9: Enterprise Features (Q3 2026)
 
 **Objective**: Add collaboration and enterprise-grade features.
 
@@ -182,15 +182,15 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 | Phase | Start | End | Duration | Status |
 |-------|-------|-----|----------|--------|
-| 1: MVP Foundation | Jan 1 | Jan 15 | 15 days | ✅ Complete |
-| 2: Analytics | Jan 15 | Jan 25 | 10 days | ✅ Complete |
-| 3: CharacterOS | Jan 25 | Feb 1 | 7 days | ✅ Complete |
-| 4: Production | Feb 1 | Feb 4 | 3 days | ✅ Complete |
-| 5: Documentation | Feb 4 | Feb 4 | 1 day | ✅ Complete |
-| 6: Billing + Gateway | Feb 4 | Feb 15 | 11 days | ✅ Complete |
-| 7: GitHub Governance | Feb 15 | Feb 20 | 5 days | 🟡 Planned |
-| 8: Performance | Q2 2026 | TBD | 2-3 weeks | ⏳ Planned |
-| 9: Enterprise | Q3 2026 | TBD | 4-6 weeks | ⏳ Planned |
+| 1: MVP Foundation | Jan 1 | Jan 15 | 15 days | Complete |
+| 2: Analytics | Jan 15 | Jan 25 | 10 days | Complete |
+| 3: CharacterOS | Jan 25 | Feb 1 | 7 days | Complete |
+| 4: Production | Feb 1 | Feb 4 | 3 days | Complete |
+| 5: Documentation | Feb 4 | Feb 4 | 1 day | Complete |
+| 6: Billing + Gateway | Feb 4 | Feb 15 | 11 days | Complete |
+| 7: GitHub Governance | Feb 15 | Feb 20 | 5 days | Planned |
+| 8: Performance | Q2 2026 | TBD | 2-3 weeks | Planned |
+| 9: Enterprise | Q3 2026 | TBD | 4-6 weeks | Planned |
 
 ---
 
@@ -198,12 +198,12 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 **Status**: Private Beta / Production Hardening
 
-- ✅ 29 routes deployed and tested
-- ✅ Strict TypeScript/ESLint builds enforced
-- ✅ 6 CharacterOS agents operational
-- ✅ Security middleware active
-- ✅ Performance monitoring live
-- ✅ RAG vector search backed by PostgreSQL pgvector
+- 29 routes deployed and tested
+- Strict TypeScript/ESLint builds enforced
+- 6 CharacterOS agents operational
+- Security middleware active
+- Performance monitoring live
+- RAG vector search backed by PostgreSQL pgvector
 
 > [!IMPORTANT]
 > Actual launch readiness and staging/production deployments are gated by automated CI release runs and runtime environment checks (e.g. valid DB credentials, Stripe webhooks, pgvector health).
@@ -235,8 +235,8 @@ Do not treat these as static guarantees. Current values should come from CI, pro
 - React 18
 
 ### AI/ML
-- OpenAI API ≥1.51.0 (LLM + TTS)
-- OpenAI text-embedding-3-small (1,536D, RAG embeddings)
+- Inference provider ≥1.51.0 (LLM + TTS)
+- The embedding model (1,536D, RAG embeddings)
 - PostgreSQL pgvector (vector storage, all environments)
 
 ---

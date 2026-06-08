@@ -4,7 +4,7 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 
 ---
 
-## 🏗️ System Overview
+## System Overview
 
 ```
 ┌─────────────────┐           ┌─────────────────┐
@@ -36,7 +36,7 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 
 ---
 
-## 🔧 Backend Stack (Python/FastAPI)
+## Backend Stack (Python/FastAPI)
 
 ### Core Framework
 - **FastAPI** `0.104.1` - Async web framework with auto-docs
@@ -50,8 +50,8 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 - **Redis** (local via Docker, Railway staging/production) - Cache, rate limiting, and job queues
 
 ### AI/ML & Embeddings
-- **OpenAI API** ≥1.51.0 — GPT-4o-mini inference, TTS audio generation
-- **OpenAI text-embedding-3-small** — 1,536-dim vector embeddings for RAG
+- **Inference provider** ≥1.51.0 — frontier LLM inference, TTS audio generation
+- **The embedding model** — 1,536-dim vector embeddings for RAG
 - **PostgreSQL pgvector** — Vector storage and similarity search (local and production, single backend)
 - **scikit-learn** ≥1.5.0 — ML utilities
 - **NumPy** ≥1.26.0 — Numerical computing
@@ -62,7 +62,7 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 
 ### Audio Processing
 - **pydub** `0.25.1` - Audio format conversion and mixing
-- **OpenAI TTS** (`gpt-4o-mini-tts`) - 13 voice synthesis
+- **Neural TTS engine** - multi-voice neural TTS
 
 ### Security & Performance
 - **Redis** - Required for rate limiting, caching, and background job queues
@@ -91,12 +91,12 @@ services/
 │   ├── director_agent.py    # Scene direction
 │   ├── narrator_agent.py    # Narrative framing
 │   └── voice_selection_agent.py
-└── openai_tts_service.py    # Multi-voice audio
+└── tts_service.py           # Multi-voice audio
 ```
 
 ---
 
-## 🎨 Frontend Stack (Next.js/React)
+## Frontend Stack (Next.js/React)
 
 ### Core Framework
 - **Next.js** `16.x` — React framework with App Router for the Marvox Core App (Note: this documentation site runs on Next.js 15.x; requires Node.js 20.9+, npm 10+)
@@ -172,7 +172,7 @@ app/
 
 ---
 
-## 🔗 Key Data Models
+## Key Data Models
 
 ### CharacterProfile (CharacterOS)
 ```typescript
@@ -196,8 +196,8 @@ app/
     omniscient: boolean;
   };
   voice_binding: {
-    voice_id: string;              // OpenAI voice (alloy, ash, etc.)
-    provider: "openai";
+    voice_id: string;              // Marvox voice (from the voice catalog)
+    provider: "marvox";
   };
 }
 ```
@@ -221,7 +221,7 @@ app/
 
 ---
 
-## 🔐 Security Architecture
+## Security Architecture
 
 ### Authentication
 - Bearer token authentication (JWT-like)
@@ -244,7 +244,7 @@ app/
 
 ---
 
-## ⚡ Performance Architecture
+## Performance Architecture
 
 ### Request Monitoring
 - **Per-endpoint latency tracking** - Millisecond precision
@@ -267,28 +267,28 @@ app/
 
 ---
 
-## 🚀 Deployment Architecture
+## Deployment Architecture
 
 ### Environment Tiers
 
 **Development**
 - PostgreSQL + Redis via Docker Compose (local)
 - pgvector extension for vector search
-- OpenAI API (real inference)
+- Inference provider (real inference)
 - Localhost frontend/backend
 
 **Staging**
 - Vercel preview deployment (frontend)
 - Railway staging backend
 - PostgreSQL + pgvector (Railway managed)
-- OpenAI API (real inference)
+- Inference provider (real inference)
 
 **Production**
 - Vercel (frontend — the only supported browser-facing surface)
 - Railway (backend FastAPI + Python runtime)
 - PostgreSQL + pgvector (Railway managed)
 - Redis/Dragonfly-compatible cache (Railway or managed Redis)
-- OpenAI API (with rate limiting)
+- Inference provider (with rate limiting)
 
 ### Supported Infrastructure
 ```
@@ -301,7 +301,7 @@ Docs:      Netlify (marvox-docs.netlify.app)
 
 ---
 
-## 📊 Agent Architecture (CharacterOS)
+## Agent Architecture (CharacterOS)
 
 ### 6 Core Agents
 
@@ -349,7 +349,7 @@ Docs:      Netlify (marvox-docs.netlify.app)
 - Narration chunks (fallback)
 
 **Retrieval**:
-- Semantic search via pgvector cosine similarity (OpenAI text-embedding-3-small, 1536 dims)
+- Semantic search via pgvector cosine similarity (the embedding model, 1536 dims)
 - Optional chapter filtering (canon scope)
 - Optional character filtering (dialogue)
 - Top-K ranking by relevance
@@ -361,7 +361,7 @@ Docs:      Netlify (marvox-docs.netlify.app)
 
 ---
 
-## 🔄 Data Flow Example: Scene Generation
+## Data Flow Example: Scene Generation
 
 ```
 User Input: "Write a scene between Alice and Mad Hatter"
@@ -373,7 +373,7 @@ WriterAgent loads character profiles + director controls
 RAG retrieves past Alice-Hatter interactions from canon
      │
      ▼
-OpenAI GPT-4o-mini generates scene with dialogue
+Frontier LLM generates scene with dialogue
      │
      ▼
 ContinuityAgent validates for contradictions
@@ -387,20 +387,20 @@ ContinuityAgent validates for contradictions
 
 ---
 
-## 📈 Performance Targets (Actual vs Target)
+## Performance Targets (Actual vs Target)
 
 | Metric | Target | Actual | Status |
 |--------|--------|--------|--------|
-| CharacterOS Build | <30s | ~6s | ✅ Exceeds |
-| Character Chat | <2s | ~1.8s | ✅ Exceeds |
-| RAG Retrieval | <200ms | ~120ms | ✅ Exceeds |
-| Scene Generation | <5s | ~4.2s | ✅ Exceeds |
-| Audio Generation | <10s | ~8.5s | ✅ Exceeds |
-| API Response (avg) | <500ms | ~250ms | ✅ Exceeds |
+| CharacterOS Build | <30s | ~6s | Exceeds |
+| Character Chat | <2s | ~1.8s | Exceeds |
+| RAG Retrieval | <200ms | ~120ms | Exceeds |
+| Scene Generation | <5s | ~4.2s | Exceeds |
+| Audio Generation | <10s | ~8.5s | Exceeds |
+| API Response (avg) | <500ms | ~250ms | Exceeds |
 
 ---
 
-## 🔗 Related Documentation
+## Related Documentation
 
 - **[README.md](./README.md)** - Project overview and quick start
 - **[FEATURES.md](./FEATURES.md)** - Detailed feature descriptions
