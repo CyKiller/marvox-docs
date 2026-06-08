@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { CheckCircle2, Clock, Target, AlertCircle } from "lucide-react"
+import { CheckCircle2, Clock, Target, AlertCircle, Check, Circle } from "lucide-react"
 
 type RoadmapPhase = {
   phase: number
@@ -139,9 +139,8 @@ const phases: RoadmapPhase[] = [
     name: "Content & Diagrams",
     title: "Interactive Diagrams & Code Examples",
     description:
-      "Phase 8 expanding documentation with interactive diagrams (Story Graph, Agent Network, Build/Audio Pipelines) and API code examples. In-progress: roadmap timeline, home page polish.",
-    status: "in-progress",
-    estimatedCompletion: "April 19, 2026",
+      "Documentation expanded with interactive diagrams (Story Graph, Agent Network, Build/Audio Pipelines), API code examples, the roadmap timeline, and home page polish. All shipped to the live docs site.",
+    status: "completed",
     features: [
       "Story Graph diagram",
       "Agent Network diagram",
@@ -151,26 +150,25 @@ const phases: RoadmapPhase[] = [
       "Roadmap timeline",
       "Home page polish",
     ],
-    completedFeatures: 5,
-    blockers: "None - Phase 8A (diagrams) complete, 8B (pipelines) in progress",
+    completedFeatures: 7,
   },
   {
     phase: 9,
     name: "Production Hardening",
-    title: "Load Testing & Scaling",
+    title: "Stabilization & Scaling",
     description:
-      "Load testing at 1000+ concurrent users. Redis caching optimization. Database connection pooling and query optimization. Monitoring and alerting infrastructure.",
-    status: "planned",
+      "Active focus: production stabilization, contract consistency, and release reliability. Release gates across frontend, audio, CharacterOS, and storyworld-collab. Caching, database tuning, and monitoring as scale demands grow.",
+    status: "in-progress",
     features: [
-      "Load testing framework",
-      "Redis optimization",
+      "Release gates (frontend / audio / CharacterOS)",
+      "Contract consistency hardening",
+      "Redis caching optimization",
       "Database tuning",
       "Connection pooling",
       "Monitoring dashboards",
-      "Alert rules",
-      "Performance benchmarks",
+      "Load testing framework",
     ],
-    completedFeatures: 0,
+    completedFeatures: 2,
   },
 ]
 
@@ -180,13 +178,13 @@ export default function RoadmapTimeline() {
   const getStatusColor = (status: RoadmapPhase["status"]) => {
     switch (status) {
       case "completed":
-        return "from-emerald-500 to-teal-500"
+        return "bg-emerald-500/12 text-emerald-300 border border-emerald-500/25"
       case "in-progress":
-        return "from-amber-500 to-orange-500"
+        return "bg-amber-500/12 text-amber-300 border border-amber-500/25"
       case "planned":
-        return "from-blue-500 to-cyan-500"
+        return "bg-sky-500/10 text-sky-300 border border-sky-500/20"
       case "blocked":
-        return "from-rose-500 to-red-500"
+        return "bg-rose-500/12 text-rose-300 border border-rose-500/25"
     }
   }
 
@@ -206,13 +204,13 @@ export default function RoadmapTimeline() {
   const getStatusLabel = (status: RoadmapPhase["status"]) => {
     switch (status) {
       case "completed":
-        return "✓ Complete"
+        return "Complete"
       case "in-progress":
-        return "⧗ In Progress"
+        return "In Progress"
       case "planned":
-        return "⎯ Planned"
+        return "Planned"
       case "blocked":
-        return "✕ Blocked"
+        return "Blocked"
     }
   }
 
@@ -221,8 +219,7 @@ export default function RoadmapTimeline() {
       <div className="rounded-lg border border-slate-800 bg-slate-950 p-6">
         <h1 className="font-display text-3xl font-semibold text-white mb-2">Product Roadmap</h1>
         <p className="text-slate-400 mb-6">
-          Marvox development timeline across 9 phases. Completed phases: 1-7. Current phase: 8 (interactive diagrams). Upcoming: 9 (production hardening). Total estimated completion:
-          April 2026.
+          Marvox development timeline across 9 phases. Completed: phases 1–8 (runtime, collaboration, scene generation, audio, memory, advanced RAG, docs, interactive diagrams). Current focus: phase 9 — production hardening and release reliability.
         </p>
 
         {/* Timeline */}
@@ -260,9 +257,9 @@ export default function RoadmapTimeline() {
 
                     <div className="flex items-center gap-4 flex-wrap">
                       <span
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${getStatusColor(
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
                           phase.status
-                        )} text-white`}
+                        )}`}
                       >
                         {getStatusLabel(phase.status)}
                       </span>
@@ -286,9 +283,9 @@ export default function RoadmapTimeline() {
                         {phase.features.map((feature, idx) => (
                           <div key={feature} className="flex items-start gap-2 text-sm">
                             {idx < phase.completedFeatures ? (
-                              <span className="text-emerald-400 font-bold mt-0.5">✓</span>
+                              <Check className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" />
                             ) : (
-                              <span className="text-slate-500 font-bold mt-0.5">◦</span>
+                              <Circle className="w-3 h-3 text-slate-600 mt-1 shrink-0" />
                             )}
                             <span className={idx < phase.completedFeatures ? "text-slate-300" : "text-slate-500"}>
                               {feature}
@@ -300,8 +297,9 @@ export default function RoadmapTimeline() {
 
                     {phase.blockers && (
                       <div className="rounded-lg bg-rose-950/20 border border-rose-900/50 p-3">
-                        <p className="text-sm text-rose-300">
-                          <span className="font-semibold">⚠ Blockers:</span> {phase.blockers}
+                        <p className="flex items-start gap-2 text-sm text-rose-300">
+                          <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                          <span><span className="font-semibold">Blockers:</span> {phase.blockers}</span>
                         </p>
                       </div>
                     )}
@@ -309,7 +307,7 @@ export default function RoadmapTimeline() {
                     {phase.status === "in-progress" && (
                       <div className="rounded-lg bg-amber-950/20 border border-amber-900/50 p-3">
                         <p className="text-sm text-amber-300">
-                          <span className="font-semibold">📍 Current Status:</span> Phase 8A (diagrams) complete. Phase 8B (pipelines) in progress. Phase 8C (Polish) upcoming.
+                          <span className="font-semibold">Current focus:</span> production stabilization and release reliability — release gates, contract consistency, and runtime guards ahead of broad scale work.
                         </p>
                       </div>
                     )}
@@ -325,24 +323,21 @@ export default function RoadmapTimeline() {
         <h2 className="font-display text-xl font-semibold text-white mb-4">Phase Highlights</h2>
         <div className="space-y-4 text-sm text-slate-400">
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">✅ Phases 1-7: Core Features (Verification Verified)</h3>
+            <h3 className="font-semibold text-slate-300 mb-1">Phases 1–7: Core platform</h3>
             <p>
-              Foundational CharacterOS runtime, collaboration, scene generation, audio production, memory/reflection, advanced RAG, and documentation. All 7 phases complete and verified. Architecture validated through rigorous test scenarios.
+              Foundational CharacterOS runtime, collaboration, scene generation, audio production, memory/reflection, advanced RAG, and the documentation site. Complete and exercised through the release-gate test suites.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">⧗ Phase 8: Content & Diagrams (In Progress)</h3>
+            <h3 className="font-semibold text-slate-300 mb-1">Phase 8: Interactive documentation</h3>
             <p>
-              <span className="text-emerald-400">8A Complete:</span> Story Graph, Agent Network, API Code Examples interactive components deployed.{" "}
-              <span className="text-amber-400">8B In Progress:</span> Build Pipeline, Audio Pipeline diagrams + Roadmap Timeline.{" "}
-              <span className="text-blue-400">8C Planned:</span> Home page polish, feature cards, advanced search.
+              Story Graph, Agent Network, Build/Audio pipeline diagrams, API code examples, the roadmap timeline, and home page polish — all shipped to the live docs site.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">⎯ Phase 9: Production Hardening (Planned)</h3>
+            <h3 className="font-semibold text-slate-300 mb-1">Phase 9: Production hardening (current)</h3>
             <p>
-              Load testing, Redis optimization, database tuning, monitoring & alerting. Prepares system for production scale (1000+ concurrent users). Estimated start: late
-              April 2026.
+              Active focus: production stabilization, contract consistency across the frontend/backend boundary, and release reliability. Caching, database tuning, and monitoring follow as scale demands grow.
             </p>
           </div>
         </div>
@@ -352,44 +347,44 @@ export default function RoadmapTimeline() {
         <h2 className="font-display text-xl font-semibold text-white mb-4">Key Milestones</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div className="rounded-lg bg-slate-900 border border-slate-700 p-4">
-            <h3 className="font-semibold text-emerald-400 mb-2">✓ What's Done</h3>
+            <h3 className="font-semibold text-emerald-400 mb-2">Shipped</h3>
             <ul className="space-y-1 text-slate-400">
-              <li>✓ 25+ CharacterOS agents</li>
-              <li>✓ Scene generation with continuity</li>
-              <li>✓ Multi-voice audio production</li>
-              <li>✓ Character reflection & memory</li>
-              <li>✓ Real-time collaboration</li>
-              <li>✓ Interactive docs with 6+ diagrams</li>
+              <li>25+ CharacterOS agents</li>
+              <li>Scene generation with continuity</li>
+              <li>Multi-voice audio production</li>
+              <li>Character reflection &amp; memory</li>
+              <li>Real-time collaboration</li>
+              <li>Interactive docs with 9 diagrams</li>
             </ul>
           </div>
           <div className="rounded-lg bg-slate-900 border border-slate-700 p-4">
-            <h3 className="font-semibold text-amber-400 mb-2">⧗ In Progress</h3>
+            <h3 className="font-semibold text-amber-400 mb-2">In progress</h3>
             <ul className="space-y-1 text-slate-400">
-              <li>⧗ Build/Audio pipeline diagrams</li>
-              <li>⧗ Roadmap timeline (this page)</li>
-              <li>⧗ Home page feature cards</li>
-              <li>⧗ Advanced search interface</li>
-              <li>⧗ Mobile optimization polish</li>
+              <li>Release-gate coverage hardening</li>
+              <li>Frontend/backend contract consistency</li>
+              <li>Production runtime guards</li>
+              <li>Audio &amp; VoiceDNA readiness gates</li>
+              <li>Mobile optimization polish</li>
             </ul>
           </div>
           <div className="rounded-lg bg-slate-900 border border-slate-700 p-4">
-            <h3 className="font-semibold text-blue-400 mb-2">⎯ Coming Next</h3>
+            <h3 className="font-semibold text-blue-400 mb-2">Coming next</h3>
             <ul className="space-y-1 text-slate-400">
-              <li>⎯ Load testing framework</li>
-              <li>⎯ Redis caching optimization</li>
-              <li>⎯ Database performance tuning</li>
-              <li>⎯ Monitoring dashboards</li>
-              <li>⎯ Alerting rules & runbooks</li>
+              <li>Load testing framework</li>
+              <li>Redis caching optimization</li>
+              <li>Database performance tuning</li>
+              <li>Monitoring dashboards</li>
+              <li>Alerting rules &amp; runbooks</li>
             </ul>
           </div>
           <div className="rounded-lg bg-slate-900 border border-slate-700 p-4">
-            <h3 className="font-semibold text-slate-300 mb-2">📊 Stats</h3>
+            <h3 className="font-semibold text-slate-300 mb-2">At a glance</h3>
             <ul className="space-y-1 text-slate-400">
-              <li>Total Phases: 9</li>
-              <li>Completed: 7 + (8A)</li>
-              <li>In Progress: 8 (B, C remaining)</li>
-              <li>Pages Generated: 25</li>
-              <li>Components: 9 interactive</li>
+              <li>Total phases: 9</li>
+              <li>Completed: 1–8</li>
+              <li>Current focus: phase 9</li>
+              <li>Doc pages: 25</li>
+              <li>Interactive components: 9</li>
             </ul>
           </div>
         </div>

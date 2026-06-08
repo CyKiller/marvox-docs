@@ -108,6 +108,50 @@
   }
 }
 
+/* ── Motion system — calm, CSS-only, dependency-free ──
+   Scroll-reveal uses native scroll-driven animations (animation-timeline: view()).
+   Content is fully visible by default; the reveal only enhances where supported.
+   Everything collapses to static under prefers-reduced-motion. */
+@keyframes marvox-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Entrance: above-the-fold elements ease in on load */
+  .rise-in {
+    animation: marvox-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .rise-in-delay-1 { animation-delay: 0.06s; }
+  .rise-in-delay-2 { animation-delay: 0.12s; }
+  .rise-in-delay-3 { animation-delay: 0.18s; }
+
+  /* Scroll-reveal: sections lift in as they enter the scroll container */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: marvox-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 2% cover 22%;
+    }
+  }
+}
+
+/* Reduced motion: no movement anywhere */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ── Shell layout ── */
 .docs-shell {
   display: flex;
@@ -614,6 +658,22 @@ html {
   box-shadow: 0 28px 80px rgba(2, 8, 22, 0.34);
   backdrop-filter: blur(20px);
   border-radius: var(--radius);
+}
+
+/* Interactive panel: calm lift + cyan edge on hover.
+   Apply only to cards that lead somewhere. */
+.marvox-card-hover {
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+.marvox-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--marvox-border-strong);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.08), 0 18px 48px rgba(2, 8, 22, 0.34);
 }
 
 .marvox-eyebrow {

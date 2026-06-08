@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef } from "react"
+import { Drama, Link2, BarChart3, Target } from "lucide-react"
 
 type StoryNode = {
   id: string
@@ -274,7 +275,7 @@ export default function StoryGraphDiagram() {
         <h2 className="font-display text-xl font-semibold text-white mb-4">How Story Graph Works</h2>
         <div className="space-y-4 text-sm text-slate-400">
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🎭 Node Categories</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Drama className="w-4 h-4 text-sky-400 shrink-0" /> Node Categories</h3>
             <p>
               The story graph organizes narrative elements into four categories: <span className="text-slate-300">characters</span> (agents in the story),{" "}
               <span className="text-slate-300">events</span> (key story moments),{" "}
@@ -283,7 +284,7 @@ export default function StoryGraphDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🔗 Relationship Types</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Link2 className="w-4 h-4 text-sky-400 shrink-0" /> Relationship Types</h3>
             <p>
               Edges in the graph represent directed relationships. <span className="text-slate-300">Influences</span> show soft causality (Alice's growth changes her perspective).{" "}
               <span className="text-slate-300">Triggers</span> show hard causality (the fall triggers Alice's adventure).{" "}
@@ -292,14 +293,14 @@ export default function StoryGraphDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">📊 Line Weight & Opacity</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><BarChart3 className="w-4 h-4 text-sky-400 shrink-0" /> Line Weight & Opacity</h3>
             <p>
               Edge thickness and opacity represent relationship strength (0.0–1.0). Thicker, more opaque lines indicate stronger influence.
               When you hover over a node, faded lines show weaker connections, and bright lines show direct relationships.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🎯 CharacterOS Integration</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Target className="w-4 h-4 text-sky-400 shrink-0" /> CharacterOS Integration</h3>
             <p>
               The story graph powers <span className="text-slate-300">canon grounding</span> in CharacterOS. Character chat, scene generation, and
               continuity validation all query the graph to understand: who is connected to whom, what events shaped the character, and what world rules

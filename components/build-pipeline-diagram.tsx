@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { CheckCircle2, Circle, Clock } from "lucide-react"
+import { CheckCircle2, Circle, Clock, RefreshCw, Database, Rocket, Upload, Search, Brain, Clapperboard, Mic } from "lucide-react"
 
 type PipelineStage = {
   id: string
@@ -209,7 +209,7 @@ export default function BuildPipelineDiagram() {
         <h2 className="font-display text-xl font-semibold text-white mb-4">Pipeline Architecture</h2>
         <div className="space-y-4 text-sm text-slate-400">
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">⏳ Status Transitions</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Clock className="w-4 h-4 text-sky-400 shrink-0" /> Status Transitions</h3>
             <p>
               Projects transition through these statuses: <span className="text-slate-300">Upload</span> →{" "}
               <span className="text-slate-300">Analyzing</span> → <span className="text-slate-300">CharacterOS</span> →{" "}
@@ -218,7 +218,7 @@ export default function BuildPipelineDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🔄 Async Jobs</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><RefreshCw className="w-4 h-4 text-sky-400 shrink-0" /> Async Jobs</h3>
             <p>
               Each stage is tracked as a background job in PostgreSQL. Polling endpoint: <span className="text-slate-300 font-mono">GET /api/jobs/{"{id}"}</span>. Returns{" "}
               <span className="text-slate-300">status</span>, <span className="text-slate-300">progress_percent</span>,{" "}
@@ -226,14 +226,14 @@ export default function BuildPipelineDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">💾 State Persistence</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Database className="w-4 h-4 text-sky-400 shrink-0" /> State Persistence</h3>
             <p>
               State at each stage is committed to PostgreSQL (character profiles, embeddings, voice configs). If a stage fails, users can trigger a retry. Retried stages skip
               already-computed data using cache keys. No redundant API calls or reprocessing.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🚀 Performance Optimizations</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Rocket className="w-4 h-4 text-sky-400 shrink-0" /> Performance Optimizations</h3>
             <p>
               Stage parallelization is limited (e.g., character extraction uses semaphore to prevent memory exhaustion). Scene and audio stages are optional demos — users
               familiar with the tool can skip them. Caching layer bridges requests across stages: embeddings stored in PostgreSQL pgvector, character profiles cached in Redis.
@@ -246,42 +246,42 @@ export default function BuildPipelineDiagram() {
         <h2 className="font-display text-xl font-semibold text-white mb-4">Stage Details</h2>
         <div className="space-y-4 text-sm text-slate-400">
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">📤 Upload (30s)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Upload className="w-4 h-4 text-sky-400 shrink-0" /> Upload (30s)</h3>
             <p>
               Client uploads file up to 100MB via multipart form. Backend validates MIME type, extracts text (python-docx for .docx, PyPDF for .pdf, plain text otherwise).
               File stored in Vercel Blob with unique key. Word/character counts streamed to database immediately, unblocking UI "Corpus" display.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🔍 Analyze (2-5m)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Search className="w-4 h-4 text-sky-400 shrink-0" /> Analyze (2-5m)</h3>
             <p>
               ProgressiveAnalysisEngine chunks manuscript, runs character extraction with multi-pass LLM prompts, detects relationships, and builds canon snapshot.
               Caching prevents redundant analysis of identical text blocks. Results written to <span className="text-slate-300">characters</span> table with extracted traits, dialogue samples, and canon scope.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🧠 CharacterOS (1-2m)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Brain className="w-4 h-4 text-sky-400 shrink-0" /> CharacterOS (1-2m)</h3>
             <p>
               AgentRuntime initializes: canon chunks → embeddings via BatchEmbeddingService (OpenAI text-embedding-3-small, 1,536D) → stored in PostgreSQL pgvector. MemoryBridge tables
               created. RAG system tested with sample query. This stage blocks character chat and scene generation until complete.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🎬 Scene Demo (1-3m)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Clapperboard className="w-4 h-4 text-sky-400 shrink-0" /> Scene Demo (1-3m)</h3>
             <p>
               WriterAgent generates 1-2 character demo scene to verify: RAG retrieval works, WriterAgent output is coherent, ContinuityAgent validation passes. Scene
               displayed in dashboard. Good smoke test before handing off to user. Can be skipped by experienced users.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🎙️ Audio Demo (2-4m)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Mic className="w-4 h-4 text-sky-400 shrink-0" /> Audio Demo (2-4m)</h3>
             <p>
               VoiceSelectionAgent maps characters to voices. VoiceConfigurationAgent applies mood and pacing. Short test audio synthesized and cached. Users hear voice
               quality before generating full audiobooks. Optional stage, frequently skipped.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🚀 Launch (30s)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Rocket className="w-4 h-4 text-sky-400 shrink-0" /> Launch (30s)</h3>
             <p>
               Project status set to "Complete". All workflows unlocked: character chat, scene generation, collaboration, audio. Nightly reflection scheduler enabled.
               Users can now interact with their storyworld freely. Celebration animation shown in UI.

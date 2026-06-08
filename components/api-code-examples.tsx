@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Copy, Check } from "lucide-react"
+import { Copy, Check, KeyRound, Radio, Timer, RefreshCw, Target, Info, Hourglass } from "lucide-react"
 
 type CodeExample = {
   name: string
@@ -324,7 +324,7 @@ export default function APICodeExamples() {
         <h2 className="font-display text-xl font-medium text-white mb-4">Authentication & Setup</h2>
         <div className="space-y-4 text-xs text-slate-400">
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🔑 API Keys</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><KeyRound className="w-4 h-4 text-sky-400 shrink-0" /> API Keys</h3>
             <p>
               Generate API keys in your project settings under <span className="text-slate-300">/api/billing/api-keys</span>. Each key is{" "}
               <span className="text-sky-300 font-semibold">one-time displayed</span> — store it securely. Use as Bearer token:{" "}
@@ -332,7 +332,7 @@ export default function APICodeExamples() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">📡 Base URL</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Radio className="w-4 h-4 text-sky-400 shrink-0" /> Base URL</h3>
             <p>
               The backend is hosted on Railway. In production the frontend rewrites <span className="text-slate-300 font-mono text-[11px]">/api/*</span> to the Railway origin via{" "}
               <span className="text-slate-300 font-mono text-[11px]">NEXT_PUBLIC_API_URL</span> (set in Vercel). For direct API calls, use your Railway backend URL. For local development, use{" "}
@@ -340,7 +340,7 @@ export default function APICodeExamples() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">⏱️ Rate Limits</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Timer className="w-4 h-4 text-sky-400 shrink-0" /> Rate Limits</h3>
             <p>
               Rate limiting is enforced per API key via Redis: <span className="text-slate-300">100 requests/minute</span> by default. Burst limits
               are <span className="text-slate-300">150 requests/10 seconds</span>. Check response headers{" "}
@@ -349,7 +349,7 @@ export default function APICodeExamples() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🔄 Error Handling</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><RefreshCw className="w-4 h-4 text-sky-400 shrink-0" /> Error Handling</h3>
             <p>
               All errors return JSON with <span className="text-slate-300 font-mono text-[11px]">error_code</span> and{" "}
               <span className="text-slate-300 font-mono text-[11px]">recovery_suggestions</span>. Examples: <span className="text-sky-300">CHARACTER_PROFILE_NOT_FOUND</span>,{" "}
@@ -364,7 +364,7 @@ export default function APICodeExamples() {
         <h2 className="font-display text-xl font-medium text-white mb-4">Common Patterns</h2>
         <div className="space-y-4 text-xs text-slate-400">
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🎯 Project & Character IDs</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Target className="w-4 h-4 text-sky-400 shrink-0" /> Project & Character IDs</h3>
             <p>
               All CharacterOS operations require <span className="text-slate-300 font-mono text-[11px]">project_id</span> and often{" "}
               <span className="text-slate-300 font-mono text-[11px]">character_id</span>. Get these from the project details endpoint or project creation response.
@@ -373,7 +373,7 @@ export default function APICodeExamples() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">ℹ️ Mode Parameter</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Info className="w-4 h-4 text-sky-400 shrink-0" /> Mode Parameter</h3>
             <p>
               Character responses are scoped by <span className="text-slate-300 font-mono text-[11px]">mode</span>:{" "}
               <span className="text-sky-300">CANON</span> (strict source material),{" "}
@@ -384,7 +384,7 @@ export default function APICodeExamples() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">⏳ Async Operations</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Hourglass className="w-4 h-4 text-sky-400 shrink-0" /> Async Operations</h3>
             <p>
               Long-running operations (build, scene generation, audio synthesis) return immediately with a <span className="text-slate-300 font-mono text-[11px]">job_id</span>.
               Poll <span className="text-slate-300 font-mono text-[11px]">GET /api/jobs/&lt;job_id&gt;</span> to check status. Status values:{" "}

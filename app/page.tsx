@@ -8,17 +8,17 @@ export default function DocsHomePage() {
       {/* ── Quiet Hero ── */}
       <section className="relative rounded-2xl p-8 sm:p-12 marvox-panel-strong">
         <div className="relative space-y-6 max-w-2xl">
-          <div className="inline-flex items-center gap-2 marvox-eyebrow">
+          <div className="inline-flex items-center gap-2 marvox-eyebrow rise-in">
             <Cpu className="w-3.5 h-3.5" />
             CharacterOS Runtime Environment
           </div>
-          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-white font-display">
+          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-white font-display rise-in rise-in-delay-1">
             Marvox Docs
           </h1>
-          <p className="text-slate-300 text-lg leading-relaxed font-sans">
+          <p className="text-slate-300 text-lg leading-relaxed font-sans rise-in rise-in-delay-2">
             The operating manual for CharacterOS, story analysis, canon-grounded scenes, and multi-voice production.
           </p>
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-wrap gap-3 pt-2 rise-in rise-in-delay-3">
             <Link
               href="/getting-started"
               className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all bg-sky-400 text-slate-950 hover:bg-sky-300"
@@ -45,7 +45,7 @@ export default function DocsHomePage() {
       </section>
 
       {/* ── Neutral Current Status ── */}
-      <section className="rounded-xl px-6 py-5 marvox-panel border-sky-400/10">
+      <section className="reveal rounded-xl px-6 py-5 marvox-panel border-sky-400/10">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
@@ -68,7 +68,7 @@ export default function DocsHomePage() {
       </section>
 
       {/* ── Studio Workflow Showcase CTA ── */}
-      <section className="relative rounded-2xl overflow-hidden border border-slate-800/80 bg-slate-950/40 p-6 sm:p-8">
+      <section className="reveal relative rounded-2xl overflow-hidden border border-slate-800/80 bg-slate-950/40 p-6 sm:p-8">
         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-64 h-64 rounded-full bg-sky-500/5 blur-3xl pointer-events-none" />
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-xl">
@@ -92,7 +92,7 @@ export default function DocsHomePage() {
       </section>
 
       {/* ── Workflow Diagram ── */}
-      <section className="space-y-6">
+      <section className="reveal space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-medium text-white tracking-tight font-display">
             The Marvox Production Loop
@@ -105,13 +105,13 @@ export default function DocsHomePage() {
       </section>
 
       {/* ── Core Documentation Paths (Start / Understand / Build / Ship) ── */}
-      <section className="space-y-6">
+      <section className="reveal space-y-6">
         <h2 className="marvox-eyebrow">
           Core Operating Manual Paths
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Start */}
-          <div className="marvox-panel p-6 space-y-4">
+          <div className="marvox-panel marvox-card-hover p-6 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center">
                 <BookOpen className="w-4 h-4 text-sky-400" />
@@ -128,7 +128,7 @@ export default function DocsHomePage() {
           </div>
 
           {/* Understand */}
-          <div className="marvox-panel p-6 space-y-4">
+          <div className="marvox-panel marvox-card-hover p-6 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center">
                 <Network className="w-4 h-4 text-sky-400" />
@@ -145,7 +145,7 @@ export default function DocsHomePage() {
           </div>
 
           {/* Build */}
-          <div className="marvox-panel p-6 space-y-4">
+          <div className="marvox-panel marvox-card-hover p-6 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center">
                 <Code className="w-4 h-4 text-sky-400" />
@@ -163,7 +163,7 @@ export default function DocsHomePage() {
           </div>
 
           {/* Ship */}
-          <div className="marvox-panel p-6 space-y-4">
+          <div className="marvox-panel marvox-card-hover p-6 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-sky-400/10 border border-sky-400/20 flex items-center justify-center">
                 <Layers className="w-4 h-4 text-sky-400" />
@@ -182,7 +182,7 @@ export default function DocsHomePage() {
       </section>
 
       {/* ── Quiet Brand Verification ── */}
-      <section className="pt-8 border-t border-slate-800">
+      <section className="reveal pt-8 border-t border-slate-800">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-400">
           <div className="space-y-1.5">
             <h4 className="font-semibold text-slate-200">Obsidian Carbon Foundation</h4>

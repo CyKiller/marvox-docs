@@ -58,7 +58,7 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 
 ### Document Processing
 - **python-docx** `1.1.0` - DOCX file parsing
-- **PyPDF** `3.17.4` - PDF extraction
+- **pypdf** `≥4.1.0` - PDF extraction
 
 ### Audio Processing
 - **pydub** `0.25.1` - Audio format conversion and mixing
@@ -66,7 +66,7 @@ Marvox is a full-stack AI platform for storyworld production. This document desc
 
 ### Security & Performance
 - **Redis** - Required for rate limiting, caching, and background job queues
-- **Custom Security Middleware** - CSRF/XSS/input sanitization, rate limiting guards (389 lines)
+- **Custom Security Middleware** - CSRF/XSS/input sanitization, rate limiting guards (~1,050 lines)
 - **Prometheus Metrics** - `/metrics` endpoint exposed when enabled
 - **Health Probes** - `/api/health` and `/api/health/ready`
 
@@ -78,12 +78,12 @@ backend/
 ├── audio_routes.py          # Audio generation endpoints
 ├── jobs_routes.py           # Background job tracking
 ├── auth_routes.py           # Authentication
-├── security_middleware.py   # CSRF/XSS/rate limiting (389 lines)
-└── performance_monitoring.py # Metrics/health checks (370 lines)
+├── security_middleware.py   # CSRF/XSS/rate limiting (~1,050 lines)
+└── performance_monitoring.py # Metrics/health checks (352 lines)
 
 services/
 ├── characteros/
-│   ├── agent_runtime.py     # 6-agent orchestrator
+│   ├── agent_runtime.py     # 25+ agent orchestrator
 │   ├── canon_indexer.py     # RAG semantic search
 │   ├── character_agent.py   # Character chat
 │   ├── writer_agent.py      # Scene generation

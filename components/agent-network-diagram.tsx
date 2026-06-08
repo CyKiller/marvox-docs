@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import { Target, RefreshCw, BarChart3, Settings2, BookOpen, CheckCircle2, Mic, Wrench, Brain } from "lucide-react"
 
 type AgentFamily = {
   name: string
@@ -137,7 +138,7 @@ export default function AgentNetworkDiagram() {
         <h2 className="font-display text-xl font-semibold text-white mb-4">Architecture & Orchestration</h2>
         <div className="space-y-4 text-sm text-slate-400">
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🎯 Core Orchestrator</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Target className="w-4 h-4 text-sky-400 shrink-0" /> Core Orchestrator</h3>
             <p>
               <span className="text-slate-300 font-mono">AgentRuntime</span> in{" "}
               <span className="text-slate-300 font-mono">services/characteros/agent_runtime.py</span> is the central orchestrator. It's a{" "}
@@ -146,7 +147,7 @@ export default function AgentNetworkDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">🔄 Orchestration Patterns</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><RefreshCw className="w-4 h-4 text-sky-400 shrink-0" /> Orchestration Patterns</h3>
             <p className="mb-2">
               Agents communicate through typed contracts, RAG retrieval, and shared memory bridges. Key patterns:
             </p>
@@ -166,7 +167,7 @@ export default function AgentNetworkDiagram() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">📊 Agent Lifecycle</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><BarChart3 className="w-4 h-4 text-sky-400 shrink-0" /> Agent Lifecycle</h3>
             <p>
               Each agent follows a consistent lifecycle: <span className="text-slate-300">initialization</span> (lazy on first use),{" "}
               <span className="text-slate-300">validation</span> (typed contracts at boundaries),{" "}
@@ -176,7 +177,7 @@ export default function AgentNetworkDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-1">⚙️ Production Safety</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-1"><Settings2 className="w-4 h-4 text-sky-400 shrink-0" /> Production Safety</h3>
             <p>
               All agents use <span className="text-slate-300 font-mono">sanitize_story_excerpts()</span> when handling RAG results,{" "}
               <span className="text-slate-300 font-mono">dump_validated()</span> for response contracts,{" "}
@@ -192,7 +193,7 @@ export default function AgentNetworkDiagram() {
         <h2 className="font-display text-xl font-semibold text-white mb-4">Agent Reference</h2>
         <div className="space-y-4 text-sm text-slate-400">
           <div>
-            <h3 className="font-semibold text-slate-300 mb-2">📖 Content Generation (4)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-2"><BookOpen className="w-4 h-4 text-sky-400 shrink-0" /> Content Generation (4)</h3>
             <p>
               These agents create story content: <span className="text-slate-300 font-mono">ReaderAgent</span> answers story questions with RAG,{" "}
               <span className="text-slate-300 font-mono">CharacterAgent</span> generates character dialogue locked to canon,{" "}
@@ -201,7 +202,7 @@ export default function AgentNetworkDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-2">✅ Quality Assurance (4)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-2"><CheckCircle2 className="w-4 h-4 text-sky-400 shrink-0" /> Quality Assurance (4)</h3>
             <p>
               These agents validate content: <span className="text-slate-300 font-mono">ContinuityAgent</span> checks 5 layers (traits, relationships, timeline, dialogue, spoilers),{" "}
               <span className="text-slate-300 font-mono">DialogueQualityAgent</span> scores naturalness,{" "}
@@ -210,7 +211,7 @@ export default function AgentNetworkDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-2">🎙️ Audio & Voice (7)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-2"><Mic className="w-4 h-4 text-sky-400 shrink-0" /> Audio & Voice (7)</h3>
             <p>
               These agents handle voice and audio production: <span className="text-slate-300 font-mono">VoiceSelectionAgent</span> maps character traits to voice DNA,{" "}
               <span className="text-slate-300 font-mono">VoiceConfigurationAgent</span> adjusts 300+ voice settings (speed, pitch, emotion),{" "}
@@ -219,7 +220,7 @@ export default function AgentNetworkDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-2">🔧 Supporting (8)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-2"><Wrench className="w-4 h-4 text-sky-400 shrink-0" /> Supporting (8)</h3>
             <p>
               These agents provide orchestration and utility: <span className="text-slate-300 font-mono">DirectorAgent</span> injects mood and pacing,{" "}
               <span className="text-slate-300 font-mono">AtmosphereAgent</span> adds context about setting and tone,{" "}
@@ -227,7 +228,7 @@ export default function AgentNetworkDiagram() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-300 mb-2">🧠 Evolution & Consensus (2)</h3>
+            <h3 className="flex items-center gap-2 font-semibold text-slate-300 mb-2"><Brain className="w-4 h-4 text-sky-400 shrink-0" /> Evolution & Consensus (2)</h3>
             <p>
               These agents enable personality growth: <span className="text-slate-300 font-mono">EmotionalArcEvolverAgent</span> computes character evolution from reactions,{" "}
               <span className="text-slate-300 font-mono">ConsensusAnalyzerAgent</span> detects when multiple writers describe the same character differently and synthesizes a unified voice.
