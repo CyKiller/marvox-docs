@@ -16,8 +16,7 @@ import AudioPipelineDiagram from "@/components/audio-pipeline-diagram"
 import RoadmapTimeline from "@/components/roadmap-timeline"
 import MarkdownRenderer from "@/components/markdown-renderer"
 import { TableOfContents } from "@/components/table-of-contents"
-import { InteractiveTutorialEmulator } from "@/components/interactive-tutorial-emulator"
-import HomepageWorkflowDiagram from "@/components/homepage-workflow-diagram"
+import UserGuidePage from "@/components/user-guide-page"
 
 const GITHUB_CONTENT_BASE =
   "https://github.com/CyKiller/MarvoxV1/blob/main/"
@@ -99,6 +98,11 @@ export default async function DocPage({ params }: PageProps) {
     return <RoadmapTimeline />
   }
 
+  // User guide — animated visual journey
+  if (slug === "user-guide") {
+    return <UserGuidePage />
+  }
+
   const content = loadDocContent(slug)
   if (!content) {
     notFound()
@@ -156,20 +160,6 @@ export default async function DocPage({ params }: PageProps) {
             </a>
           )}
         </div>
-
-        {/* User Guide: production-loop visual + interactive emulator */}
-        {slug === "user-guide" && (
-          <div className="mb-10 space-y-8">
-            <div className="space-y-3">
-              <h2 className="display-section text-white">The six-stage production loop</h2>
-              <p className="text-sm text-slate-400 leading-relaxed max-w-2xl">
-                From manuscript to synthesized audio. Each stage hands a verified artifact to the next.
-              </p>
-              <HomepageWorkflowDiagram />
-            </div>
-            <InteractiveTutorialEmulator />
-          </div>
-        )}
 
         {/* Markdown body */}
         <MarkdownRenderer content={content.markdown} />
