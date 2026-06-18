@@ -133,7 +133,7 @@ curl -X POST https://your-railway-domain/api/characteros/projects/YOUR_PROJECT_I
 
 These variables have defaults and are not required in the Railway env. Set them only when you need to override the default behavior.
 
-All are read via `RuntimePolicy.from_env()` in `services/characteros/runtime_policy.py`. Do not hardcode them.
+Most CharacterOS runtime knobs are read via `RuntimePolicy.from_env()` in `services/characteros/runtime_policy.py`; the background-maintenance loops (`STALE_*`, `MEMORY_PRUNE_*`) are read in the app entrypoint (`main.py`). Set them through the environment rather than hardcoding.
 
 | Variable | Default | Effect |
 | --- | --- | --- |

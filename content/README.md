@@ -38,7 +38,7 @@ The canonical source of truth for all production behavior, routes, schemas, and 
 
 ## Private Repo CI
 
-GitHub Actions in this private repository are configured for a Linux self-hosted runner so normal CI does not depend on GitHub-hosted billing. Setup steps are in [SELF_HOSTED_RUNNER_SETUP.md](./SELF_HOSTED_RUNNER_SETUP.md).
+GitHub Actions in the private application repository are configured for a Linux self-hosted runner so normal CI does not depend on GitHub-hosted billing. Runner setup steps are maintained alongside the application source.
 
 ---
 
@@ -457,7 +457,7 @@ A: No. Data is private to your project only and never used for external model tr
 A: No. Mode=CANON enforces strict canon scope. Characters refuse questions about chapters they haven't experienced.
 
 **Q: What's the cost?**  
-A: Transparent pricing: inference provider API calls billed at cost (typically $0.0002/character chat).
+A: Marvox uses a tiered subscription model — **Free**, **Pro**, **Studio**, and **Enterprise** — with checkout and billing handled in-app via Stripe. The Free tier covers core workflows; higher tiers unlock voice cloning, larger production runs, collaboration, and enterprise governance. Underlying inference-provider usage is billed at cost.
 
 **Q: Can I self-host?**  
 A: Local development is supported. The only supported deployed topology in this repo is Vercel for the frontend plus Railway for the backend. See [DEPLOYMENT.md](./DEPLOYMENT.md).

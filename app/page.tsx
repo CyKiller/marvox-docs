@@ -1,6 +1,14 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight, BookOpen, Code, Layers, Network, Cpu, Sparkles, Mic, Database, Shield } from "lucide-react"
 import HomepageWorkflowDiagram from "@/components/homepage-workflow-diagram"
+
+export const metadata: Metadata = {
+  title: "Marvox Docs — Build Character-Aware Storyworlds with CharacterOS",
+  description:
+    "Official documentation for Marvox and CharacterOS: turn a manuscript into canon-grounded character agents, multi-character scenes, and multi-voice audio. API reference, architecture, and guides.",
+  alternates: { canonical: "/" },
+}
 
 const CAPABILITIES = [
   { icon: Sparkles, label: "Frontier LLM", note: "canon-grounded" },
@@ -117,9 +125,15 @@ export default function DocsHomePage() {
         </div>
         <Link
           href="/changelog"
-          className="text-xs font-semibold px-3 py-1.5 rounded border border-slate-800 hover:bg-slate-900 text-slate-400 transition-colors"
+          className="group inline-flex items-center gap-2.5 px-3.5 py-2 rounded-lg border border-sky-400/20 bg-sky-400/5 hover:bg-sky-400/10 transition-colors shrink-0"
         >
-          Changelog →
+          <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-sky-400/15 text-sky-300">
+            New · v1.5.0
+          </span>
+          <span className="text-xs font-medium text-slate-300 group-hover:text-sky-200 transition-colors">
+            Robotics API, casting intelligence &amp; exports
+          </span>
+          <ArrowRight className="w-3.5 h-3.5 text-sky-400 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </section>
 

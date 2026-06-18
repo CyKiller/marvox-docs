@@ -18,8 +18,9 @@ import MarkdownRenderer from "@/components/markdown-renderer"
 import { TableOfContents } from "@/components/table-of-contents"
 import UserGuidePage from "@/components/user-guide-page"
 
+// Edit links point at the markdown that actually backs each page: content/<source> in this docs repo.
 const GITHUB_CONTENT_BASE =
-  "https://github.com/CyKiller/MarvoxV1/blob/main/"
+  "https://github.com/CyKiller/marvox-docs/blob/main/content/"
 
 type PageProps = {
   params: Promise<{ slug: string[] }>
@@ -32,14 +33,19 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params
   const slug = resolvedParams.slug?.join("/") || ""
-  const content = loadDocContent(slug)
-  if (!content) return {}
+  // Drive metadata from DOC_PAGES so custom-component routes (api, architecture, roadmap, …)
+  // get unique titles, descriptions, and canonicals too — not just markdown-backed pages.
+  const page = DOC_PAGES.find((p) => p.slug === slug)
+  if (!page) return {}
   return {
-    title: content.page.title,
-    description: content.page.description,
+    title: page.title,
+    description: page.description,
+    alternates: {
+      canonical: `/${slug}/`,
+    },
     openGraph: {
-      title: `${content.page.title} — Marvox Docs`,
-      description: content.page.description,
+      title: `${page.title} — Marvox Docs`,
+      description: page.description,
     },
   }
 }
@@ -116,35 +122,27 @@ export default async function DocPage({ params }: PageProps) {
     <div className="flex gap-8 items-start">
       <article className="min-w-0 flex-1 pb-16">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs mb-5" style={{ color: "hsl(240 5% 45%)" }}>
-          <Link href="/" className="hover:text-slate-300 transition-colors">Docs</Link>
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs mb-5 text-muted-foreground">
+          <Link href="/" className="hover:text-foreground transition-colors">Docs</Link>
           <span aria-hidden>›</span>
-          <span style={{ color: "hsl(240 5% 55%)" }}>{content.page.section}</span>
+          <span>{content.page.section}</span>
           <span aria-hidden>›</span>
-          <span style={{ color: "hsl(0 0% 75%)" }}>{content.page.title}</span>
+          <span className="text-foreground/80">{content.page.title}</span>
         </nav>
 
         {/* Page header */}
-        <div className="mb-8 pb-6" style={{ borderBottom: "1px solid rgba(148,163,184,0.1)" }}>
-          <div
-            className="inline-block text-xs font-medium uppercase tracking-widest mb-3 px-2 py-0.5 rounded"
-            style={{
-              color: "hsl(196 100% 67%)",
-              background: "rgba(125,211,252,0.08)",
-              border: "1px solid rgba(125,211,252,0.14)",
-            }}
-          >
+        <div className="mb-8 pb-6 border-b border-border">
+          <div className="inline-block text-xs font-medium uppercase tracking-widest mb-3 px-2 py-0.5 rounded text-primary bg-primary/[0.08] border border-primary/20">
             {content.page.section}
           </div>
           <h1
             id="page-title"
-            className="text-3xl font-bold mb-2"
-            style={{ color: "hsl(0 0% 98%)", letterSpacing: "-0.025em" }}
+            className="text-3xl font-bold mb-2 tracking-tight text-foreground"
           >
             {content.page.title}
           </h1>
           {content.page.description && (
-            <p className="text-base" style={{ color: "hsl(240 5% 60%)" }}>
+            <p className="text-base text-muted-foreground">
               {content.page.description}
             </p>
           )}

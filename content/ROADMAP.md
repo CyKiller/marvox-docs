@@ -194,16 +194,16 @@ Complete product development roadmap with phases, timeline, and completion statu
 
 ---
 
-## Current Status (May 23, 2026)
+## Current Status (June 2026)
 
 **Status**: Private Beta / Production Hardening
 
-- 29 routes deployed and tested
+- Two dozen backend route modules deployed and tested
 - Strict TypeScript/ESLint builds enforced
-- 6 CharacterOS agents operational
+- CharacterOS agent network operational — six core text agents plus specialized voice, audio, and collaboration agents
 - Security middleware active
 - Performance monitoring live
-- RAG vector search backed by PostgreSQL pgvector
+- RAG vector search backed by PostgreSQL pgvector (native `vector(1536)` column)
 
 > [!IMPORTANT]
 > Actual launch readiness and staging/production deployments are gated by automated CI release runs and runtime environment checks (e.g. valid DB credentials, Stripe webhooks, pgvector health).
@@ -241,6 +241,6 @@ Do not treat these as static guarantees. Current values should come from CI, pro
 
 ---
 
-**Last Updated**: May 23, 2026  
-**Version**: 2.0.0  
+**Last Updated**: June 2026  
+**Version**: 2.1.0  
 **Status**: Private Beta / Production Hardening  

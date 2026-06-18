@@ -18,6 +18,7 @@ import {
   FileAudio,
   LineChart,
   Users,
+  FileDown,
 } from "lucide-react"
 
 /* ─────────────────────────────────────────────────────────────
@@ -618,6 +619,136 @@ const API_GROUPS: ApiGroup[] = [
         auth: false,
         description: "Ingests Stripe billing and subscription lifecycle events. Signature is verified with `STRIPE_WEBHOOK_SECRET`.",
         curl: `# Programmatically invoked by Stripe servers. Verify locally using the Stripe CLI.`,
+      },
+    ],
+  },
+
+  /* ── Transcription ── */
+  {
+    id: "transcription",
+    label: "Transcription",
+    icon: Mic,
+    color: "#7dd3fc",
+    borderColor: "rgba(125,211,252,0.18)",
+    endpoints: [
+      {
+        method: "POST",
+        path: "/api/speech-to-text/projects/{project_id}/transcribe",
+        summary: "Transcribe a voice or audio input into text",
+        auth: true,
+        description: "Converts an uploaded audio clip into text within the context of a project — used for voice-driven prompts and dictation. Returns the recognized transcript.",
+        curl: `curl -X POST "https://your-domain/api/speech-to-text/projects/proj-abc/transcribe" \\
+  -H "Authorization: Bearer <token>" \\
+  -F "file=@clip.webm"`,
+        responseNote: "TranscriptionResponse — recognized text and timing metadata",
+      },
+      {
+        method: "POST",
+        path: "/api/speech-to-text/transcribe",
+        summary: "Standalone transcription (no project scope)",
+        auth: true,
+        description: "Project-agnostic transcription endpoint for quick speech-to-text without attaching the result to a storyworld.",
+        curl: `curl -X POST "https://your-domain/api/speech-to-text/transcribe" \\
+  -H "Authorization: Bearer <token>" \\
+  -F "file=@clip.webm"`,
+      },
+    ],
+  },
+
+  /* ── Voice Recipes ── */
+  {
+    id: "voice-recipes",
+    label: "Voice Recipes",
+    icon: FileAudio,
+    color: "#7dd3fc",
+    borderColor: "rgba(125,211,252,0.18)",
+    endpoints: [
+      {
+        method: "GET",
+        path: "/api/characteros/projects/{project_id}/voice-recipes",
+        summary: "List saved voice recipes",
+        auth: true,
+        description: "Voice recipes capture a reusable voice configuration — vocal archetype, pacing, and emotion mapping — that can be applied across characters and shared.",
+        curl: `curl "https://your-domain/api/characteros/projects/proj-abc/voice-recipes" \\
+  -H "Authorization: Bearer <token>"`,
+      },
+      {
+        method: "POST",
+        path: "/api/characteros/projects/{project_id}/voice-recipes",
+        summary: "Create a voice recipe",
+        auth: true,
+        curl: `curl -X POST "https://your-domain/api/characteros/projects/proj-abc/voice-recipes" \\
+  -H "Authorization: Bearer <token>" \\
+  -H "Content-Type: application/json" \\
+  -d '{"name":"Gravel Narrator","speed":0.95,"emotion":"measured"}'`,
+        responseNote: "VoiceRecipe — id, name, and configuration payload",
+      },
+      {
+        method: "PATCH",
+        path: "/api/characteros/projects/{project_id}/voice-recipes/{recipe_id}",
+        summary: "Update a voice recipe",
+        auth: true,
+        curl: `curl -X PATCH "https://your-domain/api/characteros/projects/proj-abc/voice-recipes/rec_01" \\
+  -H "Authorization: Bearer <token>" \\
+  -H "Content-Type: application/json" \\
+  -d '{"emotion":"dramatic"}'`,
+      },
+      {
+        method: "DELETE",
+        path: "/api/characteros/projects/{project_id}/voice-recipes/{recipe_id}",
+        summary: "Delete a voice recipe",
+        auth: true,
+        curl: `curl -X DELETE "https://your-domain/api/characteros/projects/proj-abc/voice-recipes/rec_01" \\
+  -H "Authorization: Bearer <token>"`,
+      },
+      {
+        method: "GET",
+        path: "/api/characteros/voice-recipes/share/{share_token}",
+        summary: "Resolve a shared voice recipe by token",
+        auth: false,
+        description: "Public, read-only access to a voice recipe that was shared via an opaque share token.",
+        curl: `curl "https://your-domain/api/characteros/voice-recipes/share/shr_8f2a"`,
+      },
+    ],
+  },
+
+  /* ── Export ── */
+  {
+    id: "export",
+    label: "Export Formats",
+    icon: FileDown,
+    color: "#7dd3fc",
+    borderColor: "rgba(125,211,252,0.18)",
+    endpoints: [
+      {
+        method: "GET",
+        path: "/api/projects/{project_id}/export/{export_type}",
+        summary: "Export storyworld data in a production format",
+        auth: true,
+        description: "Renders project data into a downloadable format. Supports Fountain (`.fountain` screenplay), localization (XLIFF 1.2), and subtitles (SRT), alongside structured storyworld reports.",
+        curl: `curl "https://your-domain/api/projects/proj-abc/export/fountain" \\
+  -H "Authorization: Bearer <token>" -o screenplay.fountain`,
+        responseNote: "File download — media type depends on the requested export_type",
+      },
+      {
+        method: "POST",
+        path: "/api/projects/{project_id}/export",
+        summary: "Create an export with an audit trail",
+        auth: true,
+        description: "Generates an export and records it for compliance, returning a reference that can be reconciled against the export audit log.",
+        curl: `curl -X POST "https://your-domain/api/projects/proj-abc/export" \\
+  -H "Authorization: Bearer <token>" \\
+  -H "Content-Type: application/json" \\
+  -d '{"export_type":"xliff"}'`,
+      },
+      {
+        method: "GET",
+        path: "/api/projects/{project_id}/export/audit",
+        summary: "Retrieve the export audit log",
+        auth: true,
+        description: "Lists prior exports with actor, timestamp, and format — used for governance and compliance reviews.",
+        curl: `curl "https://your-domain/api/projects/proj-abc/export/audit" \\
+  -H "Authorization: Bearer <token>"`,
       },
     ],
   },

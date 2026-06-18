@@ -6,6 +6,36 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
 
 ---
 
+## [1.5.0] — Production Studio, Casting Intelligence & External APIs (June 2026)
+
+### Added
+- **Robotics Persona API** — Commercial surface that lets external hardware, robots, and agents drive a
+  Marvox character outside story context. `POST /api/v2/personas/{character_id}/execute`, persona profile
+  and behavior-policy endpoints, and `GET /api/v2/personas/group/{group_id}/consensus-state` for fleet
+  synchronization. Authenticated with an `X-Marvox-API-Key` header.
+- **Character App Store** — Instantiate personas from pre-built templates via `/api/v2/templates` and
+  `POST /api/v2/personas/from-template/{template_id}`.
+- **Transcription (speech-to-text)** — `POST /api/speech-to-text/projects/{project_id}/transcribe` and a
+  standalone `POST /api/speech-to-text/transcribe` for voice-driven prompts and dictation.
+- **Voice Recipes** — Save, update, share, and reuse a voice configuration across characters.
+  CRUD under `/api/characteros/projects/{project_id}/voice-recipes`, plus public share-token resolution.
+- **Production-grade exports** — Real Fountain (`.fountain` screenplay), localization (XLIFF 1.2), and
+  subtitle (SRT) exports via `/api/projects/{project_id}/export/{export_type}`, each with an export audit log.
+- **Casting intelligence** — Gender- and age-aware voice casting for every speaker, a per-book casting
+  summary report, and an auto-produce path for full-book audiobook synthesis.
+
+### Changed
+- **Performance Director** — Audio synthesis now applies a scene-level dramatic pace envelope and
+  emotion-reactive emphasis with micro-pauses for more cinematic delivery.
+- **Agentic voice-casting** — A learning loop continuously refines voice-casting decisions from production
+  outcomes, layered into the live production pipeline alongside health monitoring.
+- **Manuscript Studio** — New Studio tab with refined speaker-attribution for dialogue-heavy manuscripts.
+- **Billing** — Subscription tiers consolidated to **Free**, **Pro**, **Studio**, and **Enterprise**, with
+  checkout and lifecycle billing handled in-app via Stripe.
+- **Vector storage** — RAG embeddings migrated to a native PostgreSQL `vector(1536)` column.
+
+---
+
 ## [1.4.0] — Phase 4: API Key Management & Character Reflection (2026-03-19)
 
 ### Added

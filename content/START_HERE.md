@@ -19,8 +19,8 @@ Follow the workflow below before diving into lower-level API or runtime details.
 ## Developer Setup (Local)
 
 ### Prerequisites
-- Python 3.10+ (3.11+ recommended)
-- Node.js 18+
+- Python 3.11+ (production runs on 3.12)
+- Node.js 20.9+, npm 10+
 
 ### Install Dependencies
 ```bash

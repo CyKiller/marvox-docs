@@ -258,7 +258,7 @@ app/
 
 ### Database Performance
 - **PostgreSQL + pgvector**: Connection pooling (asyncpg), prepared statements
-- **Vector index**: pgvector in PostgreSQL (same connection pool, no separate service required)
+- **Vector index**: pgvector in PostgreSQL (same connection pool, no separate service required). Embeddings are stored in a native `vector(1536)` column for first-class similarity search.
 
 ### Metrics Endpoints
 - `GET /metrics` - Prometheus metrics (when enabled)
@@ -387,28 +387,30 @@ ContinuityAgent validates for contradictions
 
 ---
 
-## Performance Targets (Actual vs Target)
+## Performance Targets
 
-| Metric | Target | Actual | Status |
-|--------|--------|--------|--------|
-| CharacterOS Build | <30s | ~6s | Exceeds |
-| Character Chat | <2s | ~1.8s | Exceeds |
-| RAG Retrieval | <200ms | ~120ms | Exceeds |
-| Scene Generation | <5s | ~4.2s | Exceeds |
-| Audio Generation | <10s | ~8.5s | Exceeds |
-| API Response (avg) | <500ms | ~250ms | Exceeds |
+These are the latency budgets each subsystem is built and release-gated against. Live values come from
+CI release-gate runs and production telemetry — treat the budgets below as targets, not static guarantees.
+
+| Metric | Target budget |
+|--------|--------|
+| CharacterOS Build | < 30s |
+| Character Chat | < 2s |
+| RAG Retrieval | < 200ms |
+| Scene Generation | < 5s |
+| Audio Generation | < 10s |
+| API Response (avg) | < 500ms |
 
 ---
 
 ## Related Documentation
 
 - **[README.md](./README.md)** - Project overview and quick start
-- **[FEATURES.md](./FEATURES.md)** - Detailed feature descriptions
-- **[docs/API.md](./docs/API.md)** - API endpoint reference
+- **[API.md](./API.md)** - API endpoint reference
 - **[AGENTS.md](./AGENTS.md)** - CharacterOS agent specifications
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Development guidelines
 
 ---
 
-**Last Updated**: May 2026 (synced to CyKiller/MarvoxV1 `main`)
+**Last Updated**: June 2026 (synced to CyKiller/MarvoxV1 `main`)
 **Status**: Private beta / active production hardening

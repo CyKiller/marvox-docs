@@ -5,9 +5,8 @@ const nextConfig = {
   // For subdomain deployment (default)
   trailingSlash: true,
 
-  // Image optimization
+  // Image optimization is disabled for static export; images are served as-is.
   images: {
-    domains: ["marvox.com", "docs.marvox.com"],
     unoptimized: true,
   },
 

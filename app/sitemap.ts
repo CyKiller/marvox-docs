@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next"
 import { DOC_PAGES } from "@/lib/docs-data"
+import { SITE_URL } from "@/lib/config"
 
 export const dynamic = "force-static"
 
-const BASE_URL = "https://marvox-docs.netlify.app"
+const BASE_URL = SITE_URL
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = DOC_PAGES.map((page) => ({

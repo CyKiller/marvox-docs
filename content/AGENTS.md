@@ -350,4 +350,4 @@ Start here when auditing or extending CharacterOS:
 
 ## Status
 
-As of April 12, 2026, the codebase supports the CharacterOS runtime, scene generation, billing, auth, collaboration, and audio pipelines described above. This document intentionally avoids hard claims like "100% production ready" because actual launch readiness depends on environment correctness, upstream provider health, and release-gate results at deploy time.
+As of June 2026, the codebase supports the CharacterOS runtime, scene generation, billing, auth, collaboration, and audio pipelines described above. This document intentionally avoids hard claims like "100% production ready" because actual launch readiness depends on environment correctness, upstream provider health, and release-gate results at deploy time.
