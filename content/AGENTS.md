@@ -165,6 +165,16 @@ Implemented families include:
 - `DNALearningEngine`
 - `VoiceVault`
 
+### Voice Catalog
+
+Voice selection draws from a single canonical catalog defined in `services/characteros/voice_utils.py` (`CANONICAL_AVAILABLE_VOICES`), 13 voices:
+
+`alloy`, `ash`, `ballad`, `cedar`, `coral`, `echo`, `fable`, `marin`, `nova`, `onyx`, `sage`, `shimmer`, `verse`.
+
+- Casting is gender- and age-aware via `VOICE_POOL`, with `TRAIT_VOICE_OVERRIDES` mapping personality traits (e.g. `wise → sage`, `authoritative → onyx`) onto specific voices.
+- `resolve_narrator_voice()` defaults the narrator to `cedar` unless a first-person POV character or a narrator-flagged character supplies its own voice binding.
+- Treat `voice_utils.py` as the source of truth for the available-voice list and the narrator default; do not hardcode voice ids elsewhere.
+
 ### Orchestrators and Runtime Services
 
 - `AudioPipelineOrchestrator`
