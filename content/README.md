@@ -195,7 +195,7 @@ curl -X POST http://localhost:8000/api/characteros/projects/{project_id}/chat \
 - Supports manuscript exploration
 
 ### Multi-Voice Audio Production
-- Each character bound to a Marvox voice + personality instructions
+- Each character cast from a 13-voice catalog (default narrator `cedar`) + personality instructions
 - Dynamic speed/emotion adjustment per dialogue block
 - Narrator voice for scene framing
 - 50–100ms silence padding for natural flow
