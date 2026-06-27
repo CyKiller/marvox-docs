@@ -10,7 +10,7 @@ The **Interactive Studio Simulator** above lets you step through each core stage
 
 Every storyworld begins with a written draft. The ingestion layer reads your manuscript, validates boundaries, and initializes a database project.
 
-- **Supported formats**: UTF-8 Text (`.txt`), EPUB (`.epub`), PDF (`.pdf`), Microsoft Word (`.docx`), and Rich Text Format (`.rtf`).
+- **Supported formats**: UTF-8 Text (`.txt`), Markdown (`.md`), EPUB (`.epub`), PDF (`.pdf`), Microsoft Word (`.docx`), Rich Text Format (`.rtf`), Fountain screenplay (`.fountain`), and Final Draft (`.fdx`).
 - **Upload limit**: Governed by `MAX_UPLOAD_MB` (default **100 MB**). Oversized uploads are rejected by the pre-validation middleware before consuming server memory.
 - **Project scope**: Each upload provisions a clean workspace record backed by PostgreSQL.
 
@@ -99,6 +99,7 @@ Once a scene is written and committed to canon, it passes to the multi-voice aud
 
 - **Speech DNA** — every character profile carries voice settings like `speed` (e.g. `1.05`) and `emotion` (e.g. `dramatic`) that mold synthesis.
 - **Prosody performance** — the `ProsodyPerformanceAgent` reads exclamation marks, question marks, and emotional cues to modulate pitch, stability, and pauses.
+- **Voice catalog** — characters are cast from 13 canonical voices (`alloy`, `ash`, `ballad`, `cedar`, `coral`, `echo`, `fable`, `marin`, `nova`, `onyx`, `sage`, `shimmer`, `verse`). Casting is gender- and age-aware with trait-based overrides; the narrator defaults to **`cedar`** unless a first-person POV or narrator-flagged character supplies its own voice binding.
 
 > [!TIP]
 > **Try it**: Switch to the **`HANDOFF`** tab and click **Generate Audio Pipeline** to watch the 8-step synthesis run, animate live soundwaves, and compile a finalized package.
@@ -108,6 +109,17 @@ Once a scene is written and committed to canon, it passes to the multi-voice aud
 ## Export & store
 
 The final stage compiles and bundles your storyworld assets for distribution.
+
+### Export formats
+
+Storyworld assets export through `GET /api/projects/{project_id}/export/{export_type}` in **19 formats**. Audio, polished-manuscript, and structured-character formats require a **Pro** subscription; lightweight handoff formats are **Free**. Requesting a Pro-gated format without a Pro subscription returns HTTP `403`.
+
+- **Manuscript / text**: PDF *(Pro)*, Word `.docx` *(Pro)*, EPUB *(Pro)*, Final Draft `.fdx` *(Pro)*, Fountain *(Free)*, Markdown *(Free)*, RTF *(Free)*.
+- **Audio**: MP3, WAV, FLAC — all *(Pro)*.
+- **Structured data**: Character JSON *(Pro)*, VoiceDNA JSON *(Pro)*, Canon graph CSV *(Free)*, Dialogue CSV *(Free)*, Dialogue XLSX *(Free)*, HTML *(Free)*.
+- **Interchange**: XLIFF localization *(Free)*, SRT subtitles *(Free)*, Yarn game dialogue *(Free)*.
+
+### Storage & strict blob mode
 
 In development, audio packages may fall back to local folders. In production, Marvox enforces strict **fail-closed** rules:
 
