@@ -19,8 +19,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
   standalone `POST /api/speech-to-text/transcribe` for voice-driven prompts and dictation.
 - **Voice Recipes** — Save, update, share, and reuse a voice configuration across characters.
   CRUD under `/api/characteros/projects/{project_id}/voice-recipes`, plus public share-token resolution.
-- **Production-grade exports** — Real Fountain (`.fountain` screenplay), localization (XLIFF 1.2), and
-  subtitle (SRT) exports via `/api/projects/{project_id}/export/{export_type}`, each with an export audit log.
+- **Production-grade exports** — 19 export formats via `/api/projects/{project_id}/export/{export_type}`,
+  each with an export audit log: manuscript/text (PDF, Word `.docx`, EPUB, Final Draft `.fdx`, Fountain
+  screenplay, Markdown, RTF), audio (MP3, WAV, FLAC), structured data (character JSON, VoiceDNA JSON,
+  canon-graph CSV, dialogue CSV, dialogue XLSX, HTML), and interchange (XLIFF 1.2, SRT subtitles, Yarn
+  game dialogue). Audio, polished-manuscript, and structured-character formats are Pro-gated; lightweight
+  handoff formats are Free.
 - **Casting intelligence** — Gender- and age-aware voice casting for every speaker, a per-book casting
   summary report, and an auto-produce path for full-book audiobook synthesis.
 
