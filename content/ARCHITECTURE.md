@@ -94,6 +94,15 @@ services/
 └── tts_service.py           # Multi-voice audio
 ```
 
+### API Surface & Versioning
+
+The canonical API surface is **versioned under `/api/v1/...`** (for example
+`/api/v1/characteros/...` and `/api/v1/audio/...`), mounted in `main.py`. The unversioned
+`/api/...` paths remain mounted as backward-compatible legacy aliases, so existing clients
+keep working, but new integrations should target the `/api/v1` prefix. Selected newer
+commercial surfaces (for example the Robotics Persona API) are mounted under `/api/v2/...` —
+see the changelog and API reference for those.
+
 ---
 
 ## Frontend Stack (Next.js/React)
